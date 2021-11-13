@@ -1,0 +1,11 @@
+version: '3'
+services:
+  seeds_view: 
+    build: ./view
+    container_name: 'SEEDS_VIEW'
+    ports: 
+      - "8000:3000"
+    volumes:
+      - ./view:/app
+    stdin_open: true
+    tty: true
