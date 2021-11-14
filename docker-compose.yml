@@ -2,7 +2,7 @@ version: '3'
 services:
   seeds_db:
     image: mysql:8.0
-    container_name: 'nutfes-record-db'
+    container_name: 'SEEDS_DB'
     environment:
       MYSQL_ROOT_PASSWORD: password
     ports:
