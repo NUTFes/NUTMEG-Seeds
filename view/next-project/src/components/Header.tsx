@@ -1,3 +1,4 @@
+import React from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import headerLogo from "@images/NUTMEG-logo_all_horizontal_white.png";
@@ -11,7 +12,6 @@ function Header() {
     width: 100%;
     color: white;
     z-index: 1;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   `
 
   const Header = styled.header`
@@ -26,6 +26,21 @@ function Header() {
     width: 142px;
     margin: 0px 50px;
   `
+  /* 別のissueで実装
+  const [headerColor, setHeaderColor] = useState("white")
+
+
+  const listenScrollEvent = () => {
+    window.scrollY > 1
+      ? setHeaderColor("")
+      : setHeaderColor("white")
+  }
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    window.addEventListener("scroll", listenScrollEvent)
+  })
+  */
+
 
   return (
     <HeaderContainer>
