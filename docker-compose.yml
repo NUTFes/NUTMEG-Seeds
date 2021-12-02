@@ -28,7 +28,7 @@ services:
     build: ./view
     container_name: 'SEEDS_VIEW'
     ports: 
-      - "8000:3000"
+      - "8080:8080"
     command: npm run dev
     volumes:
       - ./view:/app
