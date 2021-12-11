@@ -46,6 +46,6 @@ class CurriculumsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def curriculum_params
-      params.permit(:title, :content, :homework, :group_id)
+      params.permit(:title, :content, :homework, :skill_id)
     end
 end

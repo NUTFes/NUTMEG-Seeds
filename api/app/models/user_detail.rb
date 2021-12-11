@@ -1,4 +1,6 @@
 class UserDetail < ApplicationRecord
   belongs_to :user
-  has_many :records
+  belongs_to :grade
+  belongs_to :department
+  belongs_to :bureau
 end
