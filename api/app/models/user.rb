@@ -7,11 +7,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
 
-  has_one :user_detail
-  has_many :project_users
+  has_one :user_detail, dependent: :destroy
+  has_many :project_users, dependent: :destroy
   has_many :projects, through: :project_users
-  has_many :user_skills
+  has_many :user_skills, dependent: :destroy
   has_many :skills, through: :user_skills
-  has_many :teachers
-  has_many :records
+  has_many :teachers, dependent: :destroy
+  has_many :records, dependent: :destroy
 end
