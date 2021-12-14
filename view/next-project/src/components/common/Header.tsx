@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import styled, { keyframes } from "styled-components";
 import HeaderLogo from "@components/icons/HeaderLogo";
 
 function Header() {
-
-  const headerLogoPath = "/header-logo.svg";
 
   const [headerColor, setHeaderColor] = useState("white");
 
