@@ -7,11 +7,6 @@ type CardContentsProps = {
   children: React.ReactNode;
 };
 
-type CardStyleProps = {
-  width?: number
-  height?: number
-};
-
 function GlassCard(props: CardContentsProps): JSX.Element {
   const GlassCardContainer = styled.div`
     background-color: var(--accent-0);
