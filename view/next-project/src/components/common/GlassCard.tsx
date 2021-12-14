@@ -2,15 +2,23 @@ import React from "react";
 import styled from "styled-components";
 
 type CardContentsProps = {
+  width?: string
+  height?: string
   children: React.ReactNode;
 };
 
-function GlassCard({ children }: CardContentsProps): JSX.Element {
+type CardStyleProps = {
+  width?: number
+  height?: number
+};
+
+function GlassCard(props: CardContentsProps): JSX.Element {
   const GlassCardContainer = styled.div`
     background-color: var(--accent-0);
+    width: ${props.width};
+    height: ${props.height};
     min-height: 300px;
-    min-width: 800px;
-    max-width: 400px;
+    min-width: 300px;
     border-radius: var(--card-radius);
     padding: 50px;
     margin-bottom: 50px;
@@ -27,7 +35,7 @@ function GlassCard({ children }: CardContentsProps): JSX.Element {
 
   return (
     <>
-      <GlassCardContainer>{children}</GlassCardContainer>
+      <GlassCardContainer>{ props.children }</GlassCardContainer>
     </>
   );
 }
