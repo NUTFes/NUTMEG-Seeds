@@ -75,9 +75,9 @@ ActiveRecord::Schema.define(version: 2021_12_07_144119) do
     t.text "content"
     t.text "homework"
     t.integer "user_id"
+    t.integer "curriculum_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "curriculum_id"
   end
 
   create_table "roles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
