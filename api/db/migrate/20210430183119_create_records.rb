@@ -5,6 +5,7 @@ class CreateRecords < ActiveRecord::Migration[6.1]
       t.text :content
       t.text :homework
       t.integer :user_id
+      t.integer :curriculum_id
 
       t.timestamps
     end
