@@ -1,3 +1,10 @@
 Record.seed( :id,
-  { id: 1, title: 'ApolloSeverのスキーマを書いた', content: 'test_content', homework: 'test_homework', user_id: 1, curriculum_id: 1 },
+  { id: 1, title: 'TypeScriptで二分木を反転', content: 'test_content', homework: 'test_homework', user_id: 1, curriculum_id: 1 },
+  { id: 2, title: 'GoでFizzBuzz', content: 'test_content', homework: 'test_homework', user_id: 2, curriculum_id: 2 },
+  { id: 3, title: 'Reactのルーティングについての記事を読んだ', content: 'test_content', homework: 'test_homework', user_id: 3, curriculum_id: 3 },
+  { id: 4, title: 'TypeScriptのインターフェースを書いた', content: 'test_content', homework: 'test_homework', user_id: 4, curriculum_id: 4 },
+  { id: 5, title: 'TypeScriptのバックエンドツールに関する記事を読んだ', content: 'test_content', homework: 'test_homework', user_id: 1, curriculum_id: 1 },
+  { id: 6, title: 'Goによるオニオンアーキテクチャを実装した', content: 'test_content', homework: 'test_homework', user_id: 2, curriculum_id: 2 },
+  { id: 7, title: 'Reactとnode-fetchによるAPI操作', content: 'test_content', homework: 'test_homework', user_id: 3, curriculum_id: 3 },
+  { id: 8, title: 'Goのインターフェースを書いた', content: 'test_content', homework: 'test_homework', user_id: 4, curriculum_id: 4 },
 )
