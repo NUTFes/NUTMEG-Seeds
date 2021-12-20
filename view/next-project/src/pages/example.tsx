@@ -10,7 +10,10 @@ export default function Example() {
   const imagePath = "/header-logo.svg";
   return (
     <MainLayout>
-      <GlassCard>
+      <GlassCard width={"1000px"} height={"1000px"}>
+        <Image src={imagePath} height={30} width={142}/>
+      </GlassCard>
+      <GlassCard width={"500px"} height={"500px"}>
         <Image src={imagePath} height={30} width={142} />
       </GlassCard>
       <FlatCard>Hello World</FlatCard>
