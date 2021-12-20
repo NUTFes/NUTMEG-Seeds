@@ -4,7 +4,7 @@ class CreateCurriculums < ActiveRecord::Migration[6.1]
       t.string :title
       t.text :content
       t.text :homework
-      t.integer :group_id
+      t.integer :skill_id
 
       t.timestamps
     end

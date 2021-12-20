@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  resources :roles
+  resources :bureaus
+  resources :user_skills
+  resources :project_users
+  resources :project_skills
+  resources :skills
+  resources :projects
+  resources :user_details
   resources :groups
   resources :curriculums
   resources :teachers
