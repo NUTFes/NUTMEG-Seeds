@@ -42,5 +42,6 @@ module Myapp
       'Access-Control-Allow-Origin' => '*',
       'Access-Control-Request-Method' => '*'
     }
+    config.middleware.delete ActionDispatch::HostAuthorization
   end
 end
