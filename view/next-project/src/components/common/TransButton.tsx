@@ -11,11 +11,7 @@ type ButtonContentsProps = {
 
 function Button(props: ButtonContentsProps): JSX.Element {
   const ButtonContainer = styled.button`
-    background: radial-gradient(
-      ellipse at top left,
-      var(--button-primary),
-      var(--button-secondary)
-    );
+    background: radial-gradient(ellipse at top left, var(--button-primary), var(--button-secondary));
     width: ${props.width};
     height: ${props.height};
     border-radius: var(--button-radius);

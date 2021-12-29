@@ -1,11 +1,5 @@
-import React, { FC } from 'react';
-import { GetStaticProps } from 'next';
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
-import styled from 'styled-components';
+import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
-import FlatCard from '@components/common/FlatCard';
 import GlassCard from '@components/common/GlassCard';
 
 type Curriculum = {
@@ -19,10 +13,21 @@ type Props = {
   curriculums: Curriculum[];
 };
 
-const Example: FC<Props> = (props) => {
+export async function getStaticProps() {
+  const url = 'http://seeds_api:3000/curriculums';
+  const json = await get(url);
+
+  return {
+    props: {
+      curriculums: json,
+    },
+  };
+}
+
+export default function Example(props: Props) {
   return (
     <MainLayout>
-      <GlassCard width={'1000px'} height={'1000px'}>
+      <GlassCard align={'center'}>
         <table>
           {props.curriculums.map((curriculum) => (
             <tr key={curriculum.toString()}>
@@ -34,18 +39,4 @@ const Example: FC<Props> = (props) => {
       </GlassCard>
     </MainLayout>
   );
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const res = await fetch('http://seeds_api:3000/curriculums');
-  const json = await res.json();
-  console.log(json);
-
-  return {
-    props: {
-      curriculums: json,
-    },
-  };
-};
-
-export default Example;
+}

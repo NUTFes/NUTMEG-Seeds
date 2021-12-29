@@ -1,11 +1,15 @@
 export const get = async (url: string) => {
-  const res = await fetch(url);
-  const json = await res.json();
-  return json;
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return await res.json();
 };
 
 export const get_with_token = async (url: string) => {
-  const response = await fetch(url, {
+  const res = await fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -14,7 +18,7 @@ export const get_with_token = async (url: string) => {
       uid: localStorage.getItem('uid') || 'none',
     },
   });
-  return response.json();
+  return await res.json();
 };
 
 export const post = async (url: string, keys: Array<string>, values: Array<any>) => {

@@ -11,9 +11,7 @@ function Header() {
 
   const listenScrollEvent = () => {
     if (window.scrollY < 1) {
-      return (
-        setHeaderBackgroundColor('var(--primary)'), setHeaderColor('white'), setHeadershadow('0px')
-      );
+      return setHeaderBackgroundColor('var(--primary)'), setHeaderColor('white'), setHeadershadow('0px');
     } else {
       return (
         setHeaderBackgroundColor('rgba(255, 255, 255, 0.8)'),
@@ -42,7 +40,6 @@ function Header() {
     background-color: ${headerBackgroundColor};
     animation: ${fadeIn} 0.5s ease-in-out;
     backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
     position: fixed;
     top: 0;
     height: 60px;
