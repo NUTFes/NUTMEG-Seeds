@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 type CardContentsProps = {
-  width?: string
-  height?: string
+  width?: string;
+  height?: string;
   children: React.ReactNode;
 };
 
@@ -30,7 +30,7 @@ function GlassCard(props: CardContentsProps): JSX.Element {
 
   return (
     <>
-      <GlassCardContainer>{ props.children }</GlassCardContainer>
+      <GlassCardContainer>{props.children}</GlassCardContainer>
     </>
   );
 }

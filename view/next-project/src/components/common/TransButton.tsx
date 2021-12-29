@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import RightArrow from "@components/icons/RightArrow";
+import React from 'react';
+import styled from 'styled-components';
+import RightArrow from '@components/icons/RightArrow';
 
 type ButtonContentsProps = {
   width?: string;
@@ -34,7 +34,7 @@ function Button(props: ButtonContentsProps): JSX.Element {
       <ButtonContainer>
         {props.children}
         {props.text}
-        <RightArrow height="16" width="16" color="--secondary" />
+        <RightArrow height={16} width={16} color='--secondary' />
       </ButtonContainer>
     </>
   );

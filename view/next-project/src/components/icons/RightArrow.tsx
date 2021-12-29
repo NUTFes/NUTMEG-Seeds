@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 type Props = {
   width?: number;
@@ -13,14 +13,14 @@ const RightArrow = (props: Props) => {
   `;
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns='http://www.w3.org/2000/svg'
       width={props.width}
-      viewBox="0 0 24 24"
+      viewBox='0 0 24 24'
       height={props.height}
       fill={props.color}
     >
-      <path d="M10 17l5-5-5-5v10z" />
-      <path d="M0 24V0h24v24H0z" fill="none" />
+      <path d='M10 17l5-5-5-5v10z' />
+      <path d='M0 24V0h24v24H0z' fill='none' />
     </svg>
   );
 };
