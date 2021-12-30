@@ -21,18 +21,32 @@ export const get_with_token = async (url: string) => {
   return await res.json();
 };
 
-export const post = async (url: string, keys: Array<string>, values: Array<any>) => {
+export const post = async (url: string, data: any) => {
+  console.log(data);
+  console.log(JSON.stringify(data));
+  const res = await fetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return await res.json();
+};
+
+export const oldPost = async (url: string, keys: Array<string>, values: Array<any>) => {
   const params = new URLSearchParams();
   keys.map((keys: string, idx: number) => {
     params.append(keys[idx], values[idx]);
-    console.log(params);
   });
-  console.log(params);
-  await fetch(url, {
+
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: params,
   });
+  return await res.json();
 };
