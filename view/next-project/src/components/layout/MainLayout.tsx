@@ -14,6 +14,7 @@ function MainLayout({ children }: LayoutProps): JSX.Element {
     align-items: center;
     padding: 100px 200px;
     margin-top: 60px;
+    gap: 50px 0px;
   `;
 
   return (
