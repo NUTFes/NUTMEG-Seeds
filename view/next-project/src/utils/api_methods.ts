@@ -22,8 +22,6 @@ export const get_with_token = async (url: string) => {
 };
 
 export const post = async (url: string, data: any) => {
-  console.log(data);
-  console.log(JSON.stringify(data));
   const res = await fetch(url, {
     method: 'POST',
     mode: 'cors',
@@ -35,18 +33,18 @@ export const post = async (url: string, data: any) => {
   return await res.json();
 };
 
-export const oldPost = async (url: string, keys: Array<string>, values: Array<any>) => {
-  const params = new URLSearchParams();
-  keys.map((keys: string, idx: number) => {
-    params.append(keys[idx], values[idx]);
-  });
-
+export const put = async (url: string, data: any) => {
   const res = await fetch(url, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: params,
+    body: JSON.stringify(data),
   });
+  return await res.json();
+};
+
+export const del = async (url: string) => {
+  const res = await fetch(url, { method: 'DELETE' });
   return await res.json();
 };
