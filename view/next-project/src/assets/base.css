@@ -43,11 +43,10 @@
   --card-radius: 25px;
   --button-radius: 50px;
 
-  --font-sans: -apple-system, system-ui, BlinkMacSystemFont, "Helvetica Neue",
-    "Helvetica", sans-serif;
+  --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Helvetica Neue', 'Helvetica', sans-serif;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --primary: #000000;
   --primary-2: #111;
   --secondary: #ffffff;

@@ -1,22 +1,78 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import styled from "styled-components";
-import MainLayout from "@components/layout/MainLayout";
-import FlatCard from "@components/common/FlatCard";
-import GlassCard from "@components/common/GlassCard";
+import { get, post, put, del } from '@utils/api_methods';
+import MainLayout from '@components/layout/MainLayout';
+import Row from '@components/layout/RowLayout';
+import GlassCard from '@components/common/GlassCard';
+import Button from '@components/common/TestButton';
 
-export default function Example() {
-  const imagePath = "/header-logo.svg";
+type Curriculum = {
+  id: number;
+  title: string;
+  homework: string;
+  skill_id: number;
+};
+
+type Props = {
+  curriculums: Curriculum[];
+};
+
+export async function getStaticProps() {
+  const getUrl = 'http://seeds_api:3000/curriculums';
+  const json = await get(getUrl);
+  return {
+    props: {
+      curriculums: json,
+    },
+  };
+}
+
+export async function postCurriculum() {
+  const postUrl = 'http://localhost:3000/curriculums';
+  const postData = { title: 'Rust勉強', content: '未定', homework: '未定', skill_id: 1 };
+  const getRes = await get(postUrl);
+  console.log(getRes.slice(-1)[0].id);
+  const postReq = await post(postUrl, postData);
+}
+
+export async function putCurriculum() {
+  const Url = 'http://localhost:3000/curriculums';
+  const getRes = await get(Url);
+  const putUrl = Url + '/' + getRes.slice(-1)[0].id;
+  const putData = {
+    title: 'Rust勉強会',
+    content: 'Rustとwasbによるフロントエンド実装',
+    homework: 'ソート',
+    skill_id: 1,
+  };
+  console.log(getRes.slice(-1)[0].id);
+  const putReq = await put(putUrl, putData);
+}
+
+export async function deleteCurriculum() {
+  const Url = 'http://localhost:3000/curriculums';
+  const getRes = await get(Url);
+  const delUrl = Url + '/' + getRes.slice(-1)[0].id;
+  console.log(getRes.slice(-1)[0].id);
+  const delReq = await del(delUrl);
+}
+
+export default function Example(props: Props) {
   return (
     <MainLayout>
-      <GlassCard width={"1000px"} height={"1000px"}>
-        <Image src={imagePath} height={30} width={142}/>
+      <Row>
+        <Button onClick={postCurriculum}>POST</Button>
+        <Button onClick={putCurriculum}>PUT</Button>
+        <Button onClick={deleteCurriculum}>DELETE</Button>
+      </Row>
+      <GlassCard align={'center'}>
+        <table>
+          {props.curriculums.map((curriculum) => (
+            <tr key={curriculum.toString()}>
+              <td>{curriculum.id}</td>
+              <td>{curriculum.title}</td>
+            </tr>
+          ))}
+        </table>
       </GlassCard>
-      <GlassCard width={"500px"} height={"500px"}>
-        <Image src={imagePath} height={30} width={142} />
-      </GlassCard>
-      <FlatCard>Hello World</FlatCard>
     </MainLayout>
   );
 }

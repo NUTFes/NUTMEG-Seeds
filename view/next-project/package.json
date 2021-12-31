@@ -5,7 +5,8 @@
     "dev": "next -p 8080",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json,css}'"
   },
   "dependencies": {
     "@types/styled-components": "^5.1.15",
@@ -20,6 +21,17 @@
     "@types/react": "17.0.34",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.3",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.5.1",
     "typescript": "4.4.4"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true,
+    "jsxSingleQuote": true,
+    "printWidth": 120,
+    "bracketSpacing": true
   }
 }
