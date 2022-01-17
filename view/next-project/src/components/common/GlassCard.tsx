@@ -15,6 +15,7 @@ function GlassCard(props: CardContentsProps): JSX.Element {
     height: ${props.height};
     border-radius: var(--card-radius);
     padding: 50px;
+    margin: 30px;
     background: radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(4px);
@@ -24,6 +25,7 @@ function GlassCard(props: CardContentsProps): JSX.Element {
     align-items: ${props.align || 'start'};
     justify-content: ${props.justify || 'start'};
     font-size: 16px;
+    flex: none;
   `;
 
   return (
