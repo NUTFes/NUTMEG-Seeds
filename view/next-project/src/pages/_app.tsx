@@ -9,6 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>NUTMEG Seeds</title>
         <meta name='NUTMEG Seeds' content='ja' />
         <link rel='icon' href='/favicon.ico' />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;700&display=swap" />
       </Head>
 
       <Component {...pageProps} />

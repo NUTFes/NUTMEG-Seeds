@@ -7,12 +7,13 @@ type CardContentsProps = {
 
 function FlatCard({ children }: CardContentsProps): JSX.Element {
   const FlatCardContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
     background-color: var(--accent-0);
-    min-height: 1000px;
-    min-width: 800px;
-    max-width: 1200px;
     border-radius: var(--card-radius);
-    padding: 50px;
+    padding: 100px;
     margin-bottom: 50px;
   `;
 
