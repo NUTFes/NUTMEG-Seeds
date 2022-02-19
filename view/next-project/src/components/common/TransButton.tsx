@@ -6,14 +6,15 @@ type ButtonContentsProps = {
   width?: string;
   height?: string;
   text?: string;
-  children: React.ReactNode;
+  onClick?: (event: any) => void;
+  children?: React.ReactNode;
 };
 
 function Button(props: ButtonContentsProps): JSX.Element {
   const ButtonContainer = styled.button`
     background: radial-gradient(ellipse at top left, var(--button-primary), var(--button-secondary));
-    width: ${props.width};
-    height: ${props.height};
+    width: ${props.width || '150px'};
+    height: ${props.height || '40px'};
     border-radius: var(--button-radius);
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(4px);
@@ -23,14 +24,18 @@ function Button(props: ButtonContentsProps): JSX.Element {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: none;
+    &:active {
+      box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25);
+    }
   `;
 
   return (
     <>
-      <ButtonContainer>
+      <ButtonContainer onClick={props.onClick}>
         {props.children}
         {props.text}
-        <RightArrow height={16} width={16} color='--secondary' />
+        <RightArrow height={16} width={16} color='var(--accent-0)' />
       </ButtonContainer>
     </>
   );
