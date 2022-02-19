@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import Router from 'next/router';
 import { post } from '@utils/api_methods';
 import SubmitButton from '@components/common/TestButton';
 import s from './SignUp.module.css'
@@ -12,7 +13,13 @@ interface submitData {
 
 export const submitUser = async (data: submitData) => {
   const submitUrl = 'http://localhost:3000/api/auth/?name=' + data.userName + '&email=' + data.email + '&password=' + data.password + '&password_confirmation=' + data.passwordConfirmation;
-  await post(submitUrl).then(data => {console.log(data.status)})
+  const res = await post(submitUrl)
+  if( res.status === 200 ) {
+    Router.push('/example')
+  } else {
+    console.log('Error' + res.status)
+    console.log(await res.json())
+  }
 }
 
 const SignUp: FC = () => {
@@ -21,11 +28,7 @@ const SignUp: FC = () => {
     console.log(formData.userName)
     setFormData({...formData, [input]: e.target.value})
   }
-  /*
-  const submitUser = () => {
-    console.log(formData)
-  }
-  */
+
   return(
     <>
       <div className={s.formContainer}>
