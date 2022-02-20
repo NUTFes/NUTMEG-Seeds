@@ -45,7 +45,7 @@
   --card-radius: 25px;
   --button-radius: 50px;
 
-  --font-sans: -apple-system, system-ui, BlinkMacSystemFont,'Inter', sans-serif;
+  --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Inter', sans-serif;
 }
 
 [data-theme='dark'] {
@@ -96,6 +96,7 @@ html {
 html,
 body {
   text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--primary);

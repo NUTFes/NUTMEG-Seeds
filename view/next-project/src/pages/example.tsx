@@ -1,8 +1,10 @@
+import React, { useState } from 'react';
 import { get, post, put, del } from '@utils/api_methods';
-import MainLayout from '@components/layout/MainLayout';
 import Row from '@components/layout/RowLayout';
+import MainLayout from '@components/layout/MainLayout';
 import GlassCard from '@components/common/GlassCard';
 import Button from '@components/common/TestButton';
+import ProjectAddModal from '@components/common/ProjectAddModal';
 
 type Curriculum = {
   id: number;
@@ -56,23 +58,37 @@ export async function deleteCurriculum() {
 }
 
 export default function Example(props: Props) {
+  const [isOpenAddModal, setIsOpenAddModal] = useState(false)
+  const AddModal = (isOpenAddModal: boolean) => {
+    if (isOpenAddModal) {
+      return (
+        <>
+          <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal}/>
+        </>
+      );
+    } 
+  };
   return (
-    <MainLayout>
-      <Row>
-        <Button onClick={postCurriculum}>POST</Button>
-        <Button onClick={putCurriculum}>PUT</Button>
-        <Button onClick={deleteCurriculum}>DELETE</Button>
-      </Row>
-      <GlassCard align={'center'}>
-        <table>
-          {props.curriculums.map((curriculum) => (
-            <tr key={curriculum.toString()}>
-              <td>{curriculum.id}</td>
-              <td>{curriculum.title}</td>
-            </tr>
-          ))}
-        </table>
-      </GlassCard>
-    </MainLayout>
+    <>
+      <MainLayout>
+        <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}>open</Button>
+        { AddModal(isOpenAddModal) }
+        <Row>
+          <Button onClick={postCurriculum}>POST</Button>
+          <Button onClick={putCurriculum}>PUT</Button>
+          <Button onClick={deleteCurriculum}>DELETE</Button>
+        </Row>
+        <GlassCard align={'center'}>
+          <table>
+            {props.curriculums.map((curriculum) => (
+              <tr key={curriculum.toString()}>
+                <td>{curriculum.id}</td>
+                <td>{curriculum.title}</td>
+              </tr>
+            ))}
+          </table>
+        </GlassCard>
+      </MainLayout>
+    </>
   );
 }
