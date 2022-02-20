@@ -31,10 +31,9 @@ export async function getStaticProps() {
   };
 }
 
-
 export default function ProjectList(props: Props) {
   // 初期状態で詳細を非表示にするための処理
-  let initialState = new Object;
+  let initialState = new Object();
   for (const project of props.projects) {
     initialState[project.id] = false;
   }
@@ -65,54 +64,45 @@ export default function ProjectList(props: Props) {
   // プロジェクトのカードにマウスホバーした時の処理
   const onHover = (id: number) => {
     // マウスホバーしたプロジェクトのisHoverをTrueにする
-    setIsHover({ ...isHover, [id]: true })
-  }
+    setIsHover({ ...isHover, [id]: true });
+  };
   // プロジェクトのカードからマウスホバーが外れた時の処理
   const leaveHover = (id: number) => {
-    setIsHover({ ...isHover, [id]: false })
-  }
+    setIsHover({ ...isHover, [id]: false });
+  };
 
   // マウスホバー時のプロジェクト
   const projectContent = (isHover: any, project: Projects) => {
     if (isHover[project.id]) {
       return (
-          <GlassCard width='275px' height='250px' align={'center'} background='white'>
-            <FocusProjectNameContainer>
-              {project.name}
-            </FocusProjectNameContainer>
-            <ProjectDetail>
-              {project.detail}
-            </ProjectDetail>
-            <AccountPosition>
-              <AccountCircle height={20} width={20} color={'green'} />
-              <AccountCircle height={20} width={20} color={'blue'} />
-              <AccountCircle height={20} width={20} color={'red'} />
-            </AccountPosition>
-            <div>
-              <Button height='30px' text='More' />
-            </div>
-          </GlassCard>
-      )
+        <GlassCard width='275px' height='250px' align={'center'} background='white'>
+          <FocusProjectNameContainer>{project.name}</FocusProjectNameContainer>
+          <ProjectDetail>{project.detail}</ProjectDetail>
+          <AccountPosition>
+            <AccountCircle height={20} width={20} color={'green'} />
+            <AccountCircle height={20} width={20} color={'blue'} />
+            <AccountCircle height={20} width={20} color={'red'} />
+          </AccountPosition>
+          <div>
+            <Button height='30px' text='More' />
+          </div>
+        </GlassCard>
+      );
     } else {
       return (
-          <GlassCard width='275px' height='250px' align={'center'}>
-            <HeaderLogo height={120} width={120} color={'black'} />
-            <ProjectNameContainer>
-              {project.name}
-            </ProjectNameContainer>
-          </GlassCard>
-      )
+        <GlassCard width='275px' height='250px' align={'center'}>
+          <HeaderLogo height={120} width={120} color={'black'} />
+          <ProjectNameContainer>{project.name}</ProjectNameContainer>
+        </GlassCard>
+      );
     }
-  }
+  };
 
   return (
     <MainLayout>
       <ProjectListContainer>
         {props.projects.map((project) => (
-          <div
-            onMouseEnter={()=>onHover(project.id)}
-            onMouseLeave={()=>leaveHover(project.id)}
-          >
+          <div onMouseEnter={() => onHover(project.id)} onMouseLeave={() => leaveHover(project.id)}>
             {projectContent(isHover, project)}
           </div>
         ))}

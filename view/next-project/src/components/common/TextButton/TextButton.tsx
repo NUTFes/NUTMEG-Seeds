@@ -20,6 +20,6 @@ const TextButton = (props: ButtonContentsProps) => {
       </button>
     </>
   );
-}
+};
 
 export default TextButton;
