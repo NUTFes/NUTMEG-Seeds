@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import RightArrow from '@components/icons/RightArrow';
 import s from './TextButton.module.css';
 
-type ButtonContentsProps = {
+interface ButtonContentsProps {
   width?: string;
   height?: string;
   text?: string;
@@ -10,7 +10,7 @@ type ButtonContentsProps = {
   children: React.ReactNode;
 };
 
-const TextButton = (props: ButtonContentsProps) => {
+const TextButton: FC<ButtonContentsProps> = (props) => {
   return (
     <>
       <button className={s.textButton} onClick={props.onClick}>
