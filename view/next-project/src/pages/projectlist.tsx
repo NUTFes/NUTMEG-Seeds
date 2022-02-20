@@ -76,8 +76,12 @@ export default function ProjectList(props: Props) {
     if (isHover[project.id]) {
       return (
         <GlassCard width='275px' height='250px' align={'center'} background='white'>
-          <FocusProjectNameContainer>{project.name}</FocusProjectNameContainer>
-          <ProjectDetail>{project.detail}</ProjectDetail>
+          <FocusProjectNameContainer>
+            {project.name}
+          </FocusProjectNameContainer>
+          <ProjectDetail>
+            {project.detail}
+          </ProjectDetail>
           <AccountPosition>
             <AccountCircle height={20} width={20} color={'green'} />
             <AccountCircle height={20} width={20} color={'blue'} />
@@ -87,14 +91,16 @@ export default function ProjectList(props: Props) {
             <Button height='30px' text='More' />
           </div>
         </GlassCard>
-      );
+      )
     } else {
       return (
         <GlassCard width='275px' height='250px' align={'center'}>
           <HeaderLogo height={120} width={120} color={'black'} />
-          <ProjectNameContainer>{project.name}</ProjectNameContainer>
+          <ProjectNameContainer>
+            {project.name}
+          </ProjectNameContainer>
         </GlassCard>
-      );
+      )
     }
   };
 
@@ -102,7 +108,10 @@ export default function ProjectList(props: Props) {
     <MainLayout>
       <ProjectListContainer>
         {props.projects.map((project) => (
-          <div onMouseEnter={() => onHover(project.id)} onMouseLeave={() => leaveHover(project.id)}>
+          <div
+            onMouseEnter={() => onHover(project.id)}
+            onMouseLeave={() => leaveHover(project.id)}
+          >
             {projectContent(isHover, project)}
           </div>
         ))}
