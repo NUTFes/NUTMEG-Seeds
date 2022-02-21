@@ -1,0 +1,40 @@
+.headerContainer {
+  box-shadow: none;
+  color: white;
+  background-color: none;
+  backdrop-filter: blur(5px);
+  position: fixed;
+  top: 0;
+  height: 60px;
+  width: 100%;
+  padding: 0px 50px;
+  z-index: 1;
+}
+
+.headerContainer header {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.headerLinks {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  height: 100%;
+  width: 100%;
+}
+
+.headerLinks ul {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.headerLinks a {
+  color: var(--accent-0);
+  font-size: 1.4rem;
+  text-decoration: none;
+}

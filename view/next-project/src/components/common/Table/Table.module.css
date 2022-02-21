@@ -30,11 +30,7 @@
 }
 
 .tableContainer td:hover {
-  background: linear-gradient(
-    45deg,
-    var(--button-secondary) 0%,
-    var(--button-primary) 100%
-  );
+  background: linear-gradient(45deg, var(--button-secondary) 0%, var(--button-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

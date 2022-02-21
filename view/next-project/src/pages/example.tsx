@@ -58,21 +58,21 @@ export async function deleteCurriculum() {
 }
 
 export default function Example(props: Props) {
-  const [isOpenAddModal, setIsOpenAddModal] = useState(false)
+  const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const AddModal = (isOpenAddModal: boolean) => {
     if (isOpenAddModal) {
       return (
         <>
-          <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal}/>
+          <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} />
         </>
       );
-    } 
+    }
   };
   return (
     <>
       <MainLayout>
         <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}>open</Button>
-        { AddModal(isOpenAddModal) }
+        {AddModal(isOpenAddModal)}
         <Row>
           <Button onClick={postCurriculum}>POST</Button>
           <Button onClick={putCurriculum}>PUT</Button>

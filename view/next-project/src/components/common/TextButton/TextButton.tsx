@@ -8,7 +8,7 @@ interface ButtonContentsProps {
   text?: string;
   onClick: (event: any) => void;
   children: React.ReactNode;
-};
+}
 
 const TextButton: FC<ButtonContentsProps> = (props) => {
   return (
