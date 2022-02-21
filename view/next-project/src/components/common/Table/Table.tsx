@@ -9,20 +9,16 @@ interface TableContentProps {
 const Table: FC<TableContentProps> = (props) => {
   return (
     <>
-      <table className={ s.tableContainer }>
+      <table className={s.tableContainer}>
         <thead>
           {props.headers.map((header) => (
-            <th>
-              { header }
-            </th>
+            <th>{header}</th>
           ))}
         </thead>
-        <tbody>
-          { props.children }
-        </tbody>
+        <tbody>{props.children}</tbody>
       </table>
     </>
-  )
-}
+  );
+};
 
 export default Table;

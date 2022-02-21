@@ -8,7 +8,7 @@ import AccountCircle from '@components/icons/AccountCircle';
 import Button from '@components/common/TransButton';
 import { join } from 'path/posix';
 
-type Projects = {
+type Users = {
   id: number;
   name: string;
   detail: string;
@@ -18,42 +18,42 @@ type Projects = {
 };
 
 type Props = {
-  projects: Projects[];
+  users: Users[];
 };
 
 export async function getStaticProps() {
-  const getUrl = 'http://seeds_api:3000/projects';
+  const getUrl = 'http://seeds_api:3000/users';
   const json = await get(getUrl);
   return {
     props: {
-      projects: json,
+      users: json,
     },
   };
 }
 
-export default function ProjectList(props: Props) {
+export default function UserList(props: Props) {
   // 初期状態で詳細を非表示にするための処理
   let initialState = new Object();
-  for (const project of props.projects) {
-    initialState[project.id] = false;
+  for (const user of props.users) {
+    initialState[user.id] = false;
   }
   // マウスホバーしているかをuseStateで管理
   let [isHover, setIsHover] = useState(initialState);
 
-  const ProjectListContainer = styled.div`
+  const UserListContainer = styled.div`
     display: flex;
     gap: 60px 60px;
     flex-wrap: wrap;
     justify-content: center;
   `;
-  const ProjectNameContainer = styled.div`
+  const UserNameContainer = styled.div`
     font-size: 20px;
   `;
-  const FocusProjectNameContainer = styled.div`
+  const FocusUserNameContainer = styled.div`
     font-size: 20px;
     font-weight: bold;
   `;
-  const ProjectDetail = styled.div`
+  const UserDetail = styled.div`
     font-size: 14px;
     padding: 10px 0;
   `;
@@ -72,12 +72,12 @@ export default function ProjectList(props: Props) {
   };
 
   // マウスホバー時のプロジェクト
-  const projectContent = (isHover: any, project: Projects) => {
-    if (isHover[project.id]) {
+  const userContent = (isHover: any, user: Users) => {
+    if (isHover[user.id]) {
       return (
         <GlassCard width='275px' height='250px' align={'center'} background='white'>
-          <FocusProjectNameContainer>{project.name}</FocusProjectNameContainer>
-          <ProjectDetail>{project.detail}</ProjectDetail>
+          <FocusUserNameContainer>{user.name}</FocusUserNameContainer>
+          <UserDetail>{user.detail}</UserDetail>
           <AccountPosition>
             <AccountCircle height={20} width={20} color={'green'} />
             <AccountCircle height={20} width={20} color={'blue'} />
@@ -92,7 +92,7 @@ export default function ProjectList(props: Props) {
       return (
         <GlassCard width='275px' height='250px' align={'center'}>
           <HeaderLogo height={120} width={120} color={'black'} />
-          <ProjectNameContainer>{project.name}</ProjectNameContainer>
+          <UserNameContainer>{user.name}</UserNameContainer>
         </GlassCard>
       );
     }
@@ -100,13 +100,13 @@ export default function ProjectList(props: Props) {
 
   return (
     <MainLayout>
-      <ProjectListContainer>
-        {props.projects.map((project) => (
-          <div onMouseEnter={() => onHover(project.id)} onMouseLeave={() => leaveHover(project.id)}>
-            {projectContent(isHover, project)}
+      <UserListContainer>
+        {props.users.map((user) => (
+          <div onMouseEnter={() => onHover(user.id)} onMouseLeave={() => leaveHover(user.id)}>
+            {userContent(isHover, user)}
           </div>
         ))}
-      </ProjectListContainer>
+      </UserListContainer>
     </MainLayout>
   );
 }
