@@ -51,7 +51,7 @@ const Header: FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href='/recordlist'>
+                <Link href='/userlist'>
                   <a>Member</a>
                 </Link>
               </li>

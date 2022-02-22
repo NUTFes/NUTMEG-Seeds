@@ -3,7 +3,7 @@ class Api::V1::UsersController < ApplicationController
   
   def get_user_index_for_admin_view
     @users = User.with_user_details
-    render json: fmt(ok, @users)
+    render json: @users
   end
 
   def get_user_show_for_admin_view
@@ -42,6 +42,11 @@ class Api::V1::UsersController < ApplicationController
 
   # 現在のログインしているユーザーを返す
   # TODO: このコントローラーはフロントが整備され次第変更する
+  def index
+    @users = User.all
+    render json: @users
+  end
+
   def show
     @user = current_api_user
     render json: fmt(ok, @user)
