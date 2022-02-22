@@ -6,6 +6,7 @@ type CardContentsProps = {
   height?: string;
   align?: string;
   justify?: string;
+  gap?: string;
   children: React.ReactNode;
   background?: string;
 };
@@ -25,6 +26,7 @@ function GlassCard(props: CardContentsProps): JSX.Element {
     flex-flow: column;
     align-items: ${props.align || 'start'};
     justify-content: ${props.justify || 'start'};
+    gap: ${props.gap || '0px'};
     font-size: 16px;
     flex: none;
   `;

@@ -10,11 +10,8 @@ import { join } from 'path/posix';
 
 type Users = {
   id: number;
+  email: string;
   name: string;
-  detail: string;
-  icon_name: string;
-  github: string;
-  remark: string;
 };
 
 type Props = {
@@ -22,7 +19,7 @@ type Props = {
 };
 
 export async function getStaticProps() {
-  const getUrl = 'http://seeds_api:3000/users';
+  const getUrl = 'http://seeds_api:3000/api/v1/users';
   const json = await get(getUrl);
   return {
     props: {
@@ -33,6 +30,7 @@ export async function getStaticProps() {
 
 export default function UserList(props: Props) {
   // 初期状態で詳細を非表示にするための処理
+  console.log(props)
   let initialState = new Object();
   for (const user of props.users) {
     initialState[user.id] = false;
@@ -47,14 +45,14 @@ export default function UserList(props: Props) {
     justify-content: center;
   `;
   const UserNameContainer = styled.div`
-    font-size: 20px;
+    font-size: 2rem;
   `;
   const FocusUserNameContainer = styled.div`
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 2rem;
+    font-weight: 500;
   `;
   const UserDetail = styled.div`
-    font-size: 14px;
+    font-size: 1.4rem;
     padding: 10px 0;
   `;
   const AccountPosition = styled.div`
@@ -75,14 +73,8 @@ export default function UserList(props: Props) {
   const userContent = (isHover: any, user: Users) => {
     if (isHover[user.id]) {
       return (
-        <GlassCard width='275px' height='250px' align={'center'} background='white'>
+        <GlassCard width='275px' height='250px' align={'center'} justify={'center'} background='white' gap='30px'>
           <FocusUserNameContainer>{user.name}</FocusUserNameContainer>
-          <UserDetail>{user.detail}</UserDetail>
-          <AccountPosition>
-            <AccountCircle height={20} width={20} color={'green'} />
-            <AccountCircle height={20} width={20} color={'blue'} />
-            <AccountCircle height={20} width={20} color={'red'} />
-          </AccountPosition>
           <div>
             <Button height='30px' text='More' />
           </div>
@@ -91,7 +83,9 @@ export default function UserList(props: Props) {
     } else {
       return (
         <GlassCard width='275px' height='250px' align={'center'}>
-          <HeaderLogo height={120} width={120} color={'black'} />
+          <div onMouseEnter={() => onHover(user.id)}>
+            <AccountCircle height={120} width={120} color={'green'} />
+          </div>
           <UserNameContainer>{user.name}</UserNameContainer>
         </GlassCard>
       );
@@ -102,7 +96,7 @@ export default function UserList(props: Props) {
     <MainLayout>
       <UserListContainer>
         {props.users.map((user) => (
-          <div onMouseEnter={() => onHover(user.id)} onMouseLeave={() => leaveHover(user.id)}>
+          <div onMouseLeave={() => leaveHover(user.id)}>
             {userContent(isHover, user)}
           </div>
         ))}
