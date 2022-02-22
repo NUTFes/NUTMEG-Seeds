@@ -21,13 +21,14 @@ export const get_with_token = async (url: string) => {
   return await res.json();
 };
 
-export const post = async (url: string) => {
+export const post = async (url: string, data: any) => {
   const res = await fetch(url, {
     method: 'POST',
     mode: 'cors',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify(data),
   });
   return res;
 };
