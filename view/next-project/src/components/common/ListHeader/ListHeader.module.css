@@ -1,0 +1,20 @@
+.HeaderContainer {
+  display: flex;
+  width: 100%;
+}
+ 
+.SplitLeftContainer {
+  padding-left: 10px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+ 
+.SplitRightContainer {
+  flex-grow: 1;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+ 
