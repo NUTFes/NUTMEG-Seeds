@@ -1,6 +1,11 @@
 class Api::V1::UsersController < ApplicationController
   # before_action :authenticate_api_user!
   
+  def get_user_with_detail_and_project_and_role_and_record
+    @user = User.with_detail_and_project_and_role_and_record(params[:id])
+    render json: @user
+  end
+
   def get_user_index_for_admin_view
     @users = User.with_user_details
     render json: @users

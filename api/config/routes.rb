@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     namespace 'v1' do
       # users
       get "/users" => "users#index"
+      get "/get_user_with_detail_and_project_and_role_and_record/:id" => "users#get_user_with_detail_and_project_and_role_and_record"
       get "get_role_1" => "users#get_role_1"
       get "get_role_2" => "users#get_role_2"
       get "user/:id" => "users#show"

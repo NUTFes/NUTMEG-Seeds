@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router'
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import GlassCard from '@components/common/GlassCard';
@@ -30,7 +31,7 @@ export async function getStaticProps() {
 
 export default function UserList(props: Props) {
   // 初期状態で詳細を非表示にするための処理
-  console.log(props)
+  console.log(props);
   let initialState = new Object();
   for (const user of props.users) {
     initialState[user.id] = false;
@@ -69,6 +70,8 @@ export default function UserList(props: Props) {
     setIsHover({ ...isHover, [id]: false });
   };
 
+  const router = useRouter()
+
   // マウスホバー時のプロジェクト
   const userContent = (isHover: any, user: Users) => {
     if (isHover[user.id]) {
@@ -76,7 +79,7 @@ export default function UserList(props: Props) {
         <GlassCard width='275px' height='250px' align={'center'} justify={'center'} background='white' gap='30px'>
           <FocusUserNameContainer>{user.name}</FocusUserNameContainer>
           <div>
-            <Button height='30px' text='More' />
+            <Button height='30px' text='More' onClick={() => router.push('/users/2')}/>
           </div>
         </GlassCard>
       );
@@ -96,9 +99,7 @@ export default function UserList(props: Props) {
     <MainLayout>
       <UserListContainer>
         {props.users.map((user) => (
-          <div onMouseLeave={() => leaveHover(user.id)}>
-            {userContent(isHover, user)}
-          </div>
+          <div onMouseLeave={() => leaveHover(user.id)}>{userContent(isHover, user)}</div>
         ))}
       </UserListContainer>
     </MainLayout>

@@ -15,4 +15,25 @@ class User < ActiveRecord::Base
   has_many :skills, through: :user_skills
   has_many :teachers, dependent: :destroy
   has_many :records, dependent: :destroy
+
+  def self.with_detail_and_project_and_role_and_record(user_id)
+    @record = User.eager_load(:user_detail, :projects, :roles, :records, :teachers, :skills).where(users: {id: user_id})
+      .map{
+        |user|
+        {
+          "user": user, 
+          "detail": user.user_detail, 
+          "projects": user.projects, 
+          "roles": user.roles, 
+          "records": user.records.map {
+            |record|
+            {
+              "record": record,
+              "teacher": record.teacher.to_info_h
+            }
+          },
+          "skills": user.skills,
+        }
+      }
+  end
 end
