@@ -6,9 +6,6 @@ import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import DetailHeader from '@components/common/DetailHeader';
 import styled from 'styled-components';
-import HeaderLogo from '@components/icons/HeaderLogo';
-import SlackIcon from '@components/icons/SlackIcon';
-import GithubIcon from '@components/icons/GithubIcon';
 import Button from '@components/common/BackButton';
 
 type PathParam = {
@@ -84,6 +81,19 @@ export async function getStaticProps({ params }: any) {
 }
 
 export default function Page(props: Props) {
+  const SplitParentContainer = styled.div`
+    display: flex;
+    width: 100%;
+  `;
+  const SplitLeftContainer = styled.div`
+    width: 70%;
+  `;
+  const SplitRightContainer = styled.div`
+    width: 30%;
+    margin-left: 2rem;
+    margin-bottom: 40px;
+  `;
+
   const CurriculumContentsContainer = styled.div`
     width: 80%;
   `;
@@ -95,33 +105,83 @@ export default function Page(props: Props) {
     font-size: 1.6rem;
     padding-bottom: 3rem;
   `;
+  const ParentButtonContainer = styled.div`
+    position: relative;
+    width: 100%;
+  `;
+  const ChildButtonContainer = styled.div`
+    position: absolute;
+    bottom: 50px;
+    left:-40px;
+  `;
+  const RecordMember = styled.div`
+    font-size: 1.4rem;
+    font-weight: bold;
+    width: 100%;
+    padding-bottom: 1rem;
+  `;
+  const RecordContents = styled.div`
+    font-size: 1.4rem;
+    width: 100%;
+    padding-bottom: 1rem;
+  `;
+  const RecordDate = styled.div`
+    font-size: 1.2rem;
+    width: 100%;
+    text-align: right;
+  `;
+
+  const formatDate = (date: string) => {
+    let datetime = date.replace('T', ' ');
+    const datetime2 = datetime.substring(0, datetime.length - 5);
+    return datetime2;
+  };
 
   return (
     <MainLayout>
-      <div style={{ position: 'relative' }}>
+      <ParentButtonContainer>
         <DetailHeader curriculum={props.curriculum} skill={props.skill} />
-        <FlatCard width='100%'>
-          <CurriculumContentsContainer>
-            <CurriculumContentsTitle>
-              Contents
-              <hr />
-            </CurriculumContentsTitle>
-            <CurriculumContents>
-              {props.curriculum.content}
-            </CurriculumContents>
-            <CurriculumContentsTitle>
-              Homework
-              <hr />
-            </CurriculumContentsTitle>
-            <CurriculumContents>
-              {props.curriculum.homework}
-            </CurriculumContents>
-          </CurriculumContentsContainer>
-        </FlatCard>
-        <div style={{ position: 'absolute', bottom: '50px', left: '-40px' }}>
-          <Button onClick={() => Router.back()} />
-        </div>
-      </div>
+        <SplitParentContainer>
+          <SplitLeftContainer>
+            <FlatCard width='100%'>
+              <CurriculumContentsContainer>
+                <CurriculumContentsTitle>
+                  Contents
+                  <hr />
+                </CurriculumContentsTitle>
+                <CurriculumContents>
+                  {props.curriculum.content}
+                </CurriculumContents>
+                <CurriculumContentsTitle>
+                  Homework
+                  <hr />
+                </CurriculumContentsTitle>
+                <CurriculumContents>
+                  {props.curriculum.homework}
+                </CurriculumContents>
+              </CurriculumContentsContainer>
+            </FlatCard>
+            <ChildButtonContainer>
+              <Button onClick={() => Router.back()} />
+            </ChildButtonContainer>
+          </SplitLeftContainer>
+          <SplitRightContainer>
+            {props.records.map((record) => (
+              <FlatCard width='100%' margin='0 0 1.5rem 0' padding='2.5rem'>
+                <RecordMember>
+                  {record.user_id}
+                </RecordMember>
+                <RecordContents>
+                  {record.title}
+                </RecordContents>
+                <RecordDate>
+                  最終更新日: {formatDate(record.updated_at)}
+                </RecordDate>
+              </FlatCard>
+            ))}
+          </SplitRightContainer>
+        </SplitParentContainer>
+      </ParentButtonContainer>
     </MainLayout>
   );
 }
