@@ -25,16 +25,21 @@ interface Curriculum {
   updated_at: string;
 }
 
-interface Skill {
+interface Record {
   id: number;
-  name: string;
-  detail: string;
-  category_id: number;
+  title: string;
+  content: string;
+  homework: string;
+  user_id: number;
+  curriculum_id: number;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Props {
-  curriculum: Curriculum[];
-  skills: Skill[];
+  curriculum: Curriculum;
+  skill: string;
+  records: Record[];
 }
 
 export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
@@ -49,6 +54,7 @@ export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
   interface curriculumID {
     id: number;
   }
+
   let curriculumId: curriculumID;
   json.map((curriculum: Curriculum) => {
     curriculumId = { id: curriculum.id };
@@ -68,43 +74,17 @@ export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
 };
 
 export async function getStaticProps({ params }: any) {
-  interface Skill {
-    id: number;
-    name: string;
-    role: string;
-  }
-
-  interface Member {
-    id: number;
-    name: string;
-    role: string;
-  }
-
-  const skills: Skill[] = [
-    {
-      id: 1,
-      name: 'Vue.js',
-      role: 'Front End',
-    },
-    {
-      id: 2,
-      name: 'Ruby on Rails',
-      role: 'Back End',
-    },
-  ];
 
   const id = params.id;
-  const getUrl = 'http://seeds_api:3000/curriculums/' + id;
+  const getUrl = 'http://seeds_api:3000/api/v1/get_curriculum_for_view/' + id;
   const json = await get(getUrl);
   return {
-    props: {
-      curriculum: json,
-      skills: skills,
-    },
+      props: json[0],
   };
 }
 
 export default function Page(props: Props) {
+  console.log(props)
   const SplitParentContainer = styled.div`
     display: flex;
   `;
@@ -147,7 +127,7 @@ export default function Page(props: Props) {
   return (
     <MainLayout>
       <div style={{ position: 'relative' }}>
-       <DetailHeader skills={props.skills} curriculum={props.curriculum} />
+        <DetailHeader curriculum={props.curriculum} skill={props.skill} />
         <FlatCard width='1100px' height='650px'>
           <SplitParentContainer>
             <ImageContainer>
