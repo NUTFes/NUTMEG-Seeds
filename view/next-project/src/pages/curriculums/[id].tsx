@@ -4,6 +4,7 @@ import { get } from '@utils/api_methods';
 import { GetStaticPaths } from 'next';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
+import DetailHeader from '@components/common/DetailHeader';
 import styled from 'styled-components';
 import HeaderLogo from '@components/icons/HeaderLogo';
 import SlackIcon from '@components/icons/SlackIcon';
@@ -14,42 +15,51 @@ type PathParam = {
   id: string;
 };
 
-type Project = {
+interface Curriculum {
+  id: number;
+  title: string;
+  content: string;
+  homework: string;
+  skill_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Skill {
   id: number;
   name: string;
   detail: string;
-  icon_name: string;
-  github: string;
-  remark: string;
-};
+  category_id: number;
+}
 
-type Props = {
-  project: Project[];
-};
+interface Props {
+  curriculum: Curriculum[];
+  skills: Skill[];
+}
 
 export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
-  const getUrl = 'http://seeds_api:3000/projects';
+  const getUrl = 'http://seeds_api:3000/curriculums';
   const json = await get(getUrl);
 
-  // // ProjectのIDを一覧から取得するための処理
-  // peojectのidを格納するための配列
-  const projectIds: projectID[] = [];
+  // // CurriculumsのIDを一覧から取得するための処理
+  // Curriculumのidを格納するための配列
+  const curriculumIds: curriculumID[] = [];
 
-  // peojectのidを連想配列で格納するための処理
-  interface projectID {
+  // Curriculumのidを連想配列で格納するための処理
+  interface curriculumID {
     id: number;
   }
-  let projectId: projectID;
-  json.map((project: Project) => {
-    projectId = { id: project.id };
-    projectIds.push(projectId);
+  let curriculumId: curriculumID;
+  json.map((curriculum: Curriculum) => {
+    curriculumId = { id: curriculum.id };
+    curriculumIds.push(curriculumId);
   });
 
   return {
-    // projectのidの数だけ動的ルーティングする
-    paths: projectIds.map((project) => {
+    // curriculumのidの数だけ動的ルーティングする
+    paths: curriculumIds.map((curriculum) => {
       return {
-        params: { id: project.id.toString() },
+        params: { id: curriculum.id.toString() },
       };
     }),
     // paramsに存在しないroutesが指定されたら404を返す
@@ -83,37 +93,13 @@ export async function getStaticProps({ params }: any) {
     },
   ];
 
-  const members: Member[] = [
-    {
-      id: 1,
-      name: '大場雅士',
-      role: 'Front End',
-    },
-    {
-      id: 2,
-      name: '久々江耀平',
-      role: 'Front End',
-    },
-    {
-      id: 3,
-      name: '水上涼介',
-      role: 'Back End',
-    },
-    {
-      id: 4,
-      name: '五十嵐和亜',
-      role: 'Back End',
-    },
-  ];
-
   const id = params.id;
-  const getUrl = 'http://seeds_api:3000/projects/' + id;
+  const getUrl = 'http://seeds_api:3000/curriculums/' + id;
   const json = await get(getUrl);
   return {
     props: {
-      project: json,
+      curriculum: json,
       skills: skills,
-      members: members,
     },
   };
 }
@@ -161,6 +147,7 @@ export default function Page(props: Props) {
   return (
     <MainLayout>
       <div style={{ position: 'relative' }}>
+       <DetailHeader skills={props.skills} curriculum={props.curriculum} />
         <FlatCard width='1100px' height='650px'>
           <SplitParentContainer>
             <ImageContainer>
@@ -169,40 +156,14 @@ export default function Page(props: Props) {
             <ProjectContainer>
               <SplitParentContainer>
                 <SplitChildContainer>
-                  <ProjectNameContainer>{props.project.name}</ProjectNameContainer>
                 </SplitChildContainer>
                 <SplitChildContainer>
                   <GithubIcon height={30} width={30} />
                   <SlackIcon height={45} width={45} />
                 </SplitChildContainer>
               </SplitParentContainer>
-              <ProjectDetail>{props.project.detail}</ProjectDetail>
               <TopicContainer>Skills</TopicContainer>
-              <ContentsContainer>
-                <table>
-                  {props.skills.map((skill) => (
-                    <tr key={skill.toString()}>
-                      <TableData>
-                        <td width='150px'>{skill.name}</td>
-                        <td width='150px'>{skill.role}</td>
-                      </TableData>
-                    </tr>
-                  ))}
-                </table>
-              </ContentsContainer>
               <TopicContainer>Members</TopicContainer>
-              <ContentsContainer>
-                <table>
-                  {props.members.map((member) => (
-                    <tr key={member.toString()}>
-                      <TableData>
-                        <td width='150px'>{member.name}</td>
-                        <td width='150px'>{member.role}</td>
-                      </TableData>
-                    </tr>
-                  ))}
-                </table>
-              </ContentsContainer>
             </ProjectContainer>
           </SplitParentContainer>
         </FlatCard>
