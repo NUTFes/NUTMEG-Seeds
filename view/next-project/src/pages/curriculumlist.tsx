@@ -14,19 +14,19 @@ interface Curriculum {
   skill_id: number;
   created_at: string;
   updated_at: string;
-};
+}
 
-interface Skills {
+interface Skill {
   id: number;
   name: string;
   detail: string;
   category_id: number;
-};
+}
 
-type Props = {
+interface Props {
   curriculums: Curriculum[];
-  skills: Skills[];
-};
+  skills: Skill[];
+}
 
 export async function getStaticProps() {
   const getCurriculumsUrl = 'http://seeds_api:3000/curriculums';
