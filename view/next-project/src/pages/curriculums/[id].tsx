@@ -84,68 +84,39 @@ export async function getStaticProps({ params }: any) {
 }
 
 export default function Page(props: Props) {
-  console.log(props)
-  const SplitParentContainer = styled.div`
-    display: flex;
+  const CurriculumContentsContainer = styled.div`
+    width: 80%;
   `;
-  const SplitChildContainer = styled.div`
-    flex-grow: 1;
-    display: flex;
-    justify-content: end;
-    align-items: center;
+  const CurriculumContentsTitle = styled.div`
+    font-size: 2.8rem;
+    padding-bottom: 1.2rem;
   `;
-  const ImageContainer = styled.div`
-    flex-grow: 1;
-    padding: 20px;
+  const CurriculumContents = styled.div`
+    font-size: 1.6rem;
+    padding-bottom: 3rem;
   `;
-  const ProjectContainer = styled.div`
-    padding: 20px;
-  `;
-  const ProjectNameContainer = styled.div`
-    flex-grow: 1;
-    font-size: 28px;
-    font-weight: bold;
-  `;
-  const TopicContainer = styled.div`
-    font-size: 20px;
-    padding-top: 30px;
-    padding-bottom: 15px;
-  `;
-  const ContentsContainer = styled.div`
-    font-size: 14px;
-    padding: 10px;
-    width: 100%
-    display: flex;
-  `;
-  const TableData = styled.div`
-    text-align: center;
-  `;
-  const ProjectDetail = styled.div`
-    font-size: 14px;
-    padding: 10px 0 0 30px;
-  `;
+
   return (
     <MainLayout>
       <div style={{ position: 'relative' }}>
         <DetailHeader curriculum={props.curriculum} skill={props.skill} />
-        <FlatCard width='1100px' height='650px'>
-          <SplitParentContainer>
-            <ImageContainer>
-              <HeaderLogo height={300} width={300} color={'black'} />
-            </ImageContainer>
-            <ProjectContainer>
-              <SplitParentContainer>
-                <SplitChildContainer>
-                </SplitChildContainer>
-                <SplitChildContainer>
-                  <GithubIcon height={30} width={30} />
-                  <SlackIcon height={45} width={45} />
-                </SplitChildContainer>
-              </SplitParentContainer>
-              <TopicContainer>Skills</TopicContainer>
-              <TopicContainer>Members</TopicContainer>
-            </ProjectContainer>
-          </SplitParentContainer>
+        <FlatCard width='100%'>
+          <CurriculumContentsContainer>
+            <CurriculumContentsTitle>
+              Contents
+              <hr />
+            </CurriculumContentsTitle>
+            <CurriculumContents>
+              {props.curriculum.content}
+            </CurriculumContents>
+            <CurriculumContentsTitle>
+              Homework
+              <hr />
+            </CurriculumContentsTitle>
+            <CurriculumContents>
+              {props.curriculum.homework}
+            </CurriculumContents>
+          </CurriculumContentsContainer>
         </FlatCard>
         <div style={{ position: 'absolute', bottom: '50px', left: '-40px' }}>
           <Button onClick={() => Router.back()} />
