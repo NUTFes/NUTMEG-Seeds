@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+    :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
 
   has_one :user_detail, dependent: :destroy
@@ -22,9 +22,15 @@ class User < ActiveRecord::Base
         |user|
         {
           "user": user, 
-          "detail": user.user_detail, 
-          "projects": user.projects, 
-          "roles": user.roles, 
+          "detail": user.user_detail.to_info_h, 
+          "projects": user.project_users.map {
+            |project_user| 
+            {
+              "id": project_user.project.id,
+              "project": project_user.project.name,
+              "role": project_user.role.name
+            }
+          }, 
           "records": user.records.map {
             |record|
             {

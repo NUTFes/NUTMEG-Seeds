@@ -11,14 +11,19 @@ import GithubIcon from '@components/icons/GithubIcon';
 import Button from '@components/common/BackButton';
 import { GetStaticPaths, GetStaticProps } from 'next'
 
-interface User {
-  name: string;
-  email: string;
+interface Props {
+  user: User;
   user_detail: UserDetail;
   projects: Project[];
   records: Record[];
   skills: Skill[];
 };
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
 interface UserDetail {
   grade: string;
@@ -36,11 +41,9 @@ interface UserDetail {
 }
 
 interface Project {
+  id: number;
   name: string;
-  detail: string;
-  icon_name: string;
-  github: string;
-  remark: string;
+  role: string;
 };
 
 interface Record {
@@ -57,9 +60,6 @@ interface Skill {
   name: string;
 };
 
-type Props = {
-  user: User;
-};
 export const getStaticPaths: GetStaticPaths = async () => {
   const getUrl = 'http://seeds_api:3000/api/v1/users';
   const json = await get(getUrl);
@@ -89,8 +89,7 @@ export async function getStaticProps({ params }: any) {
   const getRes = await get(getUrl)
   return {
     props: {
-      user: getRes[0].user,
-      skills: getRes[0].skills,
+      user: getRes[0],
     },
   };
 }
