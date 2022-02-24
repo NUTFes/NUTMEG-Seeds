@@ -5,6 +5,8 @@ type CardContentsProps = {
   width?: string;
   height?: string;
   children: React.ReactNode;
+  margin?: string;
+  padding?: string;
 };
 
 function FlatCard(props: CardContentsProps): JSX.Element {
@@ -17,7 +19,8 @@ function FlatCard(props: CardContentsProps): JSX.Element {
     flex-flow: column;
     background-color: var(--accent-0);
     border-radius: var(--card-radius);
-    padding: 50px;
+    padding: ${props.padding || '50px'};
+    margin: ${props.margin || '0px'};
     font-size: 14px;
     position: relative;
   `;

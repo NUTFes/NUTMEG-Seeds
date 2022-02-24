@@ -73,6 +73,22 @@
   outline: 0;
 }
 
+.modalContent select {
+  font-size: 1.6rem;
+  width: 48rem;
+  letter-spacing: 1px;
+  color: var(--accent-6);
+  background: none;
+  border: 1px solid var(--accent-4);
+  padding: 10px;
+}
+
+.modalContent select:focus {
+  border: 1px solid var(--button-secondary);
+  z-index: 10;
+  outline: 0;
+}
+
 .modalContentClose {
   background: none;
   border: none;
@@ -88,3 +104,4 @@
 
 .textButton:active {
 }
+

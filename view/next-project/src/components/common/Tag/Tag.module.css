@@ -1,0 +1,16 @@
+.Tag {
+  background: var(--text-secondary);
+  border: none;
+  margin-bottom: 20px;
+  border-radius: var(--button-radius);
+  text-align: center;
+  font-size: 1.6rem;
+  color: var(--primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+}
+
+.Tag:active {
+}

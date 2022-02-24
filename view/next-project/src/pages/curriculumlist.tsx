@@ -2,10 +2,11 @@ import { useState } from 'react';
 import Router from 'next/router';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
+import ListHeader from '@components/common/ListHeader';
 import FlatCard from '@components/common/FlatCard';
 import Table from '@components/common/Table';
 
-type Curriculum = {
+interface Curriculum {
   id: number;
   title: string;
   content: string;
@@ -13,18 +14,29 @@ type Curriculum = {
   skill_id: number;
   created_at: string;
   updated_at: string;
-};
+}
 
-type Props = {
+interface Skill {
+  id: number;
+  name: string;
+  detail: string;
+  category_id: number;
+}
+
+interface Props {
   curriculums: Curriculum[];
-};
+  skills: Skill[];
+}
 
 export async function getStaticProps() {
-  const getUrl = 'http://seeds_api:3000/curriculums';
-  const json = await get(getUrl);
+  const getCurriculumsUrl = 'http://seeds_api:3000/curriculums';
+  const getSkillsUrl = 'http://seeds_api:3000/skills';
+  const curriculumsJson = await get(getCurriculumsUrl);
+  const skillsJson = await get(getSkillsUrl);
   return {
     props: {
-      curriculums: json,
+      curriculums: curriculumsJson,
+      skills: skillsJson,
     },
   };
 }
@@ -39,7 +51,8 @@ export default function CurriculumList(props: Props) {
   return (
     <>
       <MainLayout>
-        <FlatCard>
+        <ListHeader title="Curriculum" skills={props.skills} />
+        <FlatCard width="100%">
           <Table headers={headers}>
             {props.curriculums.map((curriculum) => (
               <tr key={curriculum.toString()} onClick={() => Router.push('/curriculums/' + curriculum.id)}>
