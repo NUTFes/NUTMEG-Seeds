@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
             |record|
             {
               "record": record,
-              "teacher": record.teacher.to_info_h
+              "teacher": record.teacher.nil? ? nil: record.teacher.user,
             }
           },
           "skills": user.skills,

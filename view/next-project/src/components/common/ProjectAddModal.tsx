@@ -4,8 +4,7 @@ import Button from '@components/common/TestButton';
 
 interface ModalProps {
   isOpen: boolean;
-  setIsOpen: any;
-  children?: React.ReactNode;
+  setIsOpen: Function;
 }
 
 const ProjectAddModal: FC<ModalProps> = (props) => {
@@ -16,13 +15,16 @@ const ProjectAddModal: FC<ModalProps> = (props) => {
     github: '',
     remark: '',
   });
+
   const handler =
     (input: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
       setFormData({ ...formData, [input]: e.target.value });
     };
+
   const submitProject = (data: any) => {
     console.log(data);
   };
+
   return (
     <AddModal show={props.isOpen} setShow={props.setIsOpen}>
       <h2>New Project</h2>

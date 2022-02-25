@@ -8,7 +8,8 @@ import styled from 'styled-components';
 import HeaderLogo from '@components/icons/HeaderLogo';
 import SlackIcon from '@components/icons/SlackIcon';
 import GithubIcon from '@components/icons/GithubIcon';
-import Button from '@components/common/BackButton';
+import BackButton from '@components/common/BackButton';
+import Row from '@components/layout/RowLayout'
 import { GetStaticPaths, GetStaticProps } from 'next'
 
 interface Props {
@@ -64,21 +65,20 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const getUrl = 'http://seeds_api:3000/api/v1/users';
   const json = await get(getUrl);
 
-  const userIds: number[] = [];
-  let userId: number;
+  let userId: {id: number};
+  const userIds: {id: number}[] = [];
+
   json.map((user: any) => {
     userId = { id: user.id };
     userIds.push(userId);
   });
 
   return {
-    // projectのidの数だけ動的ルーティングする
     paths: userIds.map((user) => {
       return {
         params: { id: user.id.toString() },
       };
     }),
-    // paramsに存在しないroutesが指定されたら404を返す
     fallback: false,
   };
 };
@@ -89,16 +89,26 @@ export async function getStaticProps({ params }: any) {
   const getRes = await get(getUrl)
   return {
     props: {
-      user: getRes[0],
+      user: getRes[0].user,
     },
   };
 }
 
-
 export default function Users(props: Props) {
+  const user = props.user
+  const detail = props.user_detail
+  const projects = props.projects
+  const records = props.records
+  const skills = props.skills
+  console.log(user)
   return (
     <MainLayout>
-      aaaa
+      <BackButton />
+      <FlatCard align="center" justify="">
+        <Row>
+          {user.name}
+        </Row>
+      </FlatCard>
     </MainLayout>
   );
 }

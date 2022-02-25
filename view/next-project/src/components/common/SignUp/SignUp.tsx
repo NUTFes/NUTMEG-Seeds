@@ -21,9 +21,9 @@ export const submitUser = async (data: submitData) => {
     data.password +
     '&password_confirmation=' +
     data.passwordConfirmation;
-  const res = await post(submitUrl);
+  const res = await post(submitUrl, "");
   if (res.status === 200) {
-    Router.push('/example');
+    Router.push('/project');
   } else {
     console.log('Error' + res.status);
     console.log(await res.json());
@@ -48,7 +48,7 @@ const SignUp: FC = () => {
         <div>
           <h3>Email</h3>
           <input type='text' placeholder='Input' value={formData.email} onChange={handler('email')} />
-          <p>例: nutmet.toro@email.com</p>
+          <p>例: nutmeg-taro@email.com</p>
         </div>
         <div>
           <h3>Password</h3>

@@ -79,7 +79,7 @@ export default function UserList(props: Props) {
         <GlassCard width='275px' height='250px' align={'center'} justify={'center'} background='white' gap='30px'>
           <FocusUserNameContainer>{user.name}</FocusUserNameContainer>
           <div>
-            <Button height='30px' text='More' onClick={() => router.push('/users/2')}/>
+            <Button height='30px' text='More' onClick={() => router.push('/users/'+ user.id)}/>
           </div>
         </GlassCard>
       );
