@@ -20,7 +20,7 @@ interface UserSkill {
 }
 
 const UserSkillAddModal: FC<ModalProps> = (props) => {
-  const [skills, setSkills] = useState<Skill[]>([{id: '', name: ''}])
+  const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
   const [formData, setFormData] = useState<UserSkill>({
     user_id: useRouter().query.id,
     skill_id: '',
@@ -34,13 +34,12 @@ const UserSkillAddModal: FC<ModalProps> = (props) => {
     getSkills(getSkillsUrl);
   }, []);
 
-  const handler =
-    (input: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setFormData({ ...formData, [input]: e.target.value });
-    };
+  const handler = (input: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, [input]: e.target.value });
+  };
 
-  const router = useRouter()
-  const submitSkill = async(data: UserSkill) => {
+  const router = useRouter();
+  const submitSkill = async (data: UserSkill) => {
     const submitUrl = 'http://localhost:3000/user_skills';
     const postRes = await post(submitUrl, data);
   };
