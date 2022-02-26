@@ -6,9 +6,9 @@ interface ButtonContentsProps {
   width?: string;
   height?: string;
   text?: string;
-  onClick: (event: any) => void;
+  onClick?: (event: any) => void;
   children?: React.ReactNode;
-};
+}
 
 function TestButton(props: ButtonContentsProps): JSX.Element {
   const ButtonContainer = styled.button`

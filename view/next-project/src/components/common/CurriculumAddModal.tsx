@@ -9,7 +9,7 @@ interface Skills {
   name: string;
   detail: string;
   category_id: number;
-};
+}
 
 interface ModalProps {
   isOpen: boolean;
@@ -26,9 +26,9 @@ interface Curriculums {
 }
 
 const submitProject = async (data: Curriculums) => {
-  console.log("******");
+  console.log('******');
   console.log(data);
-  console.log("******");
+  console.log('******');
   const postUrl = 'http://localhost:3000/curriculums';
   const postReq = await post(postUrl, data);
 };
@@ -42,7 +42,13 @@ const ProjectAddModal = (props: ModalProps) => {
     skill_id: 1,
   });
   const handler =
-    (input: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    (input: string) =>
+    (
+      e:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.ChangeEvent<HTMLTextAreaElement>
+        | React.ChangeEvent<HTMLSelectElement>,
+    ) => {
       setFormData({ ...formData, [input]: e.target.value });
     };
 
@@ -64,13 +70,19 @@ const ProjectAddModal = (props: ModalProps) => {
       <div>
         <h3>Skill</h3>
         <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
-          {props.skills.map(data => <option value={data.id}>{data.name}</option>)}
+          {props.skills.map((data) => (
+            <option value={data.id}>{data.name}</option>
+          ))}
         </select>
       </div>
-      <Button onClick={() => {
-        submitProject(formData);
-        router.reload();
-      }}>Submit</Button>
+      <Button
+        onClick={() => {
+          submitProject(formData);
+          router.reload();
+        }}
+      >
+        Submit
+      </Button>
     </AddModal>
   );
 };

@@ -4,6 +4,7 @@ import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import Table from '@components/common/Table';
+import ListHeader from '@components/common/ListHeader';
 
 type Record = {
   id: number;
@@ -40,6 +41,7 @@ export default function RecordList(props: Props) {
   return (
     <>
       <MainLayout>
+        <ListHeader title='Your Records' />
         <FlatCard>
           <Table headers={headers}>
             {props.records.map((record) => (

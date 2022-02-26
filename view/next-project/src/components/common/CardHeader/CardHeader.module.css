@@ -1,10 +1,10 @@
 .HeaderContainer {
+  margin-top: 2rem;
   display: flex;
   width: 100%;
 }
 
 .SplitLeftContainer {
-  padding-left: 10px;
   flex-grow: 1;
   display: flex;
   justify-content: start;

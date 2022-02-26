@@ -91,7 +91,9 @@ export default function ProjectList(props: Props) {
     } else {
       return (
         <GlassCard width='275px' height='250px' align={'center'}>
-          <HeaderLogo height={120} width={120} color={'black'} />
+          <div onMouseEnter={() => onHover(project.id)}>
+            <HeaderLogo height={120} width={120} color={'black'} />
+          </div>
           <ProjectNameContainer>{project.name}</ProjectNameContainer>
         </GlassCard>
       );
@@ -102,9 +104,7 @@ export default function ProjectList(props: Props) {
     <MainLayout>
       <ProjectListContainer>
         {props.projects.map((project) => (
-          <div onMouseEnter={() => onHover(project.id)} onMouseLeave={() => leaveHover(project.id)}>
-            {projectContent(isHover, project)}
-          </div>
+          <div onMouseLeave={() => leaveHover(project.id)}>{projectContent(isHover, project)}</div>
         ))}
       </ProjectListContainer>
     </MainLayout>

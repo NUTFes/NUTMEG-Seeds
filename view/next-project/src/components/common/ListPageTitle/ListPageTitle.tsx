@@ -6,11 +6,7 @@ interface Props {
 }
 
 const ListPageTitle = (props: Props) => {
-  return (
-    <div className={s.modalContainer}>
-      {props.title}
-    </div>
-  );
+  return <div className={s.modalContainer}>{props.title}</div>;
 };
 
 export default ListPageTitle;

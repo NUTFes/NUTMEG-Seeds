@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import Link from 'next/link';
-import s from './Header.module.css'
+import s from './Header.module.css';
 import HeaderLogo from '@components/icons/HeaderLogo';
 
 const Header: FC = () => {

@@ -1,4 +1,4 @@
-class Api::V1::RecordsController < ApplicationController
+class Api::V1::RecordsApiController < ApplicationController
   def get_records
     user = User.find(params[:id])
     records = user.records.order(updated_at: "DESC")

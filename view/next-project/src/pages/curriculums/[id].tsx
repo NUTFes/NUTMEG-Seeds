@@ -71,12 +71,11 @@ export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
 };
 
 export async function getStaticProps({ params }: any) {
-
   const id = params.id;
   const getUrl = 'http://seeds_api:3000/api/v1/get_curriculum_for_view/' + id;
   const json = await get(getUrl);
   return {
-      props: json[0],
+    props: json[0],
   };
 }
 
@@ -112,7 +111,7 @@ export default function Page(props: Props) {
   const ChildButtonContainer = styled.div`
     position: absolute;
     bottom: 50px;
-    left:-40px;
+    left: -40px;
   `;
   const RecordMember = styled.div`
     font-size: 1.4rem;
@@ -149,16 +148,12 @@ export default function Page(props: Props) {
                   Contents
                   <hr />
                 </CurriculumContentsTitle>
-                <CurriculumContents>
-                  {props.curriculum.content}
-                </CurriculumContents>
+                <CurriculumContents>{props.curriculum.content}</CurriculumContents>
                 <CurriculumContentsTitle>
                   Homework
                   <hr />
                 </CurriculumContentsTitle>
-                <CurriculumContents>
-                  {props.curriculum.homework}
-                </CurriculumContents>
+                <CurriculumContents>{props.curriculum.homework}</CurriculumContents>
               </CurriculumContentsContainer>
             </FlatCard>
             <ChildButtonContainer>
@@ -168,15 +163,9 @@ export default function Page(props: Props) {
           <SplitRightContainer>
             {props.records.map((record) => (
               <FlatCard width='100%' margin='0 0 1.5rem 0' padding='2.5rem'>
-                <RecordMember>
-                  {record.user_id}
-                </RecordMember>
-                <RecordContents>
-                  {record.title}
-                </RecordContents>
-                <RecordDate>
-                  最終更新日: {formatDate(record.updated_at)}
-                </RecordDate>
+                <RecordMember>{record.user_id}</RecordMember>
+                <RecordContents>{record.title}</RecordContents>
+                <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>
               </FlatCard>
             ))}
           </SplitRightContainer>

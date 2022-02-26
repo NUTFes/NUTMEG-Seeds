@@ -1,215 +1,213 @@
-import React from 'react';
-import Router from 'next/router';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { get } from '@utils/api_methods';
-import { GetStaticPaths } from 'next';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
-import styled from 'styled-components';
-import HeaderLogo from '@components/icons/HeaderLogo';
 import SlackIcon from '@components/icons/SlackIcon';
 import GithubIcon from '@components/icons/GithubIcon';
-import Button from '@components/common/BackButton';
+import BackButton from '@components/common/BackButton';
+import AddButton from '@components/common/AddButton';
+import CardHeader from '@components/common/CardHeader';
+import SkillAddModal from '@components/common/UserSkillAddModal';
+import ProjectAddModal from '@components/common/UserProjectAddModal';
+import RecordAddModal from '@components/common/UserRecordAddModal';
+import Column from '@components/common/Column';
+import Row from '@components/layout/RowLayout';
+import { GetStaticPaths, GetStaticProps } from 'next';
 
-type PathParam = {
-  id: string;
-};
+interface Props {
+  user: User;
+  detail: UserDetail;
+  projects: Project[];
+  records: Record[];
+  skills: Skill[];
+}
 
-type Project = {
+interface User {
   id: number;
   name: string;
-  detail: string;
+  email: string;
+}
+
+interface UserDetail {
+  grade: string;
+  department: string;
+  bureau: string;
   icon_name: string;
   github: string;
-  remark: string;
-};
+  slack: string;
+  biography: string;
+  pc_name: string;
+  pc_os: string;
+  pc_cpu: string;
+  pc_ram: string;
+  pc_storage: string;
+}
 
-type Props = {
-  project: Project[];
-};
+interface Project {
+  id: number;
+  project: string;
+  role: string;
+}
 
-export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
-  const getUrl = 'http://seeds_api:3000/projects';
+interface Record {
+  title: string;
+  teacher: Teacher;
+}
+
+interface Teacher {
+  name: string;
+}
+
+interface Skill {
+  id: number;
+  name: string;
+  category: string;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const getUrl = 'http://seeds_api:3000/api/v1/users';
   const json = await get(getUrl);
 
-  // // ProjectのIDを一覧から取得するための処理
-  // peojectのidを格納するための配列
-  const projectIds: projectID[] = [];
+  let userId: { id: number };
+  const userIds: { id: number }[] = [];
 
-  // peojectのidを連想配列で格納するための処理
-  interface projectID {
-    id: number;
-  }
-  let projectId: projectID;
-  json.map((project: Project) => {
-    projectId = { id: project.id };
-    projectIds.push(projectId);
+  json.map((user: any) => {
+    userId = { id: user.id };
+    userIds.push(userId);
   });
 
   return {
-    // projectのidの数だけ動的ルーティングする
-    paths: projectIds.map((project) => {
+    paths: userIds.map((user) => {
       return {
-        params: { id: project.id.toString() },
+        params: { id: user.id.toString() },
       };
     }),
-    // paramsに存在しないroutesが指定されたら404を返す
     fallback: false,
   };
 };
 
 export async function getStaticProps({ params }: any) {
-  interface Skill {
-    id: number;
-    name: string;
-    role: string;
-  }
-
-  interface Member {
-    id: number;
-    name: string;
-    role: string;
-  }
-
-  const skills: Skill[] = [
-    {
-      id: 1,
-      name: 'Vue.js',
-      role: 'Front End',
-    },
-    {
-      id: 2,
-      name: 'Ruby on Rails',
-      role: 'Back End',
-    },
-  ];
-
-  const members: Member[] = [
-    {
-      id: 1,
-      name: '大場雅士',
-      role: 'Front End',
-    },
-    {
-      id: 2,
-      name: '久々江耀平',
-      role: 'Front End',
-    },
-    {
-      id: 3,
-      name: '水上涼介',
-      role: 'Back End',
-    },
-    {
-      id: 4,
-      name: '五十嵐和亜',
-      role: 'Back End',
-    },
-  ];
-
-  const id = params.id;
-  const getUrl = 'http://seeds_api:3000/projects/' + id;
-  const json = await get(getUrl);
+  const getUrl = 'http://seeds_api:3000/api/v1/get_user_with_detail_and_project_and_role_and_record/' + params.id;
+  const getRes = await get(getUrl);
   return {
     props: {
-      project: json,
-      skills: skills,
-      members: members,
+      user: getRes[0].user,
+      detail: getRes[0].detail,
+      projects: getRes[0].projects,
+      records: getRes[0].records,
+      skills: getRes[0].skills,
     },
   };
 }
 
-export default function Page(props: Props) {
-  const SplitParentContainer = styled.div`
-    display: flex;
-  `;
-  const SplitChildContainer = styled.div`
-    flex-grow: 1;
-    display: flex;
-    justify-content: end;
-    align-items: center;
-  `;
-  const ImageContainer = styled.div`
-    flex-grow: 1;
-    padding: 20px;
-  `;
-  const ProjectContainer = styled.div`
-    padding: 20px;
-  `;
-  const ProjectNameContainer = styled.div`
-    flex-grow: 1;
-    font-size: 28px;
-    font-weight: bold;
-  `;
-  const TopicContainer = styled.div`
-    font-size: 20px;
-    padding-top: 30px;
-    padding-bottom: 15px;
-  `;
-  const ContentsContainer = styled.div`
-    font-size: 14px;
-    padding: 10px;
-    width: 100%
-    display: flex;
-  `;
-  const TableData = styled.div`
-    text-align: center;
-  `;
-  const ProjectDetail = styled.div`
-    font-size: 14px;
-    padding: 10px 0 0 30px;
-  `;
+export default function Users(props: Props) {
+  const user = props.user;
+  const detail = props.detail;
+  const projects = props.projects;
+  const records = props.records;
+  const skills = props.skills;
+  console.log(records);
+
+  const [isOpenSkillAddModal, setIsOpenSkillAddModal] = useState(false);
+  const [isOpenProjectAddModal, setIsOpenProjectAddModal] = useState(false);
+  const [isOpenRecordAddModal, setIsOpenRecordAddModal] = useState(false);
+
+  const openSkillAddModal = (isSkillOpenAddModal: boolean) => {
+    if (isOpenSkillAddModal) {
+      return (
+        <>
+          <SkillAddModal isOpen={isOpenSkillAddModal} setIsOpen={setIsOpenSkillAddModal} />
+        </>
+      );
+    }
+  };
+  const openProjectAddModal = (isProjectOpenAddModal: boolean) => {
+    if (isOpenProjectAddModal) {
+      return (
+        <>
+          <ProjectAddModal isOpen={isOpenProjectAddModal} setIsOpen={setIsOpenProjectAddModal} />
+        </>
+      );
+    }
+  };
+  const openRecordAddModal = (isRecordOpenAddModal: boolean) => {
+    if (isOpenRecordAddModal) {
+      return (
+        <>
+          <RecordAddModal isOpen={isOpenRecordAddModal} setIsOpen={setIsOpenRecordAddModal} />
+        </>
+      );
+    }
+  };
+
   return (
     <MainLayout>
-      <div style={{ position: 'relative' }}>
-        <FlatCard width='1100px' height='650px'>
-          <SplitParentContainer>
-            <ImageContainer>
-              <HeaderLogo height={300} width={300} color={'black'} />
-            </ImageContainer>
-            <ProjectContainer>
-              <SplitParentContainer>
-                <SplitChildContainer>
-                  <ProjectNameContainer>{props.project.name}</ProjectNameContainer>
-                </SplitChildContainer>
-                <SplitChildContainer>
-                  <GithubIcon height={30} width={30} />
-                  <SlackIcon height={45} width={45} />
-                </SplitChildContainer>
-              </SplitParentContainer>
-              <ProjectDetail>{props.project.detail}</ProjectDetail>
-              <TopicContainer>Skills</TopicContainer>
-              <ContentsContainer>
-                <table>
-                  {props.skills.map((skill) => (
-                    <tr key={skill.toString()}>
-                      <TableData>
-                        <td width='150px'>{skill.name}</td>
-                        <td width='150px'>{skill.role}</td>
-                      </TableData>
-                    </tr>
-                  ))}
-                </table>
-              </ContentsContainer>
-              <TopicContainer>Members</TopicContainer>
-              <ContentsContainer>
-                <table>
-                  {props.members.map((member) => (
-                    <tr key={member.toString()}>
-                      <TableData>
-                        <td width='150px'>{member.name}</td>
-                        <td width='150px'>{member.role}</td>
-                      </TableData>
-                    </tr>
-                  ))}
-                </table>
-              </ContentsContainer>
-            </ProjectContainer>
-          </SplitParentContainer>
-        </FlatCard>
-        <div style={{ position: 'absolute', bottom: '50px', left: '-40px' }}>
-          <Button onClick={() => Router.back()} />
-        </div>
-      </div>
+      <BackButton />
+      <FlatCard align='center' justify=''>
+        <Row gap={'0'}>
+          <Column>
+            <Row>
+              <img src='/99a.png' />
+            </Row>
+            <div>
+              <h1>{user.name}</h1>
+            </div>
+            <table>
+              <tr>
+                <th>{user.email}</th>
+              </tr>
+              <tr>
+                <th>{detail.grade}</th>
+              </tr>
+              <tr>
+                <th>{detail.department}</th>
+              </tr>
+              <tr>
+                <th>{detail.bureau}</th>
+              </tr>
+            </table>
+          </Column>
+          <Column>
+            <CardHeader title={'Tech Stack'}>
+              <AddButton onClick={() => setIsOpenSkillAddModal(!isOpenSkillAddModal)} />
+              {openSkillAddModal(isOpenSkillAddModal)}
+            </CardHeader>
+            <table>
+              {skills.map((skill) => (
+                <tr>
+                  <th>{skill.name}</th>
+                  <td>{skill.category}</td>
+                </tr>
+              ))}
+            </table>
+            <CardHeader title={'Projects'}>
+              <AddButton onClick={() => setIsOpenProjectAddModal(!isOpenProjectAddModal)} />
+              {openProjectAddModal(isOpenProjectAddModal)}
+            </CardHeader>
+            <table>
+              {projects.map((project) => (
+                <tr>
+                  <th>{project.project}</th>
+                  <td>{project.role}</td>
+                </tr>
+              ))}
+            </table>
+            <CardHeader title={'Records'}>
+              <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)} />
+              {openRecordAddModal(isOpenRecordAddModal)}
+            </CardHeader>
+            <table>
+              {records.map((record) => (
+                <tr>
+                  <th>{record.title}</th>
+                  <td>{record.teacher.name}</td>
+                </tr>
+              ))}
+            </table>
+          </Column>
+        </Row>
+      </FlatCard>
     </MainLayout>
   );
 }
