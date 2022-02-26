@@ -36,5 +36,7 @@
 .headerLinks a {
   color: var(--accent-0);
   font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 1px;
   text-decoration: none;
 }

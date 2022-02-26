@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel='icon' href='/favicon.ico' />
         <link
           rel='stylesheet'
-          href='https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;700&display=swap'
+          href='https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;700&display=swap'
         />
       </Head>
 

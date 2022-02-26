@@ -11,7 +11,7 @@ interface submitData {
 
 export const submitUser = async (data: submitData) => {
   const submitUrl = 'http://localhost:3000/api/auth/sign_in?email=' + data.email + '&password=' + data.password;
-  const res = await post(submitUrl, "");
+  const res = await post(submitUrl, '');
   if (res.status === 200) {
     Router.push('/project');
   } else {

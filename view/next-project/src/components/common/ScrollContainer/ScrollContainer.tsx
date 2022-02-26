@@ -1,7 +1,6 @@
 import React from 'react';
 import s from './ScrollContainer.module.css';
 
-const ScrollCnotainer = () => {
-}
+const ScrollCnotainer = () => {};
 
 export default ScrollContainer;

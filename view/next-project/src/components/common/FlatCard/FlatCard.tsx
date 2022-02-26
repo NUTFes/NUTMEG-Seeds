@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './FlatCard.module.css'
+import s from './FlatCard.module.css';
 
 interface FlatCardProps {
   align?: string;
@@ -12,10 +12,12 @@ interface FlatCardProps {
 
 const FlatCard = (props: FlatCardProps) => {
   return (
-    <div className={`${s.FlatCardContainer} ${s["align-"+props.align || "end"]} ${s["justify-"+props.align || "end"]}`}>
-      <div>{ props.children }</div>
+    <div
+      className={`${s.FlatCardContainer} ${s['align-' + props.align || 'end']} ${s['justify-' + props.align || 'end']}`}
+    >
+      {props.children}
     </div>
-  )
-}
+  );
+};
 
-export default FlatCard
+export default FlatCard;

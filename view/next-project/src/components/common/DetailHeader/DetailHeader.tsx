@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import s from './DetailHeader.module.css';
-import Tag from "@components/common/Tag";
+import Tag from '@components/common/Tag';
 
 interface Curriculum {
-    id: number;
-    title: string;
-    content: string;
-    homework: string;
-    skill_id: number;
-    created_at: string;
-    updated_at: string;
+  id: number;
+  title: string;
+  content: string;
+  homework: string;
+  skill_id: number;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Props {
@@ -21,12 +21,10 @@ interface Props {
 const DetailHeader = (props: Props) => {
   return (
     <div className={s.HeaderContainer}>
-      <div className={s.TitleContainer}>
-          {props.curriculum.title}
+      <div className={s.TitleContainer}>{props.curriculum.title}</div>
+      <div className={s.SkillContainer}>
+        <Tag text={props.skill} />
       </div>
-        <div className={s.SkillContainer}>
-            <Tag text={props.skill} />
-        </div>
     </div>
   );
 };

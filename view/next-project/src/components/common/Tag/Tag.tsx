@@ -8,7 +8,7 @@ interface ButtonContentsProps {
   children?: React.ReactNode;
 }
 
-const Tag: FC<ButtonContentsProps> = (props)=> {
+const Tag: FC<ButtonContentsProps> = (props) => {
   return (
     <>
       <button className={s.Tag}>

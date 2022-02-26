@@ -21,7 +21,7 @@ export const submitUser = async (data: submitData) => {
     data.password +
     '&password_confirmation=' +
     data.passwordConfirmation;
-  const res = await post(submitUrl, "");
+  const res = await post(submitUrl, '');
   if (res.status === 200) {
     Router.push('/project');
   } else {

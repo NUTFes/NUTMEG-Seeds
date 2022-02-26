@@ -16,7 +16,7 @@
   align-items: end;
 }
 
-.ButtonContainer button{
+.ButtonContainer button {
   z-index: 10;
   background: radial-gradient(var(--button-primary), var(--button-secondary));
   width: 60px;

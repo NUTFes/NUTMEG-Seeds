@@ -51,8 +51,8 @@ export default function CurriculumList(props: Props) {
   return (
     <>
       <MainLayout>
-        <ListHeader title="Curriculum" skills={props.skills} />
-        <FlatCard width="100%">
+        <ListHeader title='Curriculum' skills={props.skills} />
+        <FlatCard width='100%'>
           <Table headers={headers}>
             {props.curriculums.map((curriculum) => (
               <tr key={curriculum.toString()} onClick={() => Router.push('/curriculums/' + curriculum.id)}>

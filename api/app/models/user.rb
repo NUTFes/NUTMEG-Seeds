@@ -34,11 +34,18 @@ class User < ActiveRecord::Base
           "records": user.records.map {
             |record|
             {
-              "record": record,
+              "title": record.title,
               "teacher": record.teacher.nil? ? nil: record.teacher.user,
             }
           },
-          "skills": user.skills,
+          "skills": user.skills.map {
+            |skill|
+            {
+              "id": skill.id,
+              "name": skill.name,
+              "category": skill.category.name
+            }
+          },
         }
       }
   end

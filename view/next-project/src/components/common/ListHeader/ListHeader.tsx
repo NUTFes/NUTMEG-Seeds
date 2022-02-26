@@ -9,12 +9,12 @@ interface Skills {
   name: string;
   detail: string;
   category_id: number;
-};
+}
 
 interface Props {
   title: string;
   children?: React.ReactNode;
-  skills: Skills[];
+  skills?: Skills[];
 }
 
 const ListHeader = (props: Props) => {
