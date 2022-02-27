@@ -16,27 +16,27 @@ services:
     container_name: 'seeds_api'
     ports:
       - "3000:3000"
-    command: rails server -b 0.0.0.0
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec pumactl start"
     volumes:
       - ./api:/myapp
     depends_on:
       - seeds_db
     stdin_open: true
     tty: true
+    environment: 
+      - RAILS_ENV=production
 
   seeds_view: 
     build: ./view
     container_name: 'seeds_view'
     ports: 
       - "8080:8080"
-    command: npm run dev
     volumes:
       - ./view:/app
     stdin_open: true
     tty: true
-    environment:
-      - SEEDS_API_URI=http://localhost:3000
 
 volumes:
   mysql-data:
     driver: local
+  code_share: 

@@ -27,7 +27,7 @@ const UserSkillAddModal: FC<ModalProps> = (props) => {
   });
 
   useEffect(() => {
-    const getSkillsUrl = 'http://localhost:3000/skills';
+    const getSkillsUrl = process.env.SEEDS_API_URI + '/skills';
     const getSkills = async (url: string) => {
       setSkills(await get(url));
     };
@@ -40,7 +40,7 @@ const UserSkillAddModal: FC<ModalProps> = (props) => {
 
   const router = useRouter();
   const submitSkill = async (data: UserSkill) => {
-    const submitUrl = 'http://localhost:3000/user_skills';
+    const submitUrl = process.env.SEEDS_API_URI + '/user_skills';
     const postRes = await post(submitUrl, data);
   };
 
