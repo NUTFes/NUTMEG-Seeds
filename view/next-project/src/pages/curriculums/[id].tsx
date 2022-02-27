@@ -1,5 +1,4 @@
 import React from 'react';
-import Router from 'next/router';
 import { get } from '@utils/api_methods';
 import { GetStaticPaths } from 'next';
 import MainLayout from '@components/layout/MainLayout';
@@ -157,12 +156,12 @@ export default function Page(props: Props) {
               </CurriculumContentsContainer>
             </FlatCard>
             <ChildButtonContainer>
-              <Button onClick={() => Router.back()} />
+              <Button />
             </ChildButtonContainer>
           </SplitLeftContainer>
           <SplitRightContainer>
             {props.records.map((record) => (
-              <FlatCard width='100%' margin='0 0 1.5rem 0' padding='2.5rem'>
+              <FlatCard>
                 <RecordMember>{record.user_id}</RecordMember>
                 <RecordContents>{record.title}</RecordContents>
                 <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>

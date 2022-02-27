@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
-import { post } from '@utils/api_methods';
+import { get, post } from '@utils/api_methods';
 
 interface Skill {
   id: string;
@@ -24,18 +24,28 @@ interface Curriculum {
 }
 
 const submitProject = async (data: Curriculum) => {
-  const postUrl = 'http://localhost:3000/curriculums';
+  const postUrl = process.env.SEEDS_API_URI + '/curriculums';
   const postReq = await post(postUrl, data);
 };
 
 const ProjectAddModal = (props: ModalProps) => {
   const router = useRouter();
+  const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     homework: '',
-    skill_id: 1,
+    skill_id: 0,
   });
+
+  useEffect(() => {
+    const getSkillsUrl = process.env.SEEDS_API_URI + '/skills';
+    const getSkills = async (url: string) => {
+      setSkills(await get(url));
+    };
+    getSkills(getSkillsUrl);
+  }, []);
+
   const handler =
     (input: string) =>
     (
@@ -65,7 +75,8 @@ const ProjectAddModal = (props: ModalProps) => {
       <div>
         <h3>Skill</h3>
         <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
-          {props.skills.map((data) => (
+          <option value='0'>Select</option>
+          {skills.map((data) => (
             <option value={data.id}>{data.name}</option>
           ))}
         </select>
