@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
+import ListHeader from '@components/common/ListHeader';
 import GlassCard from '@components/common/GlassCard';
 import styled from 'styled-components';
 import HeaderLogo from '@components/icons/HeaderLogo';
@@ -102,6 +103,7 @@ export default function ProjectList(props: Props) {
 
   return (
     <MainLayout>
+      <ListHeader title='Project' />
       <ProjectListContainer>
         {props.projects.map((project) => (
           <div onMouseLeave={() => leaveHover(project.id)}>{projectContent(isHover, project)}</div>
