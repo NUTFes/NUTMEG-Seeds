@@ -4,31 +4,26 @@ import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
 import { post } from '@utils/api_methods';
 
-interface Skills {
-  id: number;
+interface Skill {
+  id: string;
   name: string;
-  detail: string;
-  category_id: number;
 }
 
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: any;
   children?: React.ReactNode;
-  skills: Skills[];
+  skills: Skill[];
 }
 
-interface Curriculums {
+interface Curriculum {
   title: string;
   content: string;
   homework: string;
   skill_id: number;
 }
 
-const submitProject = async (data: Curriculums) => {
-  console.log('******');
-  console.log(data);
-  console.log('******');
+const submitProject = async (data: Curriculum) => {
   const postUrl = 'http://localhost:3000/curriculums';
   const postReq = await post(postUrl, data);
 };
