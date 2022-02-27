@@ -38,6 +38,7 @@ export default function ProjectList(props: Props) {
   for (const project of props.projects) {
     initialState[project.id] = false;
   }
+  console.log(initialState)
   // マウスホバーしているかをuseStateで管理
   let [isHover, setIsHover] = useState(initialState);
 
