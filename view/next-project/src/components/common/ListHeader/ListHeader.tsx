@@ -25,7 +25,7 @@ const ListHeader = (props: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    const getSkillsUrl = 'http://localhost:3000/skills';
+    const getSkillsUrl = process.env.SEEDS_API_URI + '/skills';
     const getSkills = async (url: string) => {
       setSkills(await get(url));
     };
@@ -38,7 +38,7 @@ const ListHeader = (props: Props) => {
         case '/recordlist':
           return (
             <>
-              <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} skills={skills} />
+              <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} />
             </>
           );
         case '/curriculumlist':
@@ -50,7 +50,7 @@ const ListHeader = (props: Props) => {
         case '/projectlist':
           return (
             <>
-              <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} skills={skills} />
+              <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} />
             </>
           );
       }

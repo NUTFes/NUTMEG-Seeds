@@ -13,7 +13,7 @@ interface submitData {
 
 export const submitUser = async (data: submitData) => {
   const submitUrl =
-    'http://localhost:3000/api/auth/?name=' +
+    process.env.SEEDS_API_URI + '/api/auth/?name=' +
     data.userName +
     '&email=' +
     data.email +
