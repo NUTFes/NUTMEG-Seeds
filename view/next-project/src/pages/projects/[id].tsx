@@ -23,8 +23,23 @@ type Project = {
   remark: string;
 };
 
+interface Skill {
+  id: number;
+  name: string;
+  role: string;
+}
+
+interface Member {
+  id: number;
+  name: string;
+  role: string;
+}
+
+
 type Props = {
-  project: Project[];
+  project: Project;
+  skills: Skill[];
+  members: Member[];
 };
 
 export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
@@ -58,18 +73,6 @@ export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
 };
 
 export async function getStaticProps({ params }: any) {
-  interface Skill {
-    id: number;
-    name: string;
-    role: string;
-  }
-
-  interface Member {
-    id: number;
-    name: string;
-    role: string;
-  }
-
   const skills: Skill[] = [
     {
       id: 1,
@@ -120,43 +123,43 @@ export async function getStaticProps({ params }: any) {
 
 export default function Page(props: Props) {
   const SplitParentContainer = styled.div`
-    display: flex;
+  display: flex;
   `;
   const SplitChildContainer = styled.div`
-    flex-grow: 1;
-    display: flex;
-    justify-content: end;
-    align-items: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: end;
+  align-items: center;
   `;
   const ImageContainer = styled.div`
-    flex-grow: 1;
-    padding: 20px;
+  flex-grow: 1;
+  padding: 20px;
   `;
   const ProjectContainer = styled.div`
-    padding: 20px;
+  padding: 20px;
   `;
   const ProjectNameContainer = styled.div`
-    flex-grow: 1;
-    font-size: 28px;
-    font-weight: bold;
+  flex-grow: 1;
+  font-size: 28px;
+  font-weight: bold;
   `;
   const TopicContainer = styled.div`
-    font-size: 20px;
-    padding-top: 30px;
-    padding-bottom: 15px;
+  font-size: 20px;
+  padding-top: 30px;
+  padding-bottom: 15px;
   `;
   const ContentsContainer = styled.div`
-    font-size: 14px;
-    padding: 10px;
-    width: 100%
-    display: flex;
+  font-size: 14px;
+  padding: 10px;
+  width: 100%
+  display: flex;
   `;
   const TableData = styled.div`
-    text-align: center;
+  text-align: center;
   `;
   const ProjectDetail = styled.div`
-    font-size: 14px;
-    padding: 10px 0 0 30px;
+  font-size: 14px;
+  padding: 10px 0 0 30px;
   `;
   return (
     <MainLayout>
@@ -207,7 +210,7 @@ export default function Page(props: Props) {
           </SplitParentContainer>
         </FlatCard>
         <div style={{ position: 'absolute', bottom: '50px', left: '-40px' }}>
-          <Button onClick={() => Router.back()} />
+          <Button />
         </div>
       </div>
     </MainLayout>
