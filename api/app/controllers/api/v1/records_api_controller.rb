@@ -6,17 +6,8 @@ class Api::V1::RecordsApiController < ApplicationController
   end
 
   def get_record
-    record = Record.find(params[:id])
-    teacher = record.teacher.user.name
-    user = record.user.name
-    teacher_id = record.teacher.user_id
-    render json: 
-      { 
-        record: record, 
-        teacher: teacher,
-        user: user,
-        teacher_id: teacher_id
-      }
+    @record = Record.with_curriculum_and_teacher(params[:id])
+    render json: @record
   end
 
   def get_record_from_user

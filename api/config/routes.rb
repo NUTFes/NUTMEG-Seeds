@@ -23,16 +23,16 @@ Rails.application.routes.draw do
       get "user/:id" => "users#show"
       put "user/update/:id" => "users#update"
       get "records/:id" => "records#get_records"
-      get "record/:id" => "records#get_record"
+      get "/record/:id" => "records_api#get_record"
       get "get_records_from_user/:id" => "records#get_record_from_user"
       get "get_current_user" => "current_user#get_current_user"
       get "/get_curriculum_for_view/:id" => "curriculums_api#get_curriculum_for_view"
       get "/get_curriculum_for_index_view" => "curriculums_api#get_curriculum_for_index_view"
     end
   end
-    namespace :api do
-      mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-        registrations: 'api/auth/registrations'
-      }
-    end
+  namespace :api do
+    mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+      registrations: 'api/auth/registrations'
+    }
   end
+end

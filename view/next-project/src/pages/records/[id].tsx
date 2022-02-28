@@ -1,55 +1,69 @@
 import React from 'react';
-import Router from 'next/router';
-import { get } from '@utils/api_methods';
-import { GetStaticPaths } from 'next';
+import {get} from '@utils/api_methods';
+import {GetStaticPaths} from 'next';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
+import RecordDetailHeader from '@components/common/RecordDetailHeader';
 import styled from 'styled-components';
-import HeaderLogo from '@components/icons/HeaderLogo';
-import SlackIcon from '@components/icons/SlackIcon';
-import GithubIcon from '@components/icons/GithubIcon';
 import Button from '@components/common/BackButton';
 
-type PathParam = {
+interface PathParam {
   id: string;
-};
+}
 
-type Project = {
+interface Curriculum {
   id: number;
-  name: string;
-  detail: string;
-  icon_name: string;
-  github: string;
-  remark: string;
-};
+  title: string;
+  content: string;
+  homework: string;
+  skill_id: number;
+  created_at: string;
+  updated_at: string;
+}
 
-type Props = {
-  project: Project[];
-};
+interface Record {
+  id: number;
+  title: string;
+  content: string;
+  homework: string;
+  user_id: number;
+  curriculum_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Props {
+  curriculum: Curriculum;
+  record: Record;
+  teacher: string;
+  user: string;
+  skill: string;
+}
 
 export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
-  const getUrl = 'http://seeds_api:3000/projects';
+  const getUrl = 'http://seeds_api:3000/records';
   const json = await get(getUrl);
 
-  // // ProjectのIDを一覧から取得するための処理
-  // peojectのidを格納するための配列
-  const projectIds: projectID[] = [];
+  // // RecordのIDを一覧から取得するための処理
+  // Recordのidを格納するための配列
+  const recordIds: recordID[] = [];
 
-  // peojectのidを連想配列で格納するための処理
-  interface projectID {
+  // Recordのidを連想配列で格納するための処理
+  interface recordID {
     id: number;
   }
-  let projectId: projectID;
-  json.map((project: Project) => {
-    projectId = { id: project.id };
-    projectIds.push(projectId);
+
+  let recordId: recordID;
+  json.map((record: Record) => {
+    recordId = {id: record.id};
+    recordIds.push(recordId);
   });
 
   return {
-    // projectのidの数だけ動的ルーティングする
-    paths: projectIds.map((project) => {
+    // curriculumのidの数だけ動的ルーティングする
+    paths: recordIds.map((record) => {
       return {
-        params: { id: project.id.toString() },
+        params: {id: record.id.toString()},
       };
     }),
     // paramsに存在しないroutesが指定されたら404を返す
@@ -57,159 +71,70 @@ export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
   };
 };
 
-export async function getStaticProps({ params }: any) {
-  interface Skill {
-    id: number;
-    name: string;
-    role: string;
-  }
-
-  interface Member {
-    id: number;
-    name: string;
-    role: string;
-  }
-
-  const skills: Skill[] = [
-    {
-      id: 1,
-      name: 'Vue.js',
-      role: 'Front End',
-    },
-    {
-      id: 2,
-      name: 'Ruby on Rails',
-      role: 'Back End',
-    },
-  ];
-
-  const members: Member[] = [
-    {
-      id: 1,
-      name: '大場雅士',
-      role: 'Front End',
-    },
-    {
-      id: 2,
-      name: '久々江耀平',
-      role: 'Front End',
-    },
-    {
-      id: 3,
-      name: '水上涼介',
-      role: 'Back End',
-    },
-    {
-      id: 4,
-      name: '五十嵐和亜',
-      role: 'Back End',
-    },
-  ];
-
+export async function getStaticProps({params}: any) {
   const id = params.id;
-  const getUrl = 'http://seeds_api:3000/projects/' + id;
-  const json = await get(getUrl);
+  const getRecordUrl = 'http://seeds_api:3000/api/v1/record/' + id;
+  const recordJson = await get(getRecordUrl);
   return {
-    props: {
-      project: json,
-      skills: skills,
-      members: members,
-    },
+    props: recordJson,
   };
 }
 
 export default function Page(props: Props) {
-  const SplitParentContainer = styled.div`
-    display: flex;
+  const RecordContentsContainer = styled.div`
+    width: 100%;
   `;
-  const SplitChildContainer = styled.div`
-    flex-grow: 1;
-    display: flex;
-    justify-content: end;
-    align-items: center;
+  const RecordContentsTitle = styled.div`
+    font-size: 2.8rem;
+    padding-bottom: 1.2rem;
   `;
-  const ImageContainer = styled.div`
-    flex-grow: 1;
-    padding: 20px;
+  const RecordContents = styled.div`
+    font-size: 1.6rem;
+    padding-bottom: 3rem;
   `;
-  const ProjectContainer = styled.div`
-    padding: 20px;
+  const ParentButtonContainer = styled.div`
+    position: relative;
+    width: 100%;
   `;
-  const ProjectNameContainer = styled.div`
-    flex-grow: 1;
-    font-size: 28px;
-    font-weight: bold;
+  const ChildButtonContainer = styled.div`
+    position: absolute;
+    bottom: 50px;
+    left: -40px;
   `;
-  const TopicContainer = styled.div`
-    font-size: 20px;
-    padding-top: 30px;
-    padding-bottom: 15px;
-  `;
-  const ContentsContainer = styled.div`
-    font-size: 14px;
-    padding: 10px;
-    width: 100%
-    display: flex;
-  `;
-  const TableData = styled.div`
-    text-align: center;
-  `;
-  const ProjectDetail = styled.div`
-    font-size: 14px;
-    padding: 10px 0 0 30px;
-  `;
+
+  const formatDate = (date: string) => {
+    let datetime = date.replace('T', ' ');
+    const datetime2 = datetime.substring(0, datetime.length - 5);
+    return datetime2;
+  };
+
   return (
     <MainLayout>
-      <div style={{ position: 'relative' }}>
-        <FlatCard width='1100px' height='650px'>
-          <SplitParentContainer>
-            <ImageContainer>
-              <HeaderLogo height={300} width={300} color={'black'} />
-            </ImageContainer>
-            <ProjectContainer>
-              <SplitParentContainer>
-                <SplitChildContainer>
-                  <ProjectNameContainer>{props.project.name}</ProjectNameContainer>
-                </SplitChildContainer>
-                <SplitChildContainer>
-                  <GithubIcon height={30} width={30} />
-                  <SlackIcon height={45} width={45} />
-                </SplitChildContainer>
-              </SplitParentContainer>
-              <ProjectDetail>{props.project.detail}</ProjectDetail>
-              <TopicContainer>Skills</TopicContainer>
-              <ContentsContainer>
-                <table>
-                  {props.skills.map((skill) => (
-                    <tr key={skill.toString()}>
-                      <TableData>
-                        <td width='150px'>{skill.name}</td>
-                        <td width='150px'>{skill.role}</td>
-                      </TableData>
-                    </tr>
-                  ))}
-                </table>
-              </ContentsContainer>
-              <TopicContainer>Members</TopicContainer>
-              <ContentsContainer>
-                <table>
-                  {props.members.map((member) => (
-                    <tr key={member.toString()}>
-                      <TableData>
-                        <td width='150px'>{member.name}</td>
-                        <td width='150px'>{member.role}</td>
-                      </TableData>
-                    </tr>
-                  ))}
-                </table>
-              </ContentsContainer>
-            </ProjectContainer>
-          </SplitParentContainer>
+      <ParentButtonContainer>
+        <RecordDetailHeader recordTitle={props.record.title} createDate={formatDate(props.record.created_at)}
+                            updateDate={formatDate(props.record.updated_at)}
+                            curriculumTitle={props.curriculum.title}
+                            skill={props.skill}
+                            user={props.user}
+                            teacher={props.teacher}/>
+        <FlatCard width='100%'>
+          <RecordContentsContainer>
+            <RecordContentsTitle>
+              Contents
+              <hr/>
+            </RecordContentsTitle>
+            <RecordContents>{props.record.content}</RecordContents>
+            <RecordContentsTitle>
+              Homework
+              <hr/>
+            </RecordContentsTitle>
+            <RecordContents>{props.record.homework}</RecordContents>
+          </RecordContentsContainer>
         </FlatCard>
-        <div style={{ position: 'absolute', bottom: '50px', left: '-40px' }}>
-          <Button onClick={() => Router.back()} />
-        </div>
-      </div>
+        <ChildButtonContainer>
+          <Button/>
+        </ChildButtonContainer>
+      </ParentButtonContainer>
     </MainLayout>
   );
 }
