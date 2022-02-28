@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {useRouter} from 'next/router';
 import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import ListHeader from '@components/common/ListHeader';
@@ -56,7 +57,7 @@ export default function ProjectList(props: Props) {
   const ProjectDetail = styled.div`
     font-size: 1.4rem;
     padding: 1rem 0;
-    margin: 3rem 0;
+    margin: 2rem 0;
   `;
 
   // プロジェクトのカードにマウスホバーした時の処理
@@ -69,6 +70,8 @@ export default function ProjectList(props: Props) {
     setIsHover({...isHover, [id]: false});
   };
 
+  const router = useRouter();
+
   // マウスホバー時のプロジェクト
   const projectContent = (isHover: any, project: Projects) => {
     if (isHover[project.id]) {
@@ -77,7 +80,7 @@ export default function ProjectList(props: Props) {
           <FocusProjectNameContainer>{project.name}</FocusProjectNameContainer>
           <ProjectDetail>{project.detail}</ProjectDetail>
           <div>
-            <Button height='30px' text='More'/>
+            <Button height='3rem' text='More' onClick={() => router.push('/projects/' + project.id)}/>
           </div>
         </GlassCard>
       );
