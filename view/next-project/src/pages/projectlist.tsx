@@ -34,7 +34,7 @@ export async function getStaticProps() {
 
 export default function ProjectList(props: Props) {
   // 初期状態で詳細を非表示にするための処理
-  let initialState = new Object();
+  let initialState: any = new Object();
   for (const project of props.projects) {
     initialState[project.id] = false;
   }
