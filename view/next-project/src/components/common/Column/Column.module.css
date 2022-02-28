@@ -41,3 +41,27 @@
   overflow: scroll;
   white-space: nowrap;
 }
+
+.align-start {
+  align-items: start;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-end {
+  align-items: end;
+}
+
+.justify-start {
+  justify-content: start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: end;
+}

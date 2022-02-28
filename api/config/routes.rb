@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       get "get_current_user" => "current_user#get_current_user"
       get "/get_curriculum_for_view/:id" => "curriculums_api#get_curriculum_for_view"
       get "/get_curriculum_for_index_view" => "curriculums_api#get_curriculum_for_index_view"
+      get "/get_project_for_view/:id" => "projects_api#get_project_for_view"
     end
   end
   namespace :api do

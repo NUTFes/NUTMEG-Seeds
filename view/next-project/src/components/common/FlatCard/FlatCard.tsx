@@ -13,7 +13,9 @@ interface FlatCardProps {
 const FlatCard = (props: FlatCardProps) => {
   return (
     <div
-      className={`${s.FlatCardContainer} ${s['align-' + props.align || 'end']} ${s['justify-' + props.align || 'end']} ${s[props.gap || 'none']}`}
+      className={`${s.FlatCardContainer} ${s['align-' + props.align || 'end']} ${
+        s['justify-' + props.align || 'end']
+      } ${s[props.gap || 'none']}`}
     >
       {props.children}
     </div>

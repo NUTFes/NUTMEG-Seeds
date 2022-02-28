@@ -11,13 +11,13 @@ interface submitData {
 
 export const submitUser = async (data: submitData) => {
   const submitUrl = process.env.SEEDS_API_URI + '/api/auth/sign_in?email=' + data.email + '&password=' + data.password;
-  console.log(submitUrl)
+  console.log(submitUrl);
   const res: any = await post(submitUrl, '');
   if (res.status === 200) {
-    localStorage.setItem("access-token", res.headers["access-token"]);
-    localStorage.setItem("client", res.headers["client"]);
-    localStorage.setItem("uid", res.headers["uid"]);
-    localStorage.setItem("token-type", res.headers["token-type"]);
+    localStorage.setItem('access-token', res.headers['access-token']);
+    localStorage.setItem('client', res.headers['client']);
+    localStorage.setItem('uid', res.headers['uid']);
+    localStorage.setItem('token-type', res.headers['token-type']);
     Router.push('/records');
   } else {
     console.log('Error' + res.status);
