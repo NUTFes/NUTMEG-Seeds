@@ -34,6 +34,7 @@ class User < ActiveRecord::Base
           "records": user.records.map {
             |record|
             {
+              "id": record.id,
               "title": record.title,
               "teacher": record.teacher.nil? ? nil: record.teacher.user,
             }

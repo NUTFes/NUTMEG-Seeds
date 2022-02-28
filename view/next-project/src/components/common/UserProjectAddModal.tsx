@@ -61,7 +61,7 @@ const UserProjectAddModal: FC<ModalProps> = (props) => {
         <select defaultValue={formData.project_id} onChange={handler('project_id')}>
           <option value=''>select</option>
           {projects.map((project: Project) => (
-            <option value={project.id}>{project.name}</option>
+            <option key={project.id} value={project.id}>{project.name}</option>
           ))}
         </select>
       </div>
@@ -70,7 +70,7 @@ const UserProjectAddModal: FC<ModalProps> = (props) => {
         <select defaultValue={formData.role_id} onChange={handler('role_id')}>
           <option value=''>Select</option>
           {roles.map((data) => (
-            <option value={data.id}>{data.name}</option>
+            <option key={data.id} value={data.id}>{data.name}</option>
           ))}
         </select>
       </div>

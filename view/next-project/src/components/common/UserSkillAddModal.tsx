@@ -52,7 +52,7 @@ const UserSkillAddModal: FC<ModalProps> = (props) => {
         <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
           <option value=''>select</option>
           {skills.map((skill: Skill) => (
-            <option value={skill.id}>{skill.name}</option>
+            <option key={skill.id} value={skill.id}>{skill.name}</option>
           ))}
         </select>
       </div>

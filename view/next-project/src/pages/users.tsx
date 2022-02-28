@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
-import ListHeader from '@components/common/ListHeader';
 import GlassCard from '@components/common/GlassCard';
 import styled from 'styled-components';
 import HeaderLogo from '@components/icons/HeaderLogo';
@@ -9,54 +9,51 @@ import AccountCircle from '@components/icons/AccountCircle';
 import Button from '@components/common/TransButton';
 import { join } from 'path/posix';
 
-type Projects = {
+type Users = {
   id: number;
+  email: string;
   name: string;
-  detail: string;
-  icon_name: string;
-  github: string;
-  remark: string;
 };
 
 type Props = {
-  projects: Projects[];
+  users: Users[];
 };
 
 export async function getStaticProps() {
-  const getUrl = 'http://seeds_api:3000/projects';
+  const getUrl = 'http://seeds_api:3000/api/v1/users';
   const json = await get(getUrl);
   return {
     props: {
-      projects: json,
+      users: json,
     },
   };
 }
 
-export default function ProjectList(props: Props) {
+export default function UserList(props: Props) {
   // 初期状態で詳細を非表示にするための処理
+  console.log(props);
   let initialState: any = new Object();
-  for (const project of props.projects) {
-    initialState[project.id] = false;
+  for (const user of props.users) {
+    initialState[user.id] = false;
   }
-  console.log(initialState)
   // マウスホバーしているかをuseStateで管理
   let [isHover, setIsHover] = useState(initialState);
 
-  const ProjectListContainer = styled.div`
+  const UserListContainer = styled.div`
     display: flex;
     gap: 60px 60px;
     flex-wrap: wrap;
     justify-content: center;
   `;
-  const ProjectNameContainer = styled.div`
-    font-size: 20px;
+  const UserNameContainer = styled.div`
+    font-size: 2rem;
   `;
-  const FocusProjectNameContainer = styled.div`
-    font-size: 20px;
-    font-weight: bold;
+  const FocusUserNameContainer = styled.div`
+    font-size: 2rem;
+    font-weight: 500;
   `;
-  const ProjectDetail = styled.div`
-    font-size: 14px;
+  const UserDetail = styled.div`
+    font-size: 1.4rem;
     padding: 10px 0;
   `;
   const AccountPosition = styled.div`
@@ -73,30 +70,26 @@ export default function ProjectList(props: Props) {
     setIsHover({ ...isHover, [id]: false });
   };
 
+  const router = useRouter();
+
   // マウスホバー時のプロジェクト
-  const projectContent = (isHover: any, project: Projects) => {
-    if (isHover[project.id]) {
+  const userContent = (isHover: any, user: Users) => {
+    if (isHover[user.id]) {
       return (
-        <GlassCard width='275px' height='250px' align={'center'} background='white'>
-          <FocusProjectNameContainer>{project.name}</FocusProjectNameContainer>
-          <ProjectDetail>{project.detail}</ProjectDetail>
-          <AccountPosition>
-            <AccountCircle height={20} width={20} color={'green'} />
-            <AccountCircle height={20} width={20} color={'blue'} />
-            <AccountCircle height={20} width={20} color={'red'} />
-          </AccountPosition>
+        <GlassCard width='275px' height='250px' align={'center'} justify={'center'} background='white' gap='30px'>
+          <FocusUserNameContainer>{user.name}</FocusUserNameContainer>
           <div>
-            <Button height='30px' text='More' />
+            <Button height='30px' text='More' onClick={() => router.push('/users/' + user.id)} />
           </div>
         </GlassCard>
       );
     } else {
       return (
         <GlassCard width='275px' height='250px' align={'center'}>
-          <div onMouseEnter={() => onHover(project.id)}>
-            <HeaderLogo height={120} width={120} color={'black'} />
+          <div onMouseEnter={() => onHover(user.id)}>
+            <AccountCircle height={120} width={120} color={'green'} />
           </div>
-          <ProjectNameContainer>{project.name}</ProjectNameContainer>
+          <UserNameContainer>{user.name}</UserNameContainer>
         </GlassCard>
       );
     }
@@ -104,12 +97,11 @@ export default function ProjectList(props: Props) {
 
   return (
     <MainLayout>
-      <ListHeader title='Project' />
-      <ProjectListContainer>
-        {props.projects.map((project) => (
-          <div onMouseLeave={() => leaveHover(project.id)}>{projectContent(isHover, project)}</div>
+      <UserListContainer>
+        {props.users.map((user) => (
+          <div key={user.id} onMouseLeave={() => leaveHover(user.id)}>{userContent(isHover, user)}</div>
         ))}
-      </ProjectListContainer>
+      </UserListContainer>
     </MainLayout>
   );
 }
