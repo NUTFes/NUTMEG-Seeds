@@ -5,6 +5,8 @@ import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import CardHeader from '@components/common/CardHeader';
 import AddButton from '@components/common/AddButton';
+import EditButton from '@components/common/EditButton';
+import DeleteButton from '@components/common/DeleteButton';
 import HeaderLogo from '@components/icons/HeaderLogo';
 import SlackIcon from '@components/icons/SlackIcon';
 import GithubIcon from '@components/icons/GithubIcon';
@@ -12,6 +14,8 @@ import IconButton from '@components/common/IconButton';
 import BackButton from '@components/common/BackButton';
 import UserAddModal from '@components/common/ProjectUserAddModal';
 import SkillAddModal from '@components/common/ProjectSkillAddModal';
+import EditModal from '@components/common/ProjectEditModal';
+import DeleteProjectModal from '@components/common/ProjectDeleteModal';
 import Row from '@components/layout/RowLayout';
 import Column from '@components/common/Column';
 
@@ -87,6 +91,8 @@ export async function getStaticProps({ params }: any) {
 export default function Page(props: Props) {
   const [isOpenUserAddModal, setIsOpenUserAddModal] = useState(false);
   const [isOpenSkillAddModal, setIsOpenSkillAddModal] = useState(false);
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [isOpenDeleteProjectModal, setIsOpenDeleteProjectModal] = useState(false);
   const openUserAddModal = (isUserOpenAddModal: boolean) => {
     if (isOpenUserAddModal) {
       return (
@@ -101,6 +107,24 @@ export default function Page(props: Props) {
       return (
         <>
           <SkillAddModal isOpen={isOpenSkillAddModal} setIsOpen={setIsOpenSkillAddModal} />
+        </>
+      );
+    }
+  };
+  const openEditModal = (isOpenEditModal: boolean) => {
+    if (isOpenEditModal) {
+      return (
+        <>
+          <EditModal isOpen={isOpenEditModal} setIsOpen={setIsOpenEditModal} />
+        </>
+      );
+    }
+  };
+  const openDeleteProjectModal = (isOpenDeleteProjectModal: boolean) => {
+    if (isOpenDeleteProjectModal) {
+      return (
+        <>
+          <DeleteProjectModal isOpen={isOpenDeleteProjectModal} setIsOpen={setIsOpenDeleteProjectModal} />
         </>
       );
     }
@@ -151,6 +175,12 @@ export default function Page(props: Props) {
           </Column>
         </Row>
       </FlatCard>
+      <Row>
+        <EditButton onClick={() => setIsOpenEditModal(!isOpenEditModal)} />
+        {openEditModal(isOpenEditModal)}
+        <DeleteButton onClick={() => setIsOpenDeleteProjectModal(!isOpenDeleteProjectModal)} />
+        {openDeleteProjectModal(isOpenDeleteProjectModal)}
+      </Row>
     </MainLayout>
   );
 }
