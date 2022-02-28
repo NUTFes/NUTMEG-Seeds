@@ -9,7 +9,7 @@ interface ModalProps {
   setIsOpen: Function;
 }
 
-interface Project {
+interface User {
   id: string;
   name: string;
 }
@@ -19,26 +19,26 @@ interface Role {
   name: string;
 }
 
-const UserProjectAddModal: FC<ModalProps> = (props) => {
+const ProjectUserAddModal: FC<ModalProps> = (props) => {
   const [formData, setFormData] = useState({
-    user_id: useRouter().query.id,
-    project_id: '',
+    user_id: '',
+    project_id: useRouter().query.id,
     role_id: '',
   });
 
-  const [projects, setProjects] = useState<Project[]>([{ id: '', name: '' }]);
+  const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
   const [roles, setRoles] = useState<Role[]>([{ id: '', name: '' }]);
 
   useEffect(() => {
-    const getProjectsUrl = process.env.SEEDS_API_URI + '/projects';
-    const getProjects = async (url: string) => {
-      setProjects(await get(url));
+    const getUsersUrl = process.env.SEEDS_API_URI + '/api/v1/users';
+    const getUsers = async (url: string) => {
+      setUsers(await get(url));
     };
     const getRolesUrl = process.env.SEEDS_API_URI + '/roles';
     const getRoles = async (url: string) => {
       setRoles(await get(url));
     };
-    getProjects(getProjectsUrl);
+    getUsers(getUsersUrl);
     getRoles(getRolesUrl);
   }, []);
 
@@ -57,12 +57,12 @@ const UserProjectAddModal: FC<ModalProps> = (props) => {
     <AddModal show={props.isOpen} setShow={props.setIsOpen}>
       <h2>Assign Project</h2>
       <div>
-        <h3>Project</h3>
-        <select defaultValue={formData.project_id} onChange={handler('project_id')}>
+        <h3>Member</h3>
+        <select defaultValue={formData.user_id} onChange={handler('user_id')}>
           <option value=''>select</option>
-          {projects.map((project: Project) => (
-            <option key={project.id} value={project.id}>
-              {project.name}
+          {users.map((user: User) => (
+            <option key={user.id} value={user.id}>
+              {user.name}
             </option>
           ))}
         </select>
@@ -90,4 +90,4 @@ const UserProjectAddModal: FC<ModalProps> = (props) => {
   );
 };
 
-export default UserProjectAddModal;
+export default ProjectUserAddModal;

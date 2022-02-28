@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import FlatCard from '@components/common/FlatCard';
 import LoginLayout from '@components/layout/LoginLayout';
-import Row from '@components/layout/RowLayout'
+import Row from '@components/layout/RowLayout';
 import SignIn from '@components/common/SignIn';
 import SignUp from '@components/common/SignUp';
 import type { NextPage } from 'next';
@@ -13,7 +13,9 @@ const Home: NextPage = () => {
       return (
         <>
           <Row gap='2rem'>
-            <a onClick={() => setIsMember(!isMember)}><h2>Log in</h2></a>
+            <a onClick={() => setIsMember(!isMember)}>
+              <h2>Log in</h2>
+            </a>
             <h3>/</h3>
             <a onClick={() => setIsMember(!isMember)}>Sign up</a>
           </Row>
@@ -24,7 +26,9 @@ const Home: NextPage = () => {
       return (
         <>
           <Row gap='2rem'>
-            <a onClick={() => setIsMember(!isMember)}><h2>Sign up</h2></a>
+            <a onClick={() => setIsMember(!isMember)}>
+              <h2>Sign up</h2>
+            </a>
             <h3>/</h3>
             <a onClick={() => setIsMember(!isMember)}>Log in</a>
           </Row>
@@ -36,7 +40,7 @@ const Home: NextPage = () => {
   return (
     <LoginLayout>
       <div>
-        <FlatCard gap="gap-s">{cardContent(isMember)}</FlatCard>
+        <FlatCard gap='gap-s'>{cardContent(isMember)}</FlatCard>
       </div>
     </LoginLayout>
   );

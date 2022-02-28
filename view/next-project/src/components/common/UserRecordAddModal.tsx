@@ -119,7 +119,9 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
         <select defaultValue={teacherData.user_id} onChange={teacherHandler('user_id')}>
           <option value=''>Select</option>
           {users.map((data: User) => (
-            <option key={data.id} value={data.id}>{data.name}</option>
+            <option key={data.id} value={data.id}>
+              {data.name}
+            </option>
           ))}
         </select>
       </div>
@@ -128,7 +130,9 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
         <select defaultValue={recordData.curriculum_id} onChange={recordHandler('curriculum_id')}>
           <option value=''>Select</option>
           {curriculums.map((data: Curriculum) => (
-            <option key={data.id} value={data.id}>{data.title}</option>
+            <option key={data.id} value={data.id}>
+              {data.title}
+            </option>
           ))}
         </select>
       </div>

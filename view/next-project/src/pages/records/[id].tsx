@@ -1,6 +1,6 @@
 import React from 'react';
-import {get} from '@utils/api_methods';
-import {GetStaticPaths} from 'next';
+import { get } from '@utils/api_methods';
+import { GetStaticPaths } from 'next';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import RecordDetailHeader from '@components/common/RecordDetailHeader';
@@ -55,7 +55,7 @@ export const getStaticPaths = async () => {
 
   let recordId: recordID;
   json.map((record: Record) => {
-    recordId = {id: record.id};
+    recordId = { id: record.id };
     recordIds.push(recordId);
   });
 
@@ -63,7 +63,7 @@ export const getStaticPaths = async () => {
     // curriculumのidの数だけ動的ルーティングする
     paths: recordIds.map((record) => {
       return {
-        params: {id: record.id.toString()},
+        params: { id: record.id.toString() },
       };
     }),
     // paramsに存在しないroutesが指定されたら404を返す
@@ -71,7 +71,7 @@ export const getStaticPaths = async () => {
   };
 };
 
-export async function getStaticProps({params}: any) {
+export async function getStaticProps({ params }: any) {
   const id = params.id;
   const getRecordUrl = 'http://seeds_api:3000/api/v1/record/' + id;
   const recordJson = await get(getRecordUrl);
@@ -111,28 +111,31 @@ export default function Page(props: Props) {
   return (
     <MainLayout>
       <ParentButtonContainer>
-        <RecordDetailHeader recordTitle={props.record.title} createDate={formatDate(props.record.created_at)}
-                            updateDate={formatDate(props.record.updated_at)}
-                            curriculumTitle={props.curriculum.title}
-                            skill={props.skill}
-                            user={props.user}
-                            teacher={props.teacher}/>
+        <RecordDetailHeader
+          recordTitle={props.record.title}
+          createDate={formatDate(props.record.created_at)}
+          updateDate={formatDate(props.record.updated_at)}
+          curriculumTitle={props.curriculum.title}
+          skill={props.skill}
+          user={props.user}
+          teacher={props.teacher}
+        />
         <FlatCard width='100%'>
           <RecordContentsContainer>
             <RecordContentsTitle>
               Contents
-              <hr/>
+              <hr />
             </RecordContentsTitle>
             <RecordContents>{props.record.content}</RecordContents>
             <RecordContentsTitle>
               Homework
-              <hr/>
+              <hr />
             </RecordContentsTitle>
             <RecordContents>{props.record.homework}</RecordContents>
           </RecordContentsContainer>
         </FlatCard>
         <ChildButtonContainer>
-          <Button/>
+          <Button />
         </ChildButtonContainer>
       </ParentButtonContainer>
     </MainLayout>

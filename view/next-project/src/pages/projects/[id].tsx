@@ -1,14 +1,19 @@
-import React from 'react';
-import Router from 'next/router';
+import React, { useState } from 'react';
 import { get } from '@utils/api_methods';
 import { GetStaticPaths } from 'next';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
-import styled from 'styled-components';
+import CardHeader from '@components/common/CardHeader';
+import AddButton from '@components/common/AddButton';
 import HeaderLogo from '@components/icons/HeaderLogo';
 import SlackIcon from '@components/icons/SlackIcon';
 import GithubIcon from '@components/icons/GithubIcon';
-import Button from '@components/common/BackButton';
+import IconButton from '@components/common/IconButton';
+import BackButton from '@components/common/BackButton';
+import UserAddModal from '@components/common/ProjectUserAddModal';
+import SkillAddModal from '@components/common/ProjectSkillAddModal';
+import Row from '@components/layout/RowLayout';
+import Column from '@components/common/Column';
 
 type PathParam = {
   id: string;
@@ -26,7 +31,7 @@ type Project = {
 interface Skill {
   id: number;
   name: string;
-  role: string;
+  category: string;
 }
 
 interface Member {
@@ -34,7 +39,6 @@ interface Member {
   name: string;
   role: string;
 }
-
 
 type Props = {
   project: Project;
@@ -48,13 +52,9 @@ export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
 
   // // ProjectのIDを一覧から取得するための処理
   // peojectのidを格納するための配列
-  const projectIds: projectID[] = [];
+  let projectId: { id: number };
+  const projectIds: { id: number }[] = [];
 
-  // peojectのidを連想配列で格納するための処理
-  interface projectID {
-    id: number;
-  }
-  let projectId: projectID;
   json.map((project: Project) => {
     projectId = { id: project.id };
     projectIds.push(projectId);
@@ -73,146 +73,84 @@ export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
 };
 
 export async function getStaticProps({ params }: any) {
-  const skills: Skill[] = [
-    {
-      id: 1,
-      name: 'Vue.js',
-      role: 'Front End',
-    },
-    {
-      id: 2,
-      name: 'Ruby on Rails',
-      role: 'Back End',
-    },
-  ];
-
-  const members: Member[] = [
-    {
-      id: 1,
-      name: '大場雅士',
-      role: 'Front End',
-    },
-    {
-      id: 2,
-      name: '久々江耀平',
-      role: 'Front End',
-    },
-    {
-      id: 3,
-      name: '水上涼介',
-      role: 'Back End',
-    },
-    {
-      id: 4,
-      name: '五十嵐和亜',
-      role: 'Back End',
-    },
-  ];
-
-  const id = params.id;
-  const getUrl = 'http://seeds_api:3000/projects/' + id;
-  const json = await get(getUrl);
+  const getUrl = 'http://seeds_api:3000/api/v1/get_project_for_view/' + params.id;
+  const getRes = await get(getUrl);
   return {
     props: {
-      project: json,
-      skills: skills,
-      members: members,
+      project: getRes[0].project,
+      skills: getRes[0].skills,
+      members: getRes[0].users,
     },
   };
 }
 
 export default function Page(props: Props) {
-  const SplitParentContainer = styled.div`
-  display: flex;
-  `;
-  const SplitChildContainer = styled.div`
-  flex-grow: 1;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  `;
-  const ImageContainer = styled.div`
-  flex-grow: 1;
-  padding: 20px;
-  `;
-  const ProjectContainer = styled.div`
-  padding: 20px;
-  `;
-  const ProjectNameContainer = styled.div`
-  flex-grow: 1;
-  font-size: 28px;
-  font-weight: bold;
-  `;
-  const TopicContainer = styled.div`
-  font-size: 20px;
-  padding-top: 30px;
-  padding-bottom: 15px;
-  `;
-  const ContentsContainer = styled.div`
-  font-size: 14px;
-  padding: 10px;
-  width: 100%
-  display: flex;
-  `;
-  const TableData = styled.div`
-  text-align: center;
-  `;
-  const ProjectDetail = styled.div`
-  font-size: 14px;
-  padding: 10px 0 0 30px;
-  `;
+  const [isOpenUserAddModal, setIsOpenUserAddModal] = useState(false);
+  const [isOpenSkillAddModal, setIsOpenSkillAddModal] = useState(false);
+  const openUserAddModal = (isUserOpenAddModal: boolean) => {
+    if (isOpenUserAddModal) {
+      return (
+        <>
+          <UserAddModal isOpen={isOpenUserAddModal} setIsOpen={setIsOpenUserAddModal} />
+        </>
+      );
+    }
+  };
+  const openSkillAddModal = (isSkillOpenAddModal: boolean) => {
+    if (isOpenSkillAddModal) {
+      return (
+        <>
+          <SkillAddModal isOpen={isOpenSkillAddModal} setIsOpen={setIsOpenSkillAddModal} />
+        </>
+      );
+    }
+  };
+
   return (
     <MainLayout>
-      <div style={{ position: 'relative' }}>
-        <FlatCard width='1100px' height='650px'>
-          <SplitParentContainer>
-            <ImageContainer>
-              <HeaderLogo height={300} width={300} color={'black'} />
-            </ImageContainer>
-            <ProjectContainer>
-              <SplitParentContainer>
-                <SplitChildContainer>
-                  <ProjectNameContainer>{props.project.name}</ProjectNameContainer>
-                </SplitChildContainer>
-                <SplitChildContainer>
-                  <GithubIcon height={30} width={30} />
-                  <SlackIcon height={45} width={45} />
-                </SplitChildContainer>
-              </SplitParentContainer>
-              <ProjectDetail>{props.project.detail}</ProjectDetail>
-              <TopicContainer>Skills</TopicContainer>
-              <ContentsContainer>
-                <table>
-                  {props.skills.map((skill) => (
-                    <tr key={skill.toString()}>
-                      <TableData>
-                        <td width='150px'>{skill.name}</td>
-                        <td width='150px'>{skill.role}</td>
-                      </TableData>
-                    </tr>
-                  ))}
-                </table>
-              </ContentsContainer>
-              <TopicContainer>Members</TopicContainer>
-              <ContentsContainer>
-                <table>
-                  {props.members.map((member) => (
-                    <tr key={member.toString()}>
-                      <TableData>
-                        <td width='150px'>{member.name}</td>
-                        <td width='150px'>{member.role}</td>
-                      </TableData>
-                    </tr>
-                  ))}
-                </table>
-              </ContentsContainer>
-            </ProjectContainer>
-          </SplitParentContainer>
-        </FlatCard>
-        <div style={{ position: 'absolute', bottom: '50px', left: '-40px' }}>
-          <Button />
-        </div>
-      </div>
+      <BackButton />
+      <FlatCard>
+        <Row gap={'0'}>
+          <Column align='center'>
+            <HeaderLogo height={300} width={300} color={'black'} />
+          </Column>
+          <Column>
+            <CardHeader title={props.project.name}>
+              <IconButton onClick={() => window.open(props.project.github, '_blank')}>
+                <GithubIcon height={30} width={30} />
+              </IconButton>
+              <IconButton>
+                <SlackIcon height={45} width={45} />
+              </IconButton>
+            </CardHeader>
+            <div>{props.project.detail}</div>
+            <CardHeader subtitle={'Skills'}>
+              <AddButton onClick={() => setIsOpenSkillAddModal(!isOpenSkillAddModal)} />
+              {openSkillAddModal(isOpenSkillAddModal)}
+            </CardHeader>
+            <table>
+              {props.skills.map((skill) => (
+                <tr key={skill.toString()}>
+                  <th>{skill.name}</th>
+                  <td>{skill.category}</td>
+                </tr>
+              ))}
+            </table>
+            <CardHeader subtitle={'Members'}>
+              <AddButton onClick={() => setIsOpenUserAddModal(!isOpenUserAddModal)} />
+              {openUserAddModal(isOpenUserAddModal)}
+            </CardHeader>
+            <table>
+              {props.members.map((member) => (
+                <tr key={member.toString()}>
+                  <th>{member.name}</th>
+                  <td>{member.role}</td>
+                </tr>
+              ))}
+            </table>
+          </Column>
+        </Row>
+      </FlatCard>
     </MainLayout>
   );
 }

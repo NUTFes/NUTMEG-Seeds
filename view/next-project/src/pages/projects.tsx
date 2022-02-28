@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {useRouter} from 'next/router';
-import {get} from '@utils/api_methods';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import ListHeader from '@components/common/ListHeader';
 import GlassCard from '@components/common/GlassCard';
@@ -37,7 +37,7 @@ export default function ProjectList(props: Props) {
   for (const project of props.projects) {
     initialState[project.id] = false;
   }
-  console.log(initialState)
+  console.log(initialState);
   // マウスホバーしているかをuseStateで管理
   let [isHover, setIsHover] = useState(initialState);
 
@@ -63,11 +63,11 @@ export default function ProjectList(props: Props) {
   // プロジェクトのカードにマウスホバーした時の処理
   const onHover = (id: number) => {
     // マウスホバーしたプロジェクトのisHoverをTrueにする
-    setIsHover({...isHover, [id]: true});
+    setIsHover({ ...isHover, [id]: true });
   };
   // プロジェクトのカードからマウスホバーが外れた時の処理
   const leaveHover = (id: number) => {
-    setIsHover({...isHover, [id]: false});
+    setIsHover({ ...isHover, [id]: false });
   };
 
   const router = useRouter();
@@ -80,7 +80,7 @@ export default function ProjectList(props: Props) {
           <FocusProjectNameContainer>{project.name}</FocusProjectNameContainer>
           <ProjectDetail>{project.detail}</ProjectDetail>
           <div>
-            <Button height='3rem' text='More' onClick={() => router.push('/projects/' + project.id)}/>
+            <Button height='3rem' text='More' onClick={() => router.push('/projects/' + project.id)} />
           </div>
         </GlassCard>
       );
@@ -88,7 +88,7 @@ export default function ProjectList(props: Props) {
       return (
         <GlassCard width='30rem' height='25rem' align={'center'}>
           <div onMouseEnter={() => onHover(project.id)}>
-            <HeaderLogo height={120} width={120} color={'black'}/>
+            <HeaderLogo height={120} width={120} color={'black'} />
           </div>
           <ProjectNameContainer>{project.name}</ProjectNameContainer>
         </GlassCard>
@@ -98,10 +98,12 @@ export default function ProjectList(props: Props) {
 
   return (
     <MainLayout>
-      <ListHeader title='Project'/>
+      <ListHeader title='Project' />
       <ProjectListContainer>
         {props.projects.map((project) => (
-          <div key={project.id} onMouseLeave={() => leaveHover(project.id)}>{projectContent(isHover, project)}</div>
+          <div key={project.id} onMouseLeave={() => leaveHover(project.id)}>
+            {projectContent(isHover, project)}
+          </div>
         ))}
       </ProjectListContainer>
     </MainLayout>

@@ -8,7 +8,15 @@ interface ColumnProps {
 }
 
 const Column = (props: ColumnProps) => {
-  return <div className={`${s.ColumnContainer} ${s['align-' + props.align || 'end']}`}>{props.children}</div>;
+  return (
+    <div
+      className={`${s.ColumnContainer} ${s['align-' + props.align || 'start']} ${
+        s['justify-' + props.justify || 'start']
+      }`}
+    >
+      {props.children}
+    </div>
+  );
 };
 
 export default Column;

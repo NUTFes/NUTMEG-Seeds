@@ -87,7 +87,7 @@ export default function UserList(props: Props) {
       return (
         <GlassCard width='275px' height='250px' align={'center'}>
           <div onMouseEnter={() => onHover(user.id)}>
-            <AccountCircle height={120} width={120} color={'green'} />
+            <AccountCircle height={120} width={120} color={'var(--accent-6)'} />
           </div>
           <UserNameContainer>{user.name}</UserNameContainer>
         </GlassCard>
@@ -99,7 +99,9 @@ export default function UserList(props: Props) {
     <MainLayout>
       <UserListContainer>
         {props.users.map((user) => (
-          <div key={user.id} onMouseLeave={() => leaveHover(user.id)}>{userContent(isHover, user)}</div>
+          <div key={user.id} onMouseLeave={() => leaveHover(user.id)}>
+            {userContent(isHover, user)}
+          </div>
         ))}
       </UserListContainer>
     </MainLayout>

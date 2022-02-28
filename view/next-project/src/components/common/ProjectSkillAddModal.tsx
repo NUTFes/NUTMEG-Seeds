@@ -14,15 +14,15 @@ interface Skill {
   name: string;
 }
 
-interface UserSkill {
-  user_id: string | any;
+interface ProjectSkill {
+  project_id: string | any;
   skill_id: string;
 }
 
-const UserSkillAddModal: FC<ModalProps> = (props) => {
+const ProjectSkillAddModal: FC<ModalProps> = (props) => {
   const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
-  const [formData, setFormData] = useState<UserSkill>({
-    user_id: useRouter().query.id,
+  const [formData, setFormData] = useState<ProjectSkill>({
+    project_id: useRouter().query.id,
     skill_id: '',
   });
 
@@ -39,8 +39,8 @@ const UserSkillAddModal: FC<ModalProps> = (props) => {
   };
 
   const router = useRouter();
-  const submitSkill = async (data: UserSkill) => {
-    const submitUrl = process.env.SEEDS_API_URI + '/user_skills';
+  const submitSkill = async (data: ProjectSkill) => {
+    const submitUrl = process.env.SEEDS_API_URI + '/project_skills';
     const postRes = await post(submitUrl, data);
   };
 
@@ -70,4 +70,4 @@ const UserSkillAddModal: FC<ModalProps> = (props) => {
   );
 };
 
-export default UserSkillAddModal;
+export default ProjectSkillAddModal;

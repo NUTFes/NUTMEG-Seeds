@@ -7,6 +7,7 @@ import SlackIcon from '@components/icons/SlackIcon';
 import GithubIcon from '@components/icons/GithubIcon';
 import BackButton from '@components/common/BackButton';
 import AddButton from '@components/common/AddButton';
+import IconButton from '@components/common/IconButton';
 import CardHeader from '@components/common/CardHeader';
 import SkillAddModal from '@components/common/UserSkillAddModal';
 import ProjectAddModal from '@components/common/UserProjectAddModal';
@@ -151,9 +152,14 @@ export default function Users(props: Props) {
             <Row>
               <img src='/99a.png' />
             </Row>
-            <div>
-              <h1>{user.name}</h1>
-            </div>
+            <CardHeader title={user.name}>
+              <IconButton onClick={() => window.open(detail.github, '_blank')}>
+                <GithubIcon height={30} width={30} />
+              </IconButton>
+              <IconButton>
+                <SlackIcon height={45} width={45} />
+              </IconButton>
+            </CardHeader>
             <table>
               <tr>
                 <th>{user.email}</th>
@@ -170,7 +176,7 @@ export default function Users(props: Props) {
             </table>
           </Column>
           <Column>
-            <CardHeader title={'Tech Stack'}>
+            <CardHeader subtitle={'Tech Stack'}>
               <AddButton onClick={() => setIsOpenSkillAddModal(!isOpenSkillAddModal)} />
               {openSkillAddModal(isOpenSkillAddModal)}
             </CardHeader>
@@ -182,7 +188,7 @@ export default function Users(props: Props) {
                 </tr>
               ))}
             </table>
-            <CardHeader title={'Projects'}>
+            <CardHeader subtitle={'Projects'}>
               <AddButton onClick={() => setIsOpenProjectAddModal(!isOpenProjectAddModal)} />
               {openProjectAddModal(isOpenProjectAddModal)}
             </CardHeader>
@@ -194,7 +200,7 @@ export default function Users(props: Props) {
                 </tr>
               ))}
             </table>
-            <CardHeader title={'Records'}>
+            <CardHeader subtitle={'Records'}>
               <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)} />
               {openRecordAddModal(isOpenRecordAddModal)}
             </CardHeader>

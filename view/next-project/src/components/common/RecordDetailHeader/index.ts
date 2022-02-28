@@ -1,1 +1,1 @@
-export {default} from './RecordDetailHeader';
+export { default } from './RecordDetailHeader';
