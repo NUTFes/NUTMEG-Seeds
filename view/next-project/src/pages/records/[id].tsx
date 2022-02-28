@@ -75,16 +75,12 @@ export async function getStaticProps({params}: any) {
   const id = params.id;
   const getRecordUrl = 'http://seeds_api:3000/api/v1/record/' + id;
   const recordJson = await get(getRecordUrl);
-  // const getUserUrl = 'http://seeds_api:3000/api/v1/user/' + recordJson.record.user_id;
-  // const userJson = await get(getUserUrl);
   return {
     props: recordJson,
-    // user: userJson,
   };
 }
 
 export default function Page(props: Props) {
-  console.log(props)
   const RecordContentsContainer = styled.div`
     width: 100%;
   `;
