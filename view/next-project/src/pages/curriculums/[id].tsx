@@ -161,7 +161,7 @@ export default function Page(props: Props) {
           </SplitLeftContainer>
           <SplitRightContainer>
             {props.records.map((record) => (
-              <FlatCard>
+              <FlatCard key={record.title.toString()}>
                 <RecordMember>{record.user_id}</RecordMember>
                 <RecordContents>{record.title}</RecordContents>
                 <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>

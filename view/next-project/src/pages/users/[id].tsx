@@ -51,6 +51,7 @@ interface Project {
 }
 
 interface Record {
+  id: string;
   title: string;
   teacher: Teacher;
 }
@@ -175,7 +176,7 @@ export default function Users(props: Props) {
             </CardHeader>
             <table>
               {skills.map((skill) => (
-                <tr>
+                <tr key={skill.id}>
                   <th>{skill.name}</th>
                   <td>{skill.category}</td>
                 </tr>
@@ -187,7 +188,7 @@ export default function Users(props: Props) {
             </CardHeader>
             <table>
               {projects.map((project) => (
-                <tr>
+                <tr key={project.id}>
                   <th>{project.project}</th>
                   <td>{project.role}</td>
                 </tr>
@@ -199,7 +200,7 @@ export default function Users(props: Props) {
             </CardHeader>
             <table>
               {records.map((record) => (
-                <tr>
+                <tr key={record.id}>
                   <th>{record.title}</th>
                   <td>{record.teacher.name}</td>
                 </tr>

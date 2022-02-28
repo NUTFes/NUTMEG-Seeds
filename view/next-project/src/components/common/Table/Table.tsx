@@ -12,7 +12,7 @@ const Table: FC<TableContentProps> = (props) => {
       <table className={s.tableContainer}>
         <thead>
           {props.headers.map((header) => (
-            <th>{header}</th>
+            <th key={header}>{header}</th>
           ))}
         </thead>
         <tbody>{props.children}</tbody>

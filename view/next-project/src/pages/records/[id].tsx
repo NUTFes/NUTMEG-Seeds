@@ -40,7 +40,7 @@ interface Props {
   skill: string;
 }
 
-export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
+export const getStaticPaths = async () => {
   const getUrl = 'http://seeds_api:3000/records';
   const json = await get(getUrl);
 

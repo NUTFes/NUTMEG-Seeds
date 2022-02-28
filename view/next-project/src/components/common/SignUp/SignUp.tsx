@@ -27,7 +27,7 @@ export const submitUser = async (data: submitData) => {
     localStorage.setItem("client", res.headers["client"]);
     localStorage.setItem("uid", res.headers["uid"]);
     localStorage.setItem("token-type", res.headers["token-type"]);
-    Router.push('/recordlist');
+    Router.push('/records');
   } else {
     console.log('Error' + res.status);
     console.log(await res.json());
