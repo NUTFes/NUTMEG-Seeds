@@ -36,22 +36,22 @@ const Header: FC = () => {
           <nav>
             <ul>
               <li>
-                <Link href='/recordlist'>
+                <Link href='/records'>
                   <a>Record</a>
                 </Link>
               </li>
               <li>
-                <Link href='/curriculumlist'>
+                <Link href='/curriculums'>
                   <a>Curriculum</a>
                 </Link>
               </li>
               <li>
-                <Link href='/projectlist'>
+                <Link href='/projects'>
                   <a>Project</a>
                 </Link>
               </li>
               <li>
-                <Link href='/userlist'>
+                <Link href='/users'>
                   <a>Member</a>
                 </Link>
               </li>

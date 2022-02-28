@@ -77,7 +77,7 @@ const ProjectAddModal = (props: ModalProps) => {
         <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
           <option value='0'>Select</option>
           {skills.map((data) => (
-            <option value={data.id}>{data.name}</option>
+            <option key={data.id} value={data.id}>{data.name}</option>
           ))}
         </select>
       </div>

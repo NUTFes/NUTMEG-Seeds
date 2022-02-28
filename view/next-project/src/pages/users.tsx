@@ -99,7 +99,7 @@ export default function UserList(props: Props) {
     <MainLayout>
       <UserListContainer>
         {props.users.map((user) => (
-          <div onMouseLeave={() => leaveHover(user.id)}>{userContent(isHover, user)}</div>
+          <div key={user.id} onMouseLeave={() => leaveHover(user.id)}>{userContent(isHover, user)}</div>
         ))}
       </UserListContainer>
     </MainLayout>

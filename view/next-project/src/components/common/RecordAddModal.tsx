@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { get, post } from '@utils/api_methods';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
-import CurriculumList from 'src/pages/curriculumlist';
 
 interface ModalProps {
   isOpen: boolean;
@@ -114,7 +113,7 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
         <select defaultValue={teacherData.user_id} onChange={teacherHandler('user_id')}>
           <option value=''>Select</option>
           {users.map((data: User) => (
-            <option value={data.id}>{data.name}</option>
+            <option key={data.id} value={data.id}>{data.name}</option>
           ))}
         </select>
       </div>
@@ -123,7 +122,7 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
         <select defaultValue={recordData.user_id} onChange={recordHandler('user_id')}>
           <option value=''>Select</option>
           {users.map((data: User) => (
-            <option value={data.id}>{data.name}</option>
+            <option key={data.id} value={data.id}>{data.name}</option>
           ))}
         </select>
       </div>
@@ -132,7 +131,7 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
         <select defaultValue={recordData.curriculum_id} onChange={recordHandler('curriculum_id')}>
           <option value=''>Select</option>
           {curriculums.map((data: Curriculum) => (
-            <option value={data.id}>{data.title}</option>
+            <option key={data.id} value={data.id}>{data.title}</option>
           ))}
         </select>
       </div>

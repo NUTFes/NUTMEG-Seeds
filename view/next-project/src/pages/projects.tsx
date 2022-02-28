@@ -101,7 +101,7 @@ export default function ProjectList(props: Props) {
       <ListHeader title='Project'/>
       <ProjectListContainer>
         {props.projects.map((project) => (
-          <div onMouseLeave={() => leaveHover(project.id)}>{projectContent(isHover, project)}</div>
+          <div key={project.id} onMouseLeave={() => leaveHover(project.id)}>{projectContent(isHover, project)}</div>
         ))}
       </ProjectListContainer>
     </MainLayout>
