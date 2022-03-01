@@ -1,11 +1,14 @@
-import React from 'react';
-import { get } from '@utils/api_methods';
-import { GetStaticPaths } from 'next';
+import React, {useState} from 'react';
+import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import RecordDetailHeader from '@components/common/RecordDetailHeader';
 import styled from 'styled-components';
 import Button from '@components/common/BackButton';
+import Row from '@components/layout/RowLayout';
+import EditButton from '@components/common/EditButton';
+import DeleteButton from '@components/common/DeleteButton';
+import EditModal from "@components/common/RecordEditModal";
 
 interface PathParam {
   id: string;
@@ -55,7 +58,7 @@ export const getStaticPaths = async () => {
 
   let recordId: recordID;
   json.map((record: Record) => {
-    recordId = { id: record.id };
+    recordId = {id: record.id};
     recordIds.push(recordId);
   });
 
@@ -63,7 +66,7 @@ export const getStaticPaths = async () => {
     // curriculumのidの数だけ動的ルーティングする
     paths: recordIds.map((record) => {
       return {
-        params: { id: record.id.toString() },
+        params: {id: record.id.toString()},
       };
     }),
     // paramsに存在しないroutesが指定されたら404を返す
@@ -71,7 +74,7 @@ export const getStaticPaths = async () => {
   };
 };
 
-export async function getStaticProps({ params }: any) {
+export async function getStaticProps({params}: any) {
   const id = params.id;
   const getRecordUrl = 'http://seeds_api:3000/api/v1/record/' + id;
   const recordJson = await get(getRecordUrl);
@@ -108,6 +111,17 @@ export default function Page(props: Props) {
     return datetime2;
   };
 
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const openEditModal = (isOpenEditModal: boolean) => {
+    if (isOpenEditModal) {
+      return (
+        <>
+          <EditModal isOpen={isOpenEditModal} setIsOpen={setIsOpenEditModal}/>
+        </>
+      );
+    }
+  };
+
   return (
     <MainLayout>
       <ParentButtonContainer>
@@ -121,21 +135,26 @@ export default function Page(props: Props) {
           teacher={props.teacher}
         />
         <FlatCard width='100%'>
+          <Row gap="3rem" justify="end">
+            <EditButton onClick={() => setIsOpenEditModal(!isOpenEditModal)}/>
+            {openEditModal(isOpenEditModal)}
+            <DeleteButton/>
+          </Row>
           <RecordContentsContainer>
             <RecordContentsTitle>
               Contents
-              <hr />
+              <hr/>
             </RecordContentsTitle>
             <RecordContents>{props.record.content}</RecordContents>
             <RecordContentsTitle>
               Homework
-              <hr />
+              <hr/>
             </RecordContentsTitle>
             <RecordContents>{props.record.homework}</RecordContents>
           </RecordContentsContainer>
         </FlatCard>
         <ChildButtonContainer>
-          <Button />
+          <Button/>
         </ChildButtonContainer>
       </ParentButtonContainer>
     </MainLayout>
