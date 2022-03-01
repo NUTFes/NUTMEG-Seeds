@@ -1,15 +1,15 @@
-import React, { FC, useState } from 'react';
-import { get, post } from '@utils/api_methods';
-import AddModal from '@components/common/AddModal';
-import Button from '@components/common/TestButton';
+import React, { FC, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { get, put } from '@utils/api_methods';
+import EditModal from '@components/common/EditModal';
+import Button from '@components/common/TestButton';
 
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
 }
 
-const ProjectAddModal: FC<ModalProps> = (props) => {
+const ProjectEditModal: FC<ModalProps> = (props) => {
   const [formData, setFormData] = useState({
     name: '',
     detail: '',
@@ -17,21 +17,32 @@ const ProjectAddModal: FC<ModalProps> = (props) => {
     github: '',
     remark: '',
   });
+  const router = useRouter();
+  const query = router.query;
+
+  useEffect(() => {
+    if (router.isReady) {
+      const getFormDataUrl = process.env.SEEDS_API_URI + '/projects/' + query.id;
+      const getFormData = async (url: string) => {
+        setFormData(await get(url));
+      };
+      getFormData(getFormDataUrl);
+    }
+  }, [query, router]);
 
   const handler =
     (input: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
       setFormData({ ...formData, [input]: e.target.value });
     };
 
-  const router = useRouter();
-  const submitProject = async (data: any) => {
-    const submitProjectUrl = process.env.SEEDS_API_URI + '/projects';
-    await post(submitProjectUrl, data);
+  const submitProject = async (data: any, query: any) => {
+    const submitProjectUrl = process.env.SEEDS_API_URI + '/projects/' + query.id;
+    await put(submitProjectUrl, data);
   };
 
   return (
-    <AddModal show={props.isOpen} setShow={props.setIsOpen}>
-      <h2>New Project</h2>
+    <EditModal show={props.isOpen} setShow={props.setIsOpen}>
+      <h2>Edit Project</h2>
       <div>
         <h3>Project Name</h3>
         <input type='text' placeholder='Input' value={formData.name} onChange={handler('name')} />
@@ -50,14 +61,14 @@ const ProjectAddModal: FC<ModalProps> = (props) => {
       </div>
       <Button
         onClick={() => {
-          submitProject(formData);
+          submitProject(formData, query);
           router.reload();
         }}
       >
         Submit
       </Button>
-    </AddModal>
+    </EditModal>
   );
 };
 
-export default ProjectAddModal;
+export default ProjectEditModal;
