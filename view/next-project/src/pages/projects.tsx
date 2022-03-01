@@ -21,7 +21,7 @@ type Props = {
   projects: Projects[];
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const getUrl = 'http://seeds_api:3000/projects';
   const json = await get(getUrl);
   return {

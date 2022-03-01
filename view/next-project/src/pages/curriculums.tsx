@@ -28,7 +28,7 @@ interface Props {
   skills: Skill[];
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const getCurriculumsUrl = 'http://seeds_api:3000/curriculums';
   const getSkillsUrl = 'http://seeds_api:3000/skills';
   const curriculumsJson = await get(getCurriculumsUrl);
