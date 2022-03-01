@@ -33,6 +33,7 @@ interface Record {
 interface RecordCurriculumTeacher {
   record: Record | any;
   curriculum: Curriculum | any;
+  curriculum_title: string;
   teacher: string;
   user: string;
   skill: string;
@@ -48,6 +49,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
   const [record, setRecord] = useState<RecordCurriculumTeacher>({
     record: null,
     curriculum: null,
+    curriculum_title: '',
     teacher: '',
     user: '',
     skill: ''
@@ -147,6 +149,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
       <div>
         <h3>Curriculum</h3>
         <select defaultValue={formData.curriculum_id} onChange={handler('curriculum_id')}>
+          <option value={formData.curriculum_id}>{record.curriculum_title}</option>
           {curriculums.map((data: Curriculum) => (
             <option key={data.id} value={data.id}>
               {data.title}

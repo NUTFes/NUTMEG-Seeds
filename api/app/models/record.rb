@@ -8,6 +8,7 @@ class Record < ApplicationRecord
     {
       "record": record,
       "curriculum": record.curriculum,
+      "curriculum_title": record.curriculum.title,
       "teacher": record.teacher.user.name,
       "user": record.user.name,
       "skill": record.curriculum.skill.name,
