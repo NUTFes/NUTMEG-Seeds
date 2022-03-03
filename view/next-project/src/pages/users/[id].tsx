@@ -86,29 +86,8 @@ interface Skill {
   category: string;
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const getUrl = 'http://seeds_api:3000/api/v1/users';
-  const json = await get(getUrl);
-
-  let userId: { id: number };
-  const userIds: { id: number }[] = [];
-
-  json.map((user: any) => {
-    userId = { id: user.id };
-    userIds.push(userId);
-  });
-
-  return {
-    paths: userIds.map((user) => {
-      return {
-        params: { id: user.id.toString() },
-      };
-    }),
-    fallback: false,
-  };
-};
-
-export async function getStaticProps({ params }: any) {
+export async function getServerSideProps({ params }: any) {
+  console.log(params)
   const getUrl = 'http://seeds_api:3000/api/v1/get_user_for_member_page/' + params.id;
   const getRes = await get(getUrl);
   return {
