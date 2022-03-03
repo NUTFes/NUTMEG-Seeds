@@ -1,30 +1,11 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC } from 'react';
 import Link from 'next/link';
 import s from './Header.module.css';
+import IconButton from '@components/common/IconButton';
 import HeaderLogo from '@components/icons/HeaderLogo';
+import Account from '@components/icons/AccountCircle'
 
 const Header: FC = () => {
-  const [headerColor, setHeaderColor] = useState('white');
-
-  const [headerBackgroundColor, setHeaderBackgroundColor] = useState('var(--primary)');
-
-  const [headerShadow, setHeadershadow] = useState('0px');
-
-  const listenScrollEvent = () => {
-    if (window.scrollY < 1) {
-      return setHeaderBackgroundColor('var(--primary)'), setHeaderColor('white'), setHeadershadow('0px');
-    } else {
-      return (
-        setHeaderBackgroundColor('rgba(255, 255, 255, 0.8)'),
-        setHeaderColor('var(--primary)'),
-        setHeadershadow('4px 20px rgba(0, 0, 0, 0.25)')
-      );
-    }
-  };
-  // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => {
-    window.addEventListener('scroll', listenScrollEvent);
-  });
 
   return (
     <section className={s.headerContainer}>
@@ -57,6 +38,7 @@ const Header: FC = () => {
               </li>
             </ul>
           </nav>
+          <IconButton><Account width={30} height={30} color={'var(--accent-0)'}/></IconButton>
         </div>
       </header>
     </section>
