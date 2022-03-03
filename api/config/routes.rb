@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   resources :roles
+  resources :grades
+  resources :departments
   resources :bureaus
   resources :user_skills
   resources :project_users
@@ -17,7 +19,7 @@ Rails.application.routes.draw do
     namespace 'v1' do
       # users
       get "/users" => "users_api#index"
-      get "/get_user_with_detail_and_project_and_role_and_record/:id" => "users_api#get_user_with_detail_and_project_and_role_and_record"
+      get "/get_user_for_member_page/:id" => "users_api#get_user_for_member_page"
       get "get_role_1" => "users#get_role_1"
       get "get_role_2" => "users#get_role_2"
       get "user/:id" => "users#show"

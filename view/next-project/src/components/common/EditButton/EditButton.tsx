@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './EditButton.module.css'
+import s from './EditButton.module.css';
 import Edit from '@components/icons/Edit';
 
 interface ButtonContentsProps {
@@ -11,7 +11,6 @@ interface ButtonContentsProps {
 }
 
 function EditButton(props: ButtonContentsProps): JSX.Element {
-
   return (
     <>
       <button className={s.buttonContainer} onClick={props.onClick}>
