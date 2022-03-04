@@ -43,38 +43,7 @@ interface Props {
   skill: string;
 }
 
-export const getStaticPaths = async () => {
-  const getUrl = 'http://seeds_api:3000/records';
-  const json = await get(getUrl);
-
-  // // RecordのIDを一覧から取得するための処理
-  // Recordのidを格納するための配列
-  const recordIds: recordID[] = [];
-
-  // Recordのidを連想配列で格納するための処理
-  interface recordID {
-    id: number;
-  }
-
-  let recordId: recordID;
-  json.map((record: Record) => {
-    recordId = {id: record.id};
-    recordIds.push(recordId);
-  });
-
-  return {
-    // curriculumのidの数だけ動的ルーティングする
-    paths: recordIds.map((record) => {
-      return {
-        params: {id: record.id.toString()},
-      };
-    }),
-    // paramsに存在しないroutesが指定されたら404を返す
-    fallback: false,
-  };
-};
-
-export async function getStaticProps({params}: any) {
+export async function getServerSideProps({params}: any) {
   const id = params.id;
   const getRecordUrl = 'http://seeds_api:3000/api/v1/record/' + id;
   const recordJson = await get(getRecordUrl);

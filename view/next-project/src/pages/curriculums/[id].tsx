@@ -1,6 +1,5 @@
 import React from 'react';
-import { get } from '@utils/api_methods';
-import { GetStaticPaths } from 'next';
+import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import DetailHeader from '@components/common/DetailHeader';
@@ -38,38 +37,7 @@ interface Props {
   records: Record[];
 }
 
-export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
-  const getUrl = 'http://seeds_api:3000/curriculums';
-  const json = await get(getUrl);
-
-  // // CurriculumsのIDを一覧から取得するための処理
-  // Curriculumのidを格納するための配列
-  const curriculumIds: curriculumID[] = [];
-
-  // Curriculumのidを連想配列で格納するための処理
-  interface curriculumID {
-    id: number;
-  }
-
-  let curriculumId: curriculumID;
-  json.map((curriculum: Curriculum) => {
-    curriculumId = { id: curriculum.id };
-    curriculumIds.push(curriculumId);
-  });
-
-  return {
-    // curriculumのidの数だけ動的ルーティングする
-    paths: curriculumIds.map((curriculum) => {
-      return {
-        params: { id: curriculum.id.toString() },
-      };
-    }),
-    // paramsに存在しないroutesが指定されたら404を返す
-    fallback: false,
-  };
-};
-
-export async function getStaticProps({ params }: any) {
+export async function getServerSideProps({params}: any) {
   const id = params.id;
   const getUrl = 'http://seeds_api:3000/api/v1/get_curriculum_for_view/' + id;
   const json = await get(getUrl);
@@ -138,25 +106,25 @@ export default function Page(props: Props) {
   return (
     <MainLayout>
       <ParentButtonContainer>
-        <DetailHeader curriculum={props.curriculum} skill={props.skill} />
+        <DetailHeader curriculum={props.curriculum} skill={props.skill}/>
         <SplitParentContainer>
           <SplitLeftContainer>
             <FlatCard width='100%'>
               <CurriculumContentsContainer>
                 <CurriculumContentsTitle>
                   Contents
-                  <hr />
+                  <hr/>
                 </CurriculumContentsTitle>
                 <CurriculumContents>{props.curriculum.content}</CurriculumContents>
                 <CurriculumContentsTitle>
                   Homework
-                  <hr />
+                  <hr/>
                 </CurriculumContentsTitle>
                 <CurriculumContents>{props.curriculum.homework}</CurriculumContents>
               </CurriculumContentsContainer>
             </FlatCard>
             <ChildButtonContainer>
-              <Button />
+              <Button/>
             </ChildButtonContainer>
           </SplitLeftContainer>
           <SplitRightContainer>
