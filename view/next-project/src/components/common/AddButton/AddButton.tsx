@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './AddButton.module.css'
+import s from './AddButton.module.css';
 import Add from '@components/icons/Add';
 
 interface ButtonContentsProps {
@@ -11,7 +11,6 @@ interface ButtonContentsProps {
 }
 
 function AddButton(props: ButtonContentsProps): JSX.Element {
-
   return (
     <>
       <button className={s.buttonContainer} onClick={props.onClick}>

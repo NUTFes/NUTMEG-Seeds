@@ -7,11 +7,15 @@ import SlackIcon from '@components/icons/SlackIcon';
 import GithubIcon from '@components/icons/GithubIcon';
 import BackButton from '@components/common/BackButton';
 import AddButton from '@components/common/AddButton';
+import EditButton from '@components/common/EditButton';
+import DeleteButton from '@components/common/DeleteButton';
 import IconButton from '@components/common/IconButton';
 import CardHeader from '@components/common/CardHeader';
 import SkillAddModal from '@components/common/UserSkillAddModal';
 import ProjectAddModal from '@components/common/UserProjectAddModal';
 import RecordAddModal from '@components/common/UserRecordAddModal';
+import EditModal from '@components/common/UserEditModal';
+import DeleteUserModal from '@components/common/UserDeleteModal';
 import Column from '@components/common/Column';
 import Row from '@components/layout/RowLayout';
 import { GetStaticPaths, GetStaticProps } from 'next';
@@ -19,7 +23,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 interface Props {
   user: User;
   detail: UserDetail;
-  projects: Project[];
+  projects: User[];
   records: Record[];
   skills: Skill[];
 }
@@ -30,10 +34,25 @@ interface User {
   email: string;
 }
 
+interface Grade {
+  id: string;
+  name: string;
+}
+
+interface Department {
+  id: string;
+  name: string;
+}
+
+interface Bureau {
+  id: string;
+  name: string;
+}
+
 interface UserDetail {
-  grade: string;
-  department: string;
-  bureau: string;
+  grade: Grade;
+  department: Department;
+  bureau: Bureau;
   icon_name: string;
   github: string;
   slack: string;
@@ -45,7 +64,7 @@ interface UserDetail {
   pc_storage: string;
 }
 
-interface Project {
+interface User {
   id: number;
   project: string;
   role: string;
@@ -67,30 +86,9 @@ interface Skill {
   category: string;
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const getUrl = 'http://seeds_api:3000/api/v1/users';
-  const json = await get(getUrl);
-
-  let userId: { id: number };
-  const userIds: { id: number }[] = [];
-
-  json.map((user: any) => {
-    userId = { id: user.id };
-    userIds.push(userId);
-  });
-
-  return {
-    paths: userIds.map((user) => {
-      return {
-        params: { id: user.id.toString() },
-      };
-    }),
-    fallback: false,
-  };
-};
-
-export async function getStaticProps({ params }: any) {
-  const getUrl = 'http://seeds_api:3000/api/v1/get_user_with_detail_and_project_and_role_and_record/' + params.id;
+export async function getServerSideProps({ params }: any) {
+  console.log(params)
+  const getUrl = 'http://seeds_api:3000/api/v1/get_user_for_member_page/' + params.id;
   const getRes = await get(getUrl);
   return {
     props: {
@@ -114,8 +112,10 @@ export default function Users(props: Props) {
   const [isOpenSkillAddModal, setIsOpenSkillAddModal] = useState(false);
   const [isOpenProjectAddModal, setIsOpenProjectAddModal] = useState(false);
   const [isOpenRecordAddModal, setIsOpenRecordAddModal] = useState(false);
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [isOpenDeleteUserModal, setIsOpenDeleteUserModal] = useState(false);
 
-  const openSkillAddModal = (isSkillOpenAddModal: boolean) => {
+  const openSkillAddModal = (isOpenSkillAddModal: boolean) => {
     if (isOpenSkillAddModal) {
       return (
         <>
@@ -124,7 +124,7 @@ export default function Users(props: Props) {
       );
     }
   };
-  const openProjectAddModal = (isProjectOpenAddModal: boolean) => {
+  const openProjectAddModal = (isOpenProjectAddModal: boolean) => {
     if (isOpenProjectAddModal) {
       return (
         <>
@@ -133,11 +133,29 @@ export default function Users(props: Props) {
       );
     }
   };
-  const openRecordAddModal = (isRecordOpenAddModal: boolean) => {
+  const openRecordAddModal = (isOpenRecordAddModal: boolean) => {
     if (isOpenRecordAddModal) {
       return (
         <>
           <RecordAddModal isOpen={isOpenRecordAddModal} setIsOpen={setIsOpenRecordAddModal} />
+        </>
+      );
+    }
+  };
+  const openEditModal = (isOpenEditModal: boolean, detail: UserDetail) => {
+    if (isOpenEditModal) {
+      return (
+        <>
+          <EditModal isOpen={isOpenEditModal} setIsOpen={setIsOpenEditModal} userDetaiInfo={detail} />
+        </>
+      );
+    }
+  };
+  const openDeleteUserModal = (isOpenDeleteUserModal: boolean) => {
+    if (isOpenDeleteUserModal) {
+      return (
+        <>
+          <DeleteUserModal isOpen={isOpenDeleteUserModal} setIsOpen={setIsOpenDeleteUserModal} />
         </>
       );
     }
@@ -156,22 +174,27 @@ export default function Users(props: Props) {
               <IconButton onClick={() => window.open(detail.github, '_blank')}>
                 <GithubIcon height={30} width={30} />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={() => window.open(detail.slack, '_blank')}>
                 <SlackIcon height={45} width={45} />
               </IconButton>
+              <EditButton onClick={() => setIsOpenEditModal(!isOpenEditModal)} />
+              {openEditModal(isOpenEditModal, detail)}
             </CardHeader>
             <table>
               <tr>
                 <th>{user.email}</th>
               </tr>
               <tr>
-                <th>{detail.grade}</th>
+                <th>{detail.grade.name}</th>
               </tr>
               <tr>
-                <th>{detail.department}</th>
+                <th>{detail.department.name}</th>
               </tr>
               <tr>
-                <th>{detail.bureau}</th>
+                <th>{detail.bureau.name}</th>
+              </tr>
+              <tr>
+                <th>{detail.biography}</th>
               </tr>
             </table>
           </Column>
@@ -200,21 +223,21 @@ export default function Users(props: Props) {
                 </tr>
               ))}
             </table>
-            <CardHeader subtitle={'Records'}>
-              <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)} />
-              {openRecordAddModal(isOpenRecordAddModal)}
-            </CardHeader>
-            <table>
-              {records.map((record) => (
-                <tr key={record.id}>
-                  <th>{record.title}</th>
-                  <td>{record.teacher.name}</td>
-                </tr>
-              ))}
-            </table>
-          </Column>
-        </Row>
-      </FlatCard>
-    </MainLayout>
+              <CardHeader subtitle={'Records'}>
+                <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)} />
+                {openRecordAddModal(isOpenRecordAddModal)}
+              </CardHeader>
+                <table>
+                  {records.map((record) => (
+                    <tr key={record.id}>
+                      <th>{record.title}</th>
+                      <td>{record.teacher.name}</td>
+                    </tr>
+                  ))}
+                </table>
+                </Column>
+                </Row>
+                </FlatCard>
+                </MainLayout>
   );
 }

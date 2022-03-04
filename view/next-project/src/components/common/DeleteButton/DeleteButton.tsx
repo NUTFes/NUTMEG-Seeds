@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './DeleteButton.module.css'
+import s from './DeleteButton.module.css';
 import Delete from '@components/icons/Delete';
 
 interface ButtonContentsProps {
@@ -11,7 +11,6 @@ interface ButtonContentsProps {
 }
 
 function DeleteButton(props: ButtonContentsProps): JSX.Element {
-
   return (
     <>
       <button className={s.buttonContainer} onClick={props.onClick}>

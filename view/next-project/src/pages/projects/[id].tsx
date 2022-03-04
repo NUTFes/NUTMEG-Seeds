@@ -50,33 +50,7 @@ type Props = {
   members: Member[];
 };
 
-export const getStaticPaths: GetStaticPaths<PathParam> = async () => {
-  const getUrl = 'http://seeds_api:3000/projects';
-  const json = await get(getUrl);
-
-  // // ProjectのIDを一覧から取得するための処理
-  // peojectのidを格納するための配列
-  let projectId: { id: number };
-  const projectIds: { id: number }[] = [];
-
-  json.map((project: Project) => {
-    projectId = { id: project.id };
-    projectIds.push(projectId);
-  });
-
-  return {
-    // projectのidの数だけ動的ルーティングする
-    paths: projectIds.map((project) => {
-      return {
-        params: { id: project.id.toString() },
-      };
-    }),
-    // paramsに存在しないroutesが指定されたら404を返す
-    fallback: false,
-  };
-};
-
-export async function getStaticProps({ params }: any) {
+export async function getServerSideProps({ params }: any) {
   const getUrl = 'http://seeds_api:3000/api/v1/get_project_for_view/' + params.id;
   const getRes = await get(getUrl);
   return {

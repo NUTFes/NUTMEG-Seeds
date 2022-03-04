@@ -6,9 +6,10 @@ class UserDetail < ApplicationRecord
 
   def to_info_h
     return {
-      "department": self.department.name,
-      "grade": self.grade.name,
-      "bureau": self.bureau.name,
+      "user_detail_id": self.id,
+      "department": self.department,
+      "grade": self.grade,
+      "bureau": self.bureau,
       "icon_name": self.icon_name,
       "github": self.github,
       "slack": self.slack,

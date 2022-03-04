@@ -107,3 +107,6 @@ typings/
 # Optional REPL history
 .description.lsi
 .next/
+
+# Notification Slack
+/api/.env

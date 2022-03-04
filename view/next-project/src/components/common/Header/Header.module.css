@@ -23,6 +23,7 @@
   justify-content: end;
   height: 100%;
   width: 100%;
+  gap: 3rem;
 }
 
 .headerLinks ul {
@@ -36,7 +37,13 @@
 .headerLinks a {
   color: var(--accent-0);
   font-size: 1.4rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 1px;
   text-decoration: none;
+}
+
+.headerLinks a:hover {
+  background: linear-gradient(45deg, var(--button-secondary) 0%, var(--button-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
