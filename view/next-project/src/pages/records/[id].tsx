@@ -8,11 +8,8 @@ import Button from '@components/common/BackButton';
 import Row from '@components/layout/RowLayout';
 import EditButton from '@components/common/EditButton';
 import DeleteButton from '@components/common/DeleteButton';
-import EditModal from "@components/common/RecordEditModal";
-
-interface PathParam {
-  id: string;
-}
+import RecordEditModal from "@components/common/RecordEditModal";
+import DeleteProjectModal from "@components/common/RecordDeleteModal";
 
 interface Curriculum {
   id: number;
@@ -46,9 +43,9 @@ interface Props {
 export async function getServerSideProps({params}: any) {
   const id = params.id;
   const getRecordUrl = 'http://seeds_api:3000/api/v1/record/' + id;
-  const recordJson = await get(getRecordUrl);
+  const getRes = await get(getRecordUrl);
   return {
-    props: recordJson,
+    props: getRes,
   };
 }
 
@@ -80,12 +77,22 @@ export default function Page(props: Props) {
     return datetime2;
   };
 
-  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  const openEditModal = (isOpenEditModal: boolean) => {
-    if (isOpenEditModal) {
+  const [isOpenEditRecordModal, setIsOpenEditRecordModal] = useState(false);
+  const [isOpenDeleteRecordModal, setIsOpenDeleteRecordModal] = useState(false);
+  const openEditRecordModal = (isOpenEditRecordModal: boolean) => {
+    if (isOpenEditRecordModal) {
       return (
         <>
-          <EditModal isOpen={isOpenEditModal} setIsOpen={setIsOpenEditModal}/>
+          <RecordEditModal isOpen={isOpenEditRecordModal} setIsOpen={setIsOpenEditRecordModal}/>
+        </>
+      );
+    }
+  };
+  const openDeleteRecordModal = (isOpenDeleteRecordModal: boolean) => {
+    if (isOpenDeleteRecordModal) {
+      return (
+        <>
+          <DeleteProjectModal isOpen={isOpenDeleteRecordModal} setIsOpen={setIsOpenDeleteRecordModal}/>
         </>
       );
     }
@@ -105,9 +112,10 @@ export default function Page(props: Props) {
         />
         <FlatCard width='100%'>
           <Row gap="3rem" justify="end">
-            <EditButton onClick={() => setIsOpenEditModal(!isOpenEditModal)}/>
-            {openEditModal(isOpenEditModal)}
-            <DeleteButton/>
+            <EditButton onClick={() => setIsOpenEditRecordModal(!isOpenEditRecordModal)}/>
+            {openEditRecordModal(isOpenEditRecordModal)}
+            <DeleteButton onClick={() => setIsOpenDeleteRecordModal(!isOpenDeleteRecordModal)}/>
+            {openDeleteRecordModal(isOpenDeleteRecordModal)}
           </Row>
           <RecordContentsContainer>
             <RecordContentsTitle>
