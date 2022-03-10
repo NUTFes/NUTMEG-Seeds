@@ -8,7 +8,7 @@
   height: 60px;
   width: 100%;
   padding: 0px 50px;
-  z-index: 1;
+  z-index: 5;
 }
 
 .headerContainer header {

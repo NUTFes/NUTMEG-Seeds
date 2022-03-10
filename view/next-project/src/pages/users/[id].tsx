@@ -223,21 +223,21 @@ export default function Users(props: Props) {
                 </tr>
               ))}
             </table>
-              <CardHeader subtitle={'Records'}>
-                <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)} />
-                {openRecordAddModal(isOpenRecordAddModal)}
-              </CardHeader>
-                <table>
-                  {records.map((record) => (
-                    <tr key={record.id}>
-                      <th>{record.title}</th>
-                      <td>{record.teacher.name}</td>
-                    </tr>
-                  ))}
-                </table>
-                </Column>
-                </Row>
-                </FlatCard>
-                </MainLayout>
+            <CardHeader subtitle={'Records'}>
+              <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)} />
+              {openRecordAddModal(isOpenRecordAddModal)}
+            </CardHeader>
+            <table>
+              {records.map((record) => (
+                <tr key={record.id}>
+                  <th>{record.title}</th>
+                  <td>{record.teacher.name}</td>
+                </tr>
+              ))}
+            </table>
+          </Column>
+        </Row>
+      </FlatCard>
+    </MainLayout>
   );
 }

@@ -12,9 +12,11 @@ interface ModalProps {
 }
 
 interface UserDetail {
-  grade: Grade;
-  department: Department;
-  bureau: Bureau;
+  id: string;
+  user_id: string;
+  grade_id: string;
+  department_id: string;
+  bureau_id: string;
   icon_name: string;
   github: string;
   slack: string;
@@ -45,26 +47,28 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
   const router = useRouter();
   const query = router.query;
 
+  const detail = props.userDetaiInfo
+  const userDetail: UserDetail = {
+    id: detail.id,
+    user_id: detail.user_id,
+    grade_id: detail.grade.id,
+    department_id: detail.department.id,
+    bureau_id: detail.bureau.id,
+    icon_name: detail.icon_name,
+    github: detail.github,
+    slack: detail.github,
+    biography: detail.biography,
+    pc_name: detail.pc_name,
+    pc_os: detail.pc_os,
+    pc_cpu: detail.pc_cpu,
+    pc_ram: detail.pc_ram,
+    pc_storage: detail.pc_storage
+  }
+
   const [gradeList, setGradeList] = useState<Grade[]>([])
   const [departmentList, setDepartmentList] = useState<Department[]>([])
   const [bureauList, setBureauList] = useState<Bureau[]>([])
-  const [userDetailData, setUserDetailData] = useState<UserDetail>(props.userDetaiInfo)
-  /*
-  const [userDetailData, setUserDetailData] = useState({
-    department: '',
-    grade: '',
-    bureau: '',
-    icon_name: '',
-    github: '',
-    slack: '',
-    biography: '',
-    pc_name: '',
-    pc_os: '',
-    pc_cpu: '',
-    pc_ram: '',
-    pc_storage: '',
-  });
-  */
+  const [userDetailData, setUserDetailData] = useState<UserDetail>(userDetail)
 
   useEffect(() => {
       const getGradeListUrl = process.env.SEEDS_API_URI + '/grades';
@@ -84,17 +88,6 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
         setBureauList(await get(url))
       }
       getBureauList(getBureauListUrl)
-
-    /*
-    if (router.isReady) {
-      const getUserDetailDataUrl = process.env.SEEDS_API_URI + '/user_details/' + query.id;
-      const getUserDetailData = async (url: string) => {
-        setUserDetailData(await get(url));
-      };
-      getUserDetailData(getUserDetailDataUrl);
-
-    }
-    */
   }, [query, router]);
 
   const handler =
@@ -109,8 +102,10 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
     };
 
   const submitUserDetail = async (data: any) => {
-    const submitUserDetailUrl = process.env.SEEDS_API_URI + '/user_details/' + data.user_detail_id;
-    await put(submitUserDetailUrl, data);
+    console.log(data)
+    const submitUserDetailUrl = process.env.SEEDS_API_URI + '/user_details/' + data.id;
+    const res = await put(submitUserDetailUrl, data);
+    console.log(res)
   };
 
   return (
@@ -118,7 +113,7 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
       <h2>Edit User Info</h2>
       <div>
         <h3>Grade</h3>
-        <select defaultValue={userDetailData.grade.id} onChange={handler('grade')}>
+        <select defaultValue={userDetailData.grade_id} onChange={handler('grade_id')}>
           <option value=''>select</option>
           {gradeList.map((grade: Grade) => (
             <option key={grade.id} value={grade.id}>
@@ -129,7 +124,7 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
       </div>
       <div>
         <h3>Department</h3>
-        <select defaultValue={userDetailData.department.id} onChange={handler('department')}>
+        <select defaultValue={userDetailData.department_id} onChange={handler('department_id')}>
           <option value=''>select</option>
           {departmentList.map((department: Department) => (
             <option key={department.id} value={department.id}>
@@ -140,7 +135,7 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
       </div>
       <div>
         <h3>Bureau</h3>
-        <select defaultValue={userDetailData.bureau.id} onChange={handler('bureau')}>
+        <select defaultValue={userDetailData.bureau_id} onChange={handler('bureau_id')}>
           <option value=''>select</option>
           {bureauList.map((bureau: Bureau) => (
             <option key={bureau.id} value={bureau.id}>
