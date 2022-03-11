@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import DetailHeader from '@components/common/DetailHeader';
 import styled from 'styled-components';
 import Button from '@components/common/BackButton';
-
-type PathParam = {
-  id: string;
-};
+import EditButton from "@components/common/EditButton";
+import DeleteButton from "@components/common/DeleteButton";
+import CurriculumEditModal from "@components/common/CurriculumEditModal";
+import CurriculumDeleteModal from "@components/common/CurriculumDeleteModal";
+import Row from "@components/layout/RowLayout";
 
 interface Curriculum {
   id: number;
@@ -61,7 +62,7 @@ export default function Page(props: Props) {
   `;
 
   const CurriculumContentsContainer = styled.div`
-    width: 80%;
+    width: 100%;
   `;
   const CurriculumContentsTitle = styled.div`
     font-size: 2.8rem;
@@ -79,6 +80,9 @@ export default function Page(props: Props) {
     position: absolute;
     bottom: 50px;
     left: -40px;
+  `;
+  const RecordContainer = styled.div`
+    padding-bottom: 1rem;
   `;
   const RecordMember = styled.div`
     font-size: 1.4rem;
@@ -103,13 +107,40 @@ export default function Page(props: Props) {
     return datetime2;
   };
 
+  const [isOpenEditCurriculumModal, setIsOpenEditCurriculumModal] = useState(false);
+  const [isOpenDeleteCurriculumModal, setIsOpenDeleteCurriculumModal] = useState(false);
+  const openEditCurriculumModal = (isOpenEditCurriculumModal: boolean) => {
+    if (isOpenEditCurriculumModal) {
+      return (
+        <>
+          <CurriculumEditModal isOpen={isOpenEditCurriculumModal} setIsOpen={setIsOpenEditCurriculumModal}/>
+        </>
+      );
+    }
+  };
+  const openDeleteCurriculumModal = (isOpenDeleteCurriculumModal: boolean) => {
+    if (isOpenDeleteCurriculumModal) {
+      return (
+        <>
+          <CurriculumDeleteModal isOpen={isOpenDeleteCurriculumModal} setIsOpen={setIsOpenDeleteCurriculumModal}/>
+        </>
+      );
+    }
+  };
+
   return (
     <MainLayout>
       <ParentButtonContainer>
         <DetailHeader curriculum={props.curriculum} skill={props.skill}/>
         <SplitParentContainer>
           <SplitLeftContainer>
-            <FlatCard width='100%'>
+            <FlatCard width='100%' height="auto">
+              <Row gap="3rem" justify="end">
+                <EditButton onClick={() => setIsOpenEditCurriculumModal(!isOpenEditCurriculumModal)}/>
+                {openEditCurriculumModal(isOpenEditCurriculumModal)}
+                <DeleteButton onClick={() => setIsOpenDeleteCurriculumModal(!isOpenDeleteCurriculumModal)}/>
+                {openDeleteCurriculumModal(isOpenDeleteCurriculumModal)}
+              </Row>
               <CurriculumContentsContainer>
                 <CurriculumContentsTitle>
                   Contents
@@ -129,11 +160,13 @@ export default function Page(props: Props) {
           </SplitLeftContainer>
           <SplitRightContainer>
             {props.records.map((record) => (
-              <FlatCard key={record.title.toString()}>
-                <RecordMember>{record.user_id}</RecordMember>
-                <RecordContents>{record.title}</RecordContents>
-                <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>
-              </FlatCard>
+              <RecordContainer>
+                <FlatCard key={record.title.toString()} height="auto">
+                  <RecordMember>{record.user_id}</RecordMember>
+                  <RecordContents>{record.title}</RecordContents>
+                  <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>
+                </FlatCard>
+              </RecordContainer>
             ))}
           </SplitRightContainer>
         </SplitParentContainer>
