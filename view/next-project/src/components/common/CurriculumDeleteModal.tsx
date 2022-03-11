@@ -9,20 +9,19 @@ interface ModalProps {
   setIsOpen: Function;
 }
 
-const RecordDeleteModal: FC<ModalProps> = (props) => {
+const CurriculumDeleteModal: FC<ModalProps> = (props) => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     homework: '',
-    user_id: '',
-    curriculum_id: '',
+    skill_id: ''
   });
   const router = useRouter();
   const query = router.query;
 
   useEffect(() => {
     if (router.isReady) {
-      const getFormDataUrl = process.env.SEEDS_API_URI + '/records/' + query.id;
+      const getFormDataUrl = process.env.SEEDS_API_URI + '/curriculums/' + query.id;
       const getFormData = async (url: string) => {
         setFormData(await get(url));
       };
@@ -35,18 +34,18 @@ const RecordDeleteModal: FC<ModalProps> = (props) => {
       setFormData({...formData, [input]: e.target.value});
     };
 
-  const DeleteRecord = async (query: any) => {
-    const deleteRecordUrl = process.env.SEEDS_API_URI + '/records/' + query.id;
-    await del(deleteRecordUrl);
+  const DeleteCurriculum = async (query: any) => {
+    const deleteCurriculumUrl = process.env.SEEDS_API_URI + '/curriculums/' + query.id;
+    await del(deleteCurriculumUrl);
   };
 
   return (
     <DeleteModal show={props.isOpen} setShow={props.setIsOpen}>
-      <h2>Delete Record</h2>
+      <h2>Delete Curriculum</h2>
       <h3>Are you sure?</h3>
       <Button
         onClick={() => {
-          DeleteRecord(query);
+          DeleteCurriculum(query);
           router.back();
         }}
       >
@@ -56,4 +55,4 @@ const RecordDeleteModal: FC<ModalProps> = (props) => {
   );
 };
 
-export default RecordDeleteModal;
+export default CurriculumDeleteModal;
