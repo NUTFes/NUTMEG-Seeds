@@ -9,7 +9,7 @@ import Row from '@components/layout/RowLayout';
 import EditButton from '@components/common/EditButton';
 import DeleteButton from '@components/common/DeleteButton';
 import RecordEditModal from "@components/common/RecordEditModal";
-import DeleteProjectModal from "@components/common/RecordDeleteModal";
+import RecordDeleteModal from "@components/common/RecordDeleteModal";
 
 interface Curriculum {
   id: number;
@@ -92,7 +92,7 @@ export default function Page(props: Props) {
     if (isOpenDeleteRecordModal) {
       return (
         <>
-          <DeleteProjectModal isOpen={isOpenDeleteRecordModal} setIsOpen={setIsOpenDeleteRecordModal}/>
+          <RecordDeleteModal isOpen={isOpenDeleteRecordModal} setIsOpen={setIsOpenDeleteRecordModal}/>
         </>
       );
     }
