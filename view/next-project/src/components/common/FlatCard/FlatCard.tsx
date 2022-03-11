@@ -15,7 +15,7 @@ const FlatCard = (props: FlatCardProps) => {
     <div
       className={`${s.FlatCardContainer} ${s['align-' + props.align || 'end']} ${
         s['justify-' + props.align || 'end']
-      } ${s[props.gap || 'none']}`}
+      } ${s[props.gap || 'none']} ${s['height-' + props.height || '100']} `}
     >
       {props.children}
     </div>
