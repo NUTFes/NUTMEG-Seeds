@@ -8,9 +8,19 @@ class Record < ApplicationRecord
     {
       "record": record,
       "curriculum": record.curriculum,
+      "curriculum_title": record.curriculum.title,
       "teacher": record.teacher.user.name,
       "user": record.user.name,
       "skill": record.curriculum.skill.name,
+    }
+  end
+
+  def self.get_teacher(record_id)
+    record = Record.find(record_id)
+    {
+      "id": record.teacher.id,
+      "user_id": record.teacher.user.id,
+      "record_id": record.id,
     }
   end
 end
