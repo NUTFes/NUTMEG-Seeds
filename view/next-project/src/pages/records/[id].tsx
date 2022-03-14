@@ -1,15 +1,15 @@
-import React from 'react';
-import { get } from '@utils/api_methods';
-import { GetStaticPaths } from 'next';
+import React, {useState} from 'react';
+import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import RecordDetailHeader from '@components/common/RecordDetailHeader';
 import styled from 'styled-components';
 import Button from '@components/common/BackButton';
-
-interface PathParam {
-  id: string;
-}
+import Row from '@components/layout/RowLayout';
+import EditButton from '@components/common/EditButton';
+import DeleteButton from '@components/common/DeleteButton';
+import RecordEditModal from "@components/common/RecordEditModal";
+import RecordDeleteModal from "@components/common/RecordDeleteModal";
 
 interface Curriculum {
   id: number;
@@ -40,43 +40,12 @@ interface Props {
   skill: string;
 }
 
-export const getStaticPaths = async () => {
-  const getUrl = 'http://seeds_api:3000/records';
-  const json = await get(getUrl);
-
-  // // RecordのIDを一覧から取得するための処理
-  // Recordのidを格納するための配列
-  const recordIds: recordID[] = [];
-
-  // Recordのidを連想配列で格納するための処理
-  interface recordID {
-    id: number;
-  }
-
-  let recordId: recordID;
-  json.map((record: Record) => {
-    recordId = { id: record.id };
-    recordIds.push(recordId);
-  });
-
-  return {
-    // curriculumのidの数だけ動的ルーティングする
-    paths: recordIds.map((record) => {
-      return {
-        params: { id: record.id.toString() },
-      };
-    }),
-    // paramsに存在しないroutesが指定されたら404を返す
-    fallback: false,
-  };
-};
-
-export async function getStaticProps({ params }: any) {
+export async function getServerSideProps({params}: any) {
   const id = params.id;
   const getRecordUrl = 'http://seeds_api:3000/api/v1/record/' + id;
-  const recordJson = await get(getRecordUrl);
+  const getRes = await get(getRecordUrl);
   return {
-    props: recordJson,
+    props: getRes,
   };
 }
 
@@ -108,6 +77,27 @@ export default function Page(props: Props) {
     return datetime2;
   };
 
+  const [isOpenEditRecordModal, setIsOpenEditRecordModal] = useState(false);
+  const [isOpenDeleteRecordModal, setIsOpenDeleteRecordModal] = useState(false);
+  const openEditRecordModal = (isOpenEditRecordModal: boolean) => {
+    if (isOpenEditRecordModal) {
+      return (
+        <>
+          <RecordEditModal isOpen={isOpenEditRecordModal} setIsOpen={setIsOpenEditRecordModal}/>
+        </>
+      );
+    }
+  };
+  const openDeleteRecordModal = (isOpenDeleteRecordModal: boolean) => {
+    if (isOpenDeleteRecordModal) {
+      return (
+        <>
+          <RecordDeleteModal isOpen={isOpenDeleteRecordModal} setIsOpen={setIsOpenDeleteRecordModal}/>
+        </>
+      );
+    }
+  };
+
   return (
     <MainLayout>
       <ParentButtonContainer>
@@ -121,21 +111,27 @@ export default function Page(props: Props) {
           teacher={props.teacher}
         />
         <FlatCard width='100%'>
+          <Row gap="3rem" justify="end">
+            <EditButton onClick={() => setIsOpenEditRecordModal(!isOpenEditRecordModal)}/>
+            {openEditRecordModal(isOpenEditRecordModal)}
+            <DeleteButton onClick={() => setIsOpenDeleteRecordModal(!isOpenDeleteRecordModal)}/>
+            {openDeleteRecordModal(isOpenDeleteRecordModal)}
+          </Row>
           <RecordContentsContainer>
             <RecordContentsTitle>
               Contents
-              <hr />
+              <hr/>
             </RecordContentsTitle>
             <RecordContents>{props.record.content}</RecordContents>
             <RecordContentsTitle>
               Homework
-              <hr />
+              <hr/>
             </RecordContentsTitle>
             <RecordContents>{props.record.homework}</RecordContents>
           </RecordContentsContainer>
         </FlatCard>
         <ChildButtonContainer>
-          <Button />
+          <Button/>
         </ChildButtonContainer>
       </ParentButtonContainer>
     </MainLayout>

@@ -10,6 +10,11 @@ class Api::V1::RecordsApiController < ApplicationController
     render json: @record
   end
 
+  def get_teacher_by_record
+    @record = Record.get_teacher(params[:id])
+    render json: @record
+  end
+
   def get_record_from_user
     user = User.find(params[:id])
     teachers = user.teachers.order(updated_at: "DESC")
