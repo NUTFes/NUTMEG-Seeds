@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :user_details
   resources :groups
   resources :curriculums
+  resources :categories
   resources :teachers
   resources :records
   mount_devise_token_auth_for 'User', at: 'auth'
