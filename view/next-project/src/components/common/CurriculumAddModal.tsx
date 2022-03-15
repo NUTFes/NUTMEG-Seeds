@@ -24,7 +24,7 @@ interface Curriculum {
 }
 
 const submitProject = async (data: Curriculum) => {
-  const postUrl = process.env.SEEDS_API_URI + '/curriculums';
+  const postUrl = process.env.CSR_API_URI + '/curriculums';
   const postReq = await post(postUrl, data);
 };
 
@@ -39,7 +39,7 @@ const ProjectAddModal = (props: ModalProps) => {
   });
 
   useEffect(() => {
-    const getSkillsUrl = process.env.SEEDS_API_URI + '/skills';
+    const getSkillsUrl = process.env.CSR_API_URI + '/skills';
     const getSkills = async (url: string) => {
       setSkills(await get(url));
     };

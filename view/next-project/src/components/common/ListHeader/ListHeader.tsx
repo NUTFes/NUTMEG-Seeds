@@ -24,7 +24,7 @@ const ListHeader = (props: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    const getSkillsUrl = process.env.SEEDS_API_URI + '/skills';
+    const getSkillsUrl = process.env.CSR_API_URI + '/skills';
     const getSkills = async (url: string) => {
       setSkills(await get(url));
     };

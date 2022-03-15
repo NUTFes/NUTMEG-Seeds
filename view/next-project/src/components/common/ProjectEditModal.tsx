@@ -22,7 +22,7 @@ const ProjectEditModal: FC<ModalProps> = (props) => {
 
   useEffect(() => {
     if (router.isReady) {
-      const getFormDataUrl = process.env.SEEDS_API_URI + '/projects/' + query.id;
+      const getFormDataUrl = process.env.CSR_API_URI + '/projects/' + query.id;
       const getFormData = async (url: string) => {
         setFormData(await get(url));
       };
@@ -36,7 +36,7 @@ const ProjectEditModal: FC<ModalProps> = (props) => {
     };
 
   const submitProject = async (data: any, query: any) => {
-    const submitProjectUrl = process.env.SEEDS_API_URI + '/projects/' + query.id;
+    const submitProjectUrl = process.env.CSR_API_URI + '/projects/' + query.id;
     await put(submitProjectUrl, data);
   };
 

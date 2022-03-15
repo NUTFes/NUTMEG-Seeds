@@ -25,7 +25,7 @@ const ProjectAddModal: FC<ModalProps> = (props) => {
 
   const router = useRouter();
   const submitProject = async (data: any) => {
-    const submitProjectUrl = process.env.SEEDS_API_URI + '/projects';
+    const submitProjectUrl = process.env.CSR_API_URI + '/projects';
     await post(submitProjectUrl, data);
   };
 

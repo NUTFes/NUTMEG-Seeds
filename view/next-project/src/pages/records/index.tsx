@@ -21,7 +21,7 @@ type Props = {
 };
 
 export async function getServerSideProps() {
-  const getUrl = 'http://seeds_api:3000/records';
+  const getUrl = process.env.SSR_API_URI + '/records';
   const json = await get(getUrl);
   return {
     props: {

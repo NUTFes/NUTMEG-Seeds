@@ -30,11 +30,11 @@ const ProjectUserAddModal: FC<ModalProps> = (props) => {
   const [roles, setRoles] = useState<Role[]>([{ id: '', name: '' }]);
 
   useEffect(() => {
-    const getUsersUrl = process.env.SEEDS_API_URI + '/api/v1/users';
+    const getUsersUrl = process.env.CSR_API_URI + '/api/v1/users';
     const getUsers = async (url: string) => {
       setUsers(await get(url));
     };
-    const getRolesUrl = process.env.SEEDS_API_URI + '/roles';
+    const getRolesUrl = process.env.CSR_API_URI + '/roles';
     const getRoles = async (url: string) => {
       setRoles(await get(url));
     };
@@ -47,7 +47,7 @@ const ProjectUserAddModal: FC<ModalProps> = (props) => {
   };
 
   const submitProject = async (data: any) => {
-    const submitUrl = process.env.SEEDS_API_URI + '/project_users';
+    const submitUrl = process.env.CSR_API_URI + '/project_users';
     const postRes = await post(submitUrl, data);
   };
 

@@ -22,7 +22,7 @@ const RecordDeleteModal: FC<ModalProps> = (props) => {
 
   useEffect(() => {
     if (router.isReady) {
-      const getFormDataUrl = process.env.SEEDS_API_URI + '/records/' + query.id;
+      const getFormDataUrl = process.env.CSR_API_URI + '/records/' + query.id;
       const getFormData = async (url: string) => {
         setFormData(await get(url));
       };
@@ -36,7 +36,7 @@ const RecordDeleteModal: FC<ModalProps> = (props) => {
     };
 
   const DeleteRecord = async (query: any) => {
-    const deleteRecordUrl = process.env.SEEDS_API_URI + '/records/' + query.id;
+    const deleteRecordUrl = process.env.CSR_API_URI + '/records/' + query.id;
     await del(deleteRecordUrl);
   };
 

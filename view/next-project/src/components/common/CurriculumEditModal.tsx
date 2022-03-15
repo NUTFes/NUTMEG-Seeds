@@ -49,20 +49,20 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
   });
 
   useEffect(() => {
-    const getSkillsUrl = process.env.SEEDS_API_URI + '/skills';
+    const getSkillsUrl = process.env.CSR_API_URI + '/skills';
     const getSkills = async (url: string) => {
       setSkills(await get(url));
     };
     getSkills(getSkillsUrl);
 
     if (router.isReady) {
-      const getFormDataUrl = process.env.SEEDS_API_URI + '/curriculums/' + query.id;
+      const getFormDataUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
       const getFormData = async (url: string) => {
         setFormData(await get(url));
       };
       getFormData(getFormDataUrl);
 
-      const getCurriculumsUrl = process.env.SEEDS_API_URI + '/api/v1/get_curriculum_for_view/' + query.id;
+      const getCurriculumsUrl = process.env.CSR_API_URI + '/api/v1/get_curriculum_for_view/' + query.id;
       const getCurriculumSkill = async (url: string) => {
         setCurriculumSkill(await get(url));
       };
@@ -81,7 +81,7 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
     };
 
   const submitCurriculum = async (data: any, query: any) => {
-    const submitCurriculumUrl = process.env.SEEDS_API_URI + '/curriculums/' + query.id;
+    const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
     await put(submitCurriculumUrl, data);
   };
 

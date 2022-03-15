@@ -13,7 +13,7 @@ interface submitData {
 
 export const submitUser = async (data: submitData) => {
   const submitUrl =
-    process.env.SEEDS_API_URI +
+    process.env.CSR_API_URI +
     '/api/auth/?name=' +
     data.userName +
     '&email=' +
@@ -22,13 +22,16 @@ export const submitUser = async (data: submitData) => {
     data.password +
     '&password_confirmation=' +
     data.passwordConfirmation;
-  const res: any = await post(submitUrl, '');
-  if (res.status === 200) {
-    localStorage.setItem('access-token', res.headers['access-token']);
-    localStorage.setItem('client', res.headers['client']);
-    localStorage.setItem('uid', res.headers['uid']);
-    localStorage.setItem('token-type', res.headers['token-type']);
-    Router.push('/records');
+  console.log(submitUrl)
+  const req: any = await post(submitUrl, '');
+  const res: any = await req.json()
+  if (req.status === 200) {
+    localStorage.setItem('access-token', req.headers['access-token']);
+    localStorage.setItem('client', req.headers['client']);
+    localStorage.setItem('uid', req.headers['uid']);
+    localStorage.setItem('token-type', req.headers['token-type']);
+    localStorage.setItem('user_id', res.data.id);
+    Router.push('/user_detail');
   } else {
     console.log('Error' + res.status);
     console.log(await res.json());
@@ -70,7 +73,7 @@ const SignUp: FC = () => {
           />
           <p className={s.formExample}>例: 木実太郎</p>
         </div>
-        <SubmitButton onClick={() => submitUser(formData)}>Login</SubmitButton>
+        <SubmitButton onClick={() => submitUser(formData)}>Next</SubmitButton>
       </div>
     </>
   );

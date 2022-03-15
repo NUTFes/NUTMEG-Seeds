@@ -71,19 +71,19 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
   const [userDetailData, setUserDetailData] = useState<UserDetail>(userDetail)
 
   useEffect(() => {
-      const getGradeListUrl = process.env.SEEDS_API_URI + '/grades';
+      const getGradeListUrl = process.env.CSR_API_URI + '/grades';
       const getGradeList = async (url: string) => {
         setGradeList(await get(url));
       };
       getGradeList(getGradeListUrl);
 
-      const getDepartmentListUrl = process.env.SEEDS_API_URI + '/departments'
+      const getDepartmentListUrl = process.env.CSR_API_URI + '/departments'
       const getDepartmentList = async (url: string) => {
         setDepartmentList(await get(url))
       }
       getDepartmentList(getDepartmentListUrl)
 
-      const getBureauListUrl = process.env.SEEDS_API_URI + '/bureaus'
+      const getBureauListUrl = process.env.CSR_API_URI + '/bureaus'
       const getBureauList = async (url: string) => {
         setBureauList(await get(url))
       }
@@ -103,7 +103,7 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
 
   const submitUserDetail = async (data: any) => {
     console.log(data)
-    const submitUserDetailUrl = process.env.SEEDS_API_URI + '/user_details/' + data.id;
+    const submitUserDetailUrl = process.env.CSR_API_URI + '/user_details/' + data.id;
     const res = await put(submitUserDetailUrl, data);
     console.log(res)
   };
@@ -159,7 +159,7 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
       <Button
         onClick={() => {
           submitUserDetail(userDetailData);
-          //router.reload();
+          router.reload();
         }}
       >
         Submit

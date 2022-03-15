@@ -21,7 +21,7 @@ const CurriculumDeleteModal: FC<ModalProps> = (props) => {
 
   useEffect(() => {
     if (router.isReady) {
-      const getFormDataUrl = process.env.SEEDS_API_URI + '/curriculums/' + query.id;
+      const getFormDataUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
       const getFormData = async (url: string) => {
         setFormData(await get(url));
       };
@@ -35,7 +35,7 @@ const CurriculumDeleteModal: FC<ModalProps> = (props) => {
     };
 
   const DeleteCurriculum = async (query: any) => {
-    const deleteCurriculumUrl = process.env.SEEDS_API_URI + '/curriculums/' + query.id;
+    const deleteCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
     await del(deleteCurriculumUrl);
   };
 
