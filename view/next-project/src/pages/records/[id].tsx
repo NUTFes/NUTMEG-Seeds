@@ -42,7 +42,7 @@ interface Props {
 
 export async function getServerSideProps({params}: any) {
   const id = params.id;
-  const getRecordUrl = 'http://seeds_api:3000/api/v1/record/' + id;
+  const getRecordUrl = process.env.SSR_API_URI + '/api/v1/record/' + id;
   const getRes = await get(getRecordUrl);
   return {
     props: getRes,

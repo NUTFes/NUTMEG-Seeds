@@ -63,32 +63,32 @@ const RecordEditModal: FC<ModalProps> = (props) => {
   });
 
   useEffect(() => {
-    const getCurriculumsUrl = process.env.SEEDS_API_URI + '/curriculums';
+    const getCurriculumsUrl = process.env.CSR_API_URI + '/curriculums';
     const getCurriculums = async (url: string) => {
       setCurriculums(await get(url));
     };
     getCurriculums(getCurriculumsUrl);
 
-    const getUsersUrl = process.env.SEEDS_API_URI + '/api/v1/users';
+    const getUsersUrl = process.env.CSR_API_URI + '/api/v1/users';
     const getUsers = async (url: string) => {
       setUsers(await get(url));
     };
     getUsers(getUsersUrl);
 
     if (router.isReady) {
-      const getFormDataUrl = process.env.SEEDS_API_URI + '/records/' + query.id;
+      const getFormDataUrl = process.env.CSR_API_URI + '/records/' + query.id;
       const getFormData = async (url: string) => {
         setFormData(await get(url));
       };
       getFormData(getFormDataUrl);
 
-      const getTeacherDataUrl = process.env.SEEDS_API_URI + '/api/v1/get_teacher_by_record/' + query.id;
+      const getTeacherDataUrl = process.env.CSR_API_URI + '/api/v1/get_teacher_by_record/' + query.id;
       const getTeacherData = async (url: string) => {
         setTeacherData(await get(url));
       };
       getTeacherData(getTeacherDataUrl);
 
-      const getRecordUrl = process.env.SEEDS_API_URI + '/api/v1/record/' + query.id;
+      const getRecordUrl = process.env.CSR_API_URI + '/api/v1/record/' + query.id;
       const getRecord = async (url: string) => {
         setRecord(await get(url));
       };
@@ -105,18 +105,18 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     ) => {
       setFormData({...formData, [input]: e.target.value});
     };
-  const teacherHandler = (input: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const teacherHandler = (input: string, query: any) => (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTeacherData({id: "1", user_id: e.target.value, record_id: query.id.toString()});
   };
 
   const submitRecord = async (data: any, query: any) => {
-    const submitRecordUrl = process.env.SEEDS_API_URI + '/records/' + query.id;
+    const submitRecordUrl = process.env.CSR_API_URI + '/records/' + query.id;
     await put(submitRecordUrl, data);
   };
 
   const submitTeacher = async (data: any, query: any) => {
     console.log(data);
-    const submitTeacherUrl = process.env.SEEDS_API_URI + '/teachers/' + teacherData.id;
+    const submitTeacherUrl = process.env.CSR_API_URI + '/teachers/' + teacherData.id;
     await put(submitTeacherUrl, data);
   };
 
@@ -137,7 +137,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
       </div>
       <div>
         <h3>Teacher</h3>
-        <select defaultValue={teacherData.user_id} onChange={teacherHandler('user_id')}>
+        <select defaultValue={teacherData.user_id} onChange={teacherHandler('user_id', query)}>
           <option value={teacherData.user_id}>{record.teacher}</option>
           {users.map((data: User) => (
             <option key={data.id} value={data.id}>

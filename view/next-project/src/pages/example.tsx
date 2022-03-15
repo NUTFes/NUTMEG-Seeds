@@ -18,7 +18,7 @@ type Props = {
 };
 
 export async function getStaticProps() {
-  const getUrl = 'http://seeds_api:3000/curriculums';
+  const getUrl = process.env.SSR_API_URI + '/curriculums';
   const json = await get(getUrl);
   return {
     props: {

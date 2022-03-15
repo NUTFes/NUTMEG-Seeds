@@ -10,7 +10,9 @@ const MainLayout: FC<LayoutProps> = (props) => {
   return (
     <>
       <Header />
+      <section>
       <main className={s.mainLayoutContainer}>{props.children}</main>
+        </section>
     </>
   );
 };

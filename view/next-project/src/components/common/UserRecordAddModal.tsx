@@ -55,19 +55,19 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
   });
 
   useEffect(() => {
-    const getCurriculumsUrl = process.env.SEEDS_API_URI + '/curriculums';
+    const getCurriculumsUrl = process.env.CSR_API_URI + '/curriculums';
     const getCurriculums = async (url: string) => {
       setCurriculums(await get(url));
     };
     getCurriculums(getCurriculumsUrl);
 
-    const getRecordsUrl = process.env.SEEDS_API_URI + '/records';
+    const getRecordsUrl = process.env.CSR_API_URI + '/records';
     const getRecords = async (url: string) => {
       setRecords(await get(url));
     };
     getRecords(getRecordsUrl);
 
-    const getUsersUrl = process.env.SEEDS_API_URI + '/api/v1/users';
+    const getUsersUrl = process.env.CSR_API_URI + '/api/v1/users';
     const getUsers = async (url: string) => {
       setUsers(await get(url));
     };
@@ -92,10 +92,10 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
   const submitRecord = async (recordData: any, teacherData: any) => {
     console.log(recordData);
     console.log(teacherData);
-    const submitRecordUrl = process.env.SEEDS_API_URI + '/records';
+    const submitRecordUrl = process.env.CSR_API_URI + '/records';
     await post(submitRecordUrl, recordData);
 
-    const submitTeacherUrl = process.env.SEEDS_API_URI + '/teachers';
+    const submitTeacherUrl = process.env.CSR_API_URI + '/teachers';
     await post(submitTeacherUrl, teacherData);
   };
 

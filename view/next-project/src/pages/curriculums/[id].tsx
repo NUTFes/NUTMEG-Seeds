@@ -40,7 +40,7 @@ interface Props {
 
 export async function getServerSideProps({params}: any) {
   const id = params.id;
-  const getUrl = 'http://seeds_api:3000/api/v1/get_curriculum_for_view/' + id;
+  const getUrl = process.env.SSR_API_URI + '/api/v1/get_curriculum_for_view/' + id;
   const json = await get(getUrl);
   return {
     props: json[0],
@@ -159,15 +159,15 @@ export default function Page(props: Props) {
             </ChildButtonContainer>
           </SplitLeftContainer>
           <SplitRightContainer>
-            {props.records.map((record) => (
               <RecordContainer>
+            {props.records.map((record) => (
                 <FlatCard key={record.title.toString()} height="auto">
                   <RecordMember>{record.user_id}</RecordMember>
                   <RecordContents>{record.title}</RecordContents>
                   <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>
                 </FlatCard>
-              </RecordContainer>
             ))}
+              </RecordContainer>
           </SplitRightContainer>
         </SplitParentContainer>
       </ParentButtonContainer>

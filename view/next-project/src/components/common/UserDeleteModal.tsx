@@ -22,7 +22,7 @@ const ProjectDeleteModal: FC<ModalProps> = (props) => {
 
   useEffect(() => {
     if (router.isReady) {
-      const getFormDataUrl = process.env.SEEDS_API_URI + '/projects/' + query.id;
+      const getFormDataUrl = process.env.CSR_API_URI + '/projects/' + query.id;
       const getFormData = async (url: string) => {
         setFormData(await get(url));
       };
@@ -36,7 +36,7 @@ const ProjectDeleteModal: FC<ModalProps> = (props) => {
     };
 
   const DeleteProject = async (query: any) => {
-    const deleteProjectUrl = process.env.SEEDS_API_URI + '/api/auth/' + query.id;
+    const deleteProjectUrl = process.env.CSR_API_URI + '/api/auth/' + query.id;
     await del(deleteProjectUrl);
   };
 

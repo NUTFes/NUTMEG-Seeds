@@ -88,7 +88,7 @@ interface Skill {
 
 export async function getServerSideProps({ params }: any) {
   console.log(params)
-  const getUrl = 'http://seeds_api:3000/api/v1/get_user_for_member_page/' + params.id;
+  const getUrl = process.env.SSR_API_URI + '/api/v1/get_user_for_member_page/' + params.id;
   const getRes = await get(getUrl);
   return {
     props: {
@@ -223,21 +223,21 @@ export default function Users(props: Props) {
                 </tr>
               ))}
             </table>
-              <CardHeader subtitle={'Records'}>
-                <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)} />
-                {openRecordAddModal(isOpenRecordAddModal)}
-              </CardHeader>
-                <table>
-                  {records.map((record) => (
-                    <tr key={record.id}>
-                      <th>{record.title}</th>
-                      <td>{record.teacher.name}</td>
-                    </tr>
-                  ))}
-                </table>
-                </Column>
-                </Row>
-                </FlatCard>
-                </MainLayout>
+            <CardHeader subtitle={'Records'}>
+              <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)} />
+              {openRecordAddModal(isOpenRecordAddModal)}
+            </CardHeader>
+            <table>
+              {records.map((record) => (
+                <tr key={record.id}>
+                  <th>{record.title}</th>
+                  <td>{record.teacher.name}</td>
+                </tr>
+              ))}
+            </table>
+          </Column>
+        </Row>
+      </FlatCard>
+    </MainLayout>
   );
 }

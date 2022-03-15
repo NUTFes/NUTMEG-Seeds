@@ -29,8 +29,8 @@ interface Props {
 }
 
 export async function getServerSideProps() {
-  const getCurriculumsUrl = 'http://seeds_api:3000/curriculums';
-  const getSkillsUrl = 'http://seeds_api:3000/skills';
+  const getCurriculumsUrl = process.env.SSR_API_URI + '/curriculums';
+  const getSkillsUrl = process.env.SSR_API_URI + '/skills';
   const curriculumsJson = await get(getCurriculumsUrl);
   const skillsJson = await get(getSkillsUrl);
   return {

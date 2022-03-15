@@ -7,6 +7,9 @@ module.exports = {
     optimizeFonts: true,
   },
   env: {
-    SEEDS_API_URI: isProd ? 'http://seeds-api.nutfes.net' : 'http://localhost:3000',
+    //SSR_API_URI: isProd ? 'https://seeds-api.nutfes.net' : 'http://seeds_api:3000',
+    //CSR_API_URI: isProd ? 'https://seeds-api.nutfes.net' : 'http://localhost:3000',
+    SSR_API_URI: isProd ? 'http://seeds_api:3000' : 'http://seeds_api:3000',
+    CSR_API_URI: isProd ? 'http://localhost:3000' : 'http://localhost:3000',
   },
 };

@@ -51,7 +51,7 @@ type Props = {
 };
 
 export async function getServerSideProps({ params }: any) {
-  const getUrl = 'http://seeds_api:3000/api/v1/get_project_for_view/' + params.id;
+  const getUrl = process.env.SSR_API_URI + '/api/v1/get_project_for_view/' + params.id;
   const getRes = await get(getUrl);
   return {
     props: {

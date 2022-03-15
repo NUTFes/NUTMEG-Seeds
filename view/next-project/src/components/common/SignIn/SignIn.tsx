@@ -10,7 +10,7 @@ interface submitData {
 }
 
 export const submitUser = async (data: submitData) => {
-  const submitUrl = process.env.SEEDS_API_URI + '/api/auth/sign_in?email=' + data.email + '&password=' + data.password;
+  const submitUrl = process.env.CSR_API_URI + '/api/auth/sign_in?email=' + data.email + '&password=' + data.password;
   console.log(submitUrl);
   const res: any = await post(submitUrl, '');
   if (res.status === 200) {
@@ -18,6 +18,7 @@ export const submitUser = async (data: submitData) => {
     localStorage.setItem('client', res.headers['client']);
     localStorage.setItem('uid', res.headers['uid']);
     localStorage.setItem('token-type', res.headers['token-type']);
+    localStorage.setItem('user_id', res.data.id);
     Router.push('/records');
   } else {
     console.log('Error' + res.status);
