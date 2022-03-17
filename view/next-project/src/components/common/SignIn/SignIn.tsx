@@ -12,12 +12,13 @@ interface submitData {
 export const submitUser = async (data: submitData) => {
   const submitUrl = process.env.CSR_API_URI + '/api/auth/sign_in?email=' + data.email + '&password=' + data.password;
   console.log(submitUrl);
-  const res: any = await post(submitUrl, '');
+  const req: any = await post(submitUrl, '');
+  const res: any = await req.json()
   if (res.status === 200) {
-    localStorage.setItem('access-token', res.headers['access-token']);
-    localStorage.setItem('client', res.headers['client']);
-    localStorage.setItem('uid', res.headers['uid']);
-    localStorage.setItem('token-type', res.headers['token-type']);
+    localStorage.setItem('access-token', req.headers['access-token']);
+    localStorage.setItem('client', req.headers['client']);
+    localStorage.setItem('uid', req.headers['uid']);
+    localStorage.setItem('token-type', req.headers['token-type']);
     localStorage.setItem('user_id', res.data.id);
     Router.push('/records');
   } else {
