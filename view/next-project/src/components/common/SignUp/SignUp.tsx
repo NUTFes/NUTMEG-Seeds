@@ -34,7 +34,7 @@ export const submitUser = async (data: submitData) => {
     Router.push('/user_detail');
   } else {
     console.log('Error' + res.status);
-    console.log(await res.json());
+    console.log(res);
   }
 };
 
