@@ -14,7 +14,7 @@ export const submitUser = async (data: submitData) => {
   console.log(submitUrl);
   const req: any = await post(submitUrl, '');
   const res: any = await req.json()
-  if (res.status === 200) {
+  if (req.status === 200) {
     localStorage.setItem('access-token', req.headers['access-token']);
     localStorage.setItem('client', req.headers['client']);
     localStorage.setItem('uid', req.headers['uid']);
@@ -22,8 +22,8 @@ export const submitUser = async (data: submitData) => {
     localStorage.setItem('user_id', res.data.id);
     Router.push('/records');
   } else {
-    console.log('Error' + res.status);
-    console.log(await res.json());
+    console.log('Error' + req.status);
+    console.log(res);
   }
 };
 
