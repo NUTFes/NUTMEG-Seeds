@@ -28,10 +28,14 @@ Rails.application.routes.draw do
       get "records/:id" => "records#get_records"
       get "/record/:id" => "records_api#get_record"
       get "/get_teacher_by_record/:id" => "records_api#get_teacher_by_record"
+      get "/get_records_for_index" => "records_api#get_records_for_index"
+      get "/get_record_for_index_reload/:id" => "records_api#get_record_for_index_reload"
+      get "/get_record_for_view/:id" => "records_api#get_record_for_view"
       get "get_records_from_user/:id" => "records#get_record_from_user"
       get "get_current_user" => "current_user#get_current_user"
       get "/get_curriculum_for_view/:id" => "curriculums_api#get_curriculum_for_view"
-      get "/get_curriculum_for_index_view" => "curriculums_api#get_curriculum_for_index_view"
+      get "/get_curriculums_for_index" => "curriculums_api#get_curriculums_for_index"
+      get "/get_curriculum_for_reload_index/:id" => "curriculums_api#get_curriculum_for_reload_index"
       get "/get_project_for_view/:id" => "projects_api#get_project_for_view"
     end
   end

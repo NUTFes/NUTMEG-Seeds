@@ -1,11 +1,16 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import Link from 'next/link';
 import s from './Header.module.css';
 import IconButton from '@components/common/IconButton';
 import HeaderLogo from '@components/icons/HeaderLogo';
-import Account from '@components/icons/AccountCircle'
+import Logout from '@components/icons/Logout'
+import router from 'next/router';
 
 const Header: FC = () => {
+  const logout = () => {
+    localStorage.clear()
+    router.push('/')
+  }
 
   return (
     <section className={s.headerContainer}>
@@ -38,7 +43,7 @@ const Header: FC = () => {
               </li>
             </ul>
           </nav>
-          <IconButton><Account width={30} height={30} color={'var(--accent-0)'}/></IconButton>
+          <IconButton onClick={logout}><Logout width={20} height={20} color={'var(--accent-0)'}/></IconButton>
         </div>
       </header>
     </section>

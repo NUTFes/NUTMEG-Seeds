@@ -1,14 +1,19 @@
 class Api::V1::RecordsApiController < ApplicationController
-  def get_records
-    user = User.find(params[:id])
-    records = user.records.order(updated_at: "DESC")
-    render json: records
+  def get_records_for_index
+    @record = Record.with_teacher_and_skills
+    render json: @record
   end
 
-  def get_record
+  def get_record_for_reload_index
+    @record = Record.with_teacher_and_skill(params[:id])
+    render json: @record
+  end
+
+  def get_record_for_view
     @record = Record.with_curriculum_and_teacher(params[:id])
     render json: @record
   end
+
 
   def get_teacher_by_record
     @record = Record.get_teacher(params[:id])

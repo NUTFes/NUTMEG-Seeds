@@ -46,6 +46,7 @@ export const submitUser = async (data: submitData) => {
     console.log(await res.json());
   }
 };
+
 const RegistUserDetail: FC = () => {
   const [formData, setFormData] = useState<submitData>({ 
     user_id: '',
@@ -65,8 +66,6 @@ const RegistUserDetail: FC = () => {
   const [gradeList, setGradeList] = useState<Grade[]>([])
   const [departmentList, setDepartmentList] = useState<Department[]>([])
   const [bureauList, setBureauList] = useState<Bureau[]>([])
-  console.log(formData)
-
 
   useEffect(() => {
     const getGradeListUrl = process.env.CSR_API_URI + '/grades';
@@ -100,14 +99,10 @@ const RegistUserDetail: FC = () => {
     setFormData({ ...formData, [input]: e.target.value });
   };
 
-  /*
-     const submitUser = () => {
-     console.log(formData)
-     }
-     */
   return (
     <>
       <div className={s.formContainer}>
+        <h2>Detail</h2>
         <div>
           <h3>Grade</h3>
           <select defaultValue={formData.grade_id} onChange={handler('grade_id')}>

@@ -7,14 +7,24 @@ import Button from '@components/common/TestButton';
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
+  setNewRecords: Function;
 }
+
+type Record = {
+  id: number;
+  title: string;
+  user_id: string;
+  user_name: string;
+  teacher_id: string;
+  teacher_name: string;
+  curriculum_id: number;
+  curriculum_title: string;
+  skill: string;
+  created_at: string;
+  updated_at: string;
+};
 
 interface Curriculum {
-  id: string;
-  title: string;
-}
-
-interface Record {
   id: string;
   title: string;
 }
@@ -39,7 +49,7 @@ interface UserRecord {
 
 const UserRecordAddModal: FC<ModalProps> = (props) => {
   const [curriculums, setCurriculums] = useState<Curriculum[]>([{ id: '', title: '' }]);
-  const [records, setRecords] = useState<Record[]>([{ id: '', title: '' }]);
+  const [records, setRecords] = useState<Record[]>([]);
   const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
   const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '', record_id: '' });
   const [recordData, setRecordData] = useState<UserRecord>({
@@ -57,7 +67,7 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
     };
     getCurriculums(getCurriculumsUrl);
 
-    const getRecordsUrl = process.env.CSR_API_URI + '/records';
+    const getRecordsUrl = process.env.CSR_API_URI + '/api/v1/get_records_for_index';
     const getRecords = async (url: string) => {
       setRecords(await get(url));
     };
@@ -81,16 +91,21 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
       setRecordData({ ...recordData, [input]: e.target.value });
     };
   const teacherHandler = (input: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTeacherData({ user_id: e.target.value, record_id: records.slice(-1)[0].id + 1 });
+    setTeacherData({ ...teacherData, user_id: e.target.value });
   };
 
-  const router = useRouter();
+  // フォームデータの送信とページの表を再レンダリング
   const submitRecord = async (recordData: any, teacherData: any) => {
     const submitRecordUrl = process.env.CSR_API_URI + '/records';
-    await post(submitRecordUrl, recordData);
-
+    const req = await post(submitRecordUrl, recordData);
+    const res = await req.json()
     const submitTeacherUrl = process.env.CSR_API_URI + '/teachers';
-    await post(submitTeacherUrl, teacherData);
+    await post(submitTeacherUrl, {user_id: teacherData.user_id, record_id: res.id});
+
+    const getRecordUrl = process.env.CSR_API_URI + '/api/v1/get_record_for_index_reload/' + res.id;
+    const getRes = await get(getRecordUrl);
+    const newRecord: Record = getRes[0]
+    props.setNewRecords([...records, newRecord])
   };
 
   return (
@@ -144,7 +159,7 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
       <Button
         onClick={() => {
           submitRecord(recordData, teacherData);
-          router.reload();
+          props.setIsOpen(false)
         }}
       >
         Submit
