@@ -42,7 +42,7 @@ interface Props {
 
 export async function getServerSideProps({params}: any) {
   const id = params.id;
-  const getRecordUrl = process.env.SSR_API_URI + '/api/v1/record/' + id;
+  const getRecordUrl = process.env.SSR_API_URI + '/api/v1/get_record_for_view/' + id;
   const getRes = await get(getRecordUrl);
   return {
     props: getRes,

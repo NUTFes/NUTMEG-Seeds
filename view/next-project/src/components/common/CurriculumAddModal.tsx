@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
 import { get, post } from '@utils/api_methods';
+import CurriculumList from 'src/pages/curriculums';
 
 interface Skill {
   id: string;
@@ -14,6 +15,7 @@ interface ModalProps {
   setIsOpen: any;
   children?: React.ReactNode;
   skills: Skill[];
+  setNewCurriculums: Function;
 }
 
 interface Curriculum {
@@ -23,13 +25,10 @@ interface Curriculum {
   skill_id: number;
 }
 
-const submitProject = async (data: Curriculum) => {
-  const postUrl = process.env.CSR_API_URI + '/curriculums';
-  const postReq = await post(postUrl, data);
-};
 
 const ProjectAddModal = (props: ModalProps) => {
   const router = useRouter();
+  const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
   const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
   const [formData, setFormData] = useState({
     title: '',
@@ -39,6 +38,11 @@ const ProjectAddModal = (props: ModalProps) => {
   });
 
   useEffect(() => {
+    const getCurriculumsUrl = process.env.CSR_API_URI + '/api/v1/get_curriculums_for_index';
+    const getCurriculums = async (url: string) => {
+      setCurriculums(await get(url));
+    };
+    getCurriculums(getCurriculumsUrl);
     const getSkillsUrl = process.env.CSR_API_URI + '/skills';
     const getSkills = async (url: string) => {
       setSkills(await get(url));
@@ -48,14 +52,29 @@ const ProjectAddModal = (props: ModalProps) => {
 
   const handler =
     (input: string) =>
-    (
-      e:
-        | React.ChangeEvent<HTMLInputElement>
+  (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
         | React.ChangeEvent<HTMLTextAreaElement>
-        | React.ChangeEvent<HTMLSelectElement>,
-    ) => {
-      setFormData({ ...formData, [input]: e.target.value });
-    };
+          | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setFormData({ ...formData, [input]: e.target.value });
+  };
+
+  // フォームデータの送信とページの表を再レンダリング
+  const submitCurriculum = async (data: Curriculum) => {
+    // フォームデータの送信
+    const postUrl = process.env.CSR_API_URI + '/curriculums';
+    const postReq = await post(postUrl, data);
+    const postRes = await postReq.json();
+    console.log(postRes)
+    // 最新のcurriculumsを取得
+    const getCurriculumUrl = process.env.CSR_API_URI + '/api/v1/get_curriculum_for_reload_index/' + postRes.id;
+    const getRes = await get(getCurriculumUrl);
+    const newCurriculums: Curriculum = getRes[0]
+    console.log(newCurriculums)
+    props.setNewCurriculums([...curriculums, newCurriculums])
+  };
 
   return (
     <AddModal show={props.isOpen} setShow={props.setIsOpen}>
@@ -85,8 +104,8 @@ const ProjectAddModal = (props: ModalProps) => {
       </div>
       <Button
         onClick={() => {
-          submitProject(formData);
-          router.reload();
+          submitCurriculum(formData);
+          props.setIsOpen(false)
         }}
       >
         Submit

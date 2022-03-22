@@ -1,5 +1,6 @@
 import Router from 'next/router';
 import { get } from '@utils/api_methods';
+import { useState } from 'react';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import Table from '@components/common/Table';
@@ -8,10 +9,13 @@ import ListHeader from '@components/common/ListHeader';
 type Record = {
   id: number;
   title: string;
-  content: string;
-  homework: string;
-  user_id: number;
+  user_id: string;
+  user_name: string;
+  teacher_id: string;
+  teacher_name: string;
   curriculum_id: number;
+  curriculum_title: string;
+  skill: string;
   created_at: string;
   updated_at: string;
 };
@@ -21,7 +25,7 @@ type Props = {
 };
 
 export async function getServerSideProps() {
-  const getUrl = process.env.SSR_API_URI + '/records';
+  const getUrl = process.env.SSR_API_URI + '/api/v1/get_records_for_index';
   const json = await get(getUrl);
   return {
     props: {
@@ -31,22 +35,27 @@ export async function getServerSideProps() {
 }
 
 export default function RecordList(props: Props) {
-  const headers = ['Title', 'Content', 'Date'];
+  const [records, setRecords] = useState<Record[]>(props.records)
+  const headers = ['Student', 'Title', 'Skill', 'Date'];
+
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
     const datetime2 = datetime.substring(0, datetime.length - 5);
     return datetime2;
   };
+  console.log(records)
+
   return (
     <>
       <MainLayout>
-        <ListHeader title='Your Records' />
+        <ListHeader title='Records' setRecords={setRecords}/>
         <FlatCard>
           <Table headers={headers}>
-            {props.records.map((record) => (
+            {records.map((record) => (
               <tr key={record.id} onClick={() => Router.push('/records/' + record.id)}>
+                <td>{record.user_name}</td>
                 <td>{record.title}</td>
-                <td>{record.content}</td>
+                <td>{record.skill}</td>
                 <td>{formatDate(record.created_at)}</td>
               </tr>
             ))}

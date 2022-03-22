@@ -17,32 +17,34 @@ interface Curriculum {
 }
 
 interface Skill {
-  id: number;
   name: string;
-  detail: string;
-  category_id: number;
+}
+
+interface CurriculumWithSkill {
+  curriculum: Curriculum;
+  skill: Skill;
 }
 
 interface Props {
-  curriculums: Curriculum[];
-  skills: Skill[];
+  json: CurriculumWithSkill[]
 }
 
 export async function getServerSideProps() {
-  const getCurriculumsUrl = process.env.SSR_API_URI + '/curriculums';
+  const getCurriculumsUrl = process.env.SSR_API_URI + '/api/v1/get_curriculums_for_index';
   const getSkillsUrl = process.env.SSR_API_URI + '/skills';
   const curriculumsJson = await get(getCurriculumsUrl);
   const skillsJson = await get(getSkillsUrl);
   return {
     props: {
-      curriculums: curriculumsJson,
-      skills: skillsJson,
+      json: curriculumsJson,
     },
   };
 }
 
 export default function CurriculumList(props: Props) {
-  const headers = ['Title', 'Skill', 'Content', 'Date'];
+  const headers = ['Title', 'Skill', 'Date'];
+  const [curriculums, setCurriculums] = useState<CurriculumWithSkill[]>(props.json)
+  console.log(curriculums)
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
     const datetime2 = datetime.substring(0, datetime.length - 5);
@@ -51,15 +53,14 @@ export default function CurriculumList(props: Props) {
   return (
     <>
       <MainLayout>
-        <ListHeader title='Curriculum' />
+        <ListHeader title='Curriculum' setCurriculums={setCurriculums}/>
         <FlatCard width='100%'>
           <Table headers={headers}>
-            {props.curriculums.map((curriculum) => (
-              <tr key={curriculum.toString()} onClick={() => Router.push('/curriculums/' + curriculum.id)}>
-                <td>{curriculum.title}</td>
-                <td>{curriculum.skill_id}</td>
-                <td>{curriculum.content}</td>
-                <td>{formatDate(curriculum.created_at)}</td>
+            {curriculums.map((data: CurriculumWithSkill) => (
+              <tr key={data.toString()} onClick={() => Router.push('/curriculums/' + data.curriculum.id)}>
+                <td>{data.curriculum.title}</td>
+                <td>{data.skill}</td>
+                <td>{formatDate(data.curriculum.created_at)}</td>
               </tr>
             ))}
           </Table>

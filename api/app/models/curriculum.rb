@@ -3,12 +3,23 @@ class Curriculum < ApplicationRecord
   has_many :records
 
   def self.with_skills
-    @records = Curriculum.preload(:skill)
+    @records = Curriculum.eager_load(:skill)
       .map{
         |curriculum|
         {
           "curriculum": curriculum,
           "skill": curriculum.skill.name
+        }
+      }
+  end
+
+  def self.with_skill(curriculum_id)
+    @record = Curriculum.eager_load(:skill).where(curriculums: {id: curriculum_id})
+      .map{
+        |curriculum|
+        {
+          "curriculum": curriculum,
+          "skill": curriculum.skill.name,
         }
       }
   end

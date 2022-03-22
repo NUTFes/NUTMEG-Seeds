@@ -15,6 +15,8 @@ interface Skill {
 interface Props {
   title: string;
   children?: React.ReactNode;
+  setRecords?: any;
+  setCurriculums?: any;
   skills?: Skill[];
 }
 
@@ -37,13 +39,13 @@ const ListHeader = (props: Props) => {
         case '/records':
           return (
             <>
-              <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} />
+              <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} setNewRecords={props.setRecords} />
             </>
           );
         case '/curriculums':
           return (
             <>
-              <CurriculumAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} skills={skills} />
+              <CurriculumAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} skills={skills} setNewCurriculums={props.setCurriculums} />
             </>
           );
         case '/projects':
