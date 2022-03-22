@@ -46,5 +46,5 @@ export const put = async (url: string, data: any) => {
 
 export const del = async (url: string) => {
   const res = await fetch(url, { method: 'DELETE' });
-  return await res.json();
+  return res;
 };
