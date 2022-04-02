@@ -4,7 +4,7 @@ class Api::V1::RecordsApiController < ApplicationController
     render json: @record
   end
 
-  def get_record_for_reload_index
+  def get_record_for_index_reload
     @record = Record.with_teacher_and_skill(params[:id])
     render json: @record
   end
