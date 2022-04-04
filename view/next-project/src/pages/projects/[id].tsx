@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { get } from '@utils/api_methods';
-import { GetStaticPaths } from 'next';
+import React, {useState} from 'react';
+import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import CardHeader from '@components/common/CardHeader';
@@ -50,7 +49,7 @@ type Props = {
   members: Member[];
 };
 
-export async function getServerSideProps({ params }: any) {
+export async function getServerSideProps({params}: any) {
   const getUrl = process.env.SSR_API_URI + '/api/v1/get_project_for_view/' + params.id;
   const getRes = await get(getUrl);
   return {
@@ -67,11 +66,12 @@ export default function Page(props: Props) {
   const [isOpenSkillAddModal, setIsOpenSkillAddModal] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isOpenDeleteProjectModal, setIsOpenDeleteProjectModal] = useState(false);
+  const [skills, setSkills] = useState<Skill[]>(props.skills);
   const openUserAddModal = (isUserOpenAddModal: boolean) => {
     if (isOpenUserAddModal) {
       return (
         <>
-          <UserAddModal isOpen={isOpenUserAddModal} setIsOpen={setIsOpenUserAddModal} />
+          <UserAddModal isOpen={isOpenUserAddModal} setIsOpen={setIsOpenUserAddModal}/>
         </>
       );
     }
@@ -80,7 +80,8 @@ export default function Page(props: Props) {
     if (isOpenSkillAddModal) {
       return (
         <>
-          <SkillAddModal isOpen={isOpenSkillAddModal} setIsOpen={setIsOpenSkillAddModal} />
+          <SkillAddModal isOpen={isOpenSkillAddModal} setIsOpen={setIsOpenSkillAddModal} setSkills={setSkills}
+                         skills={skills}/>
         </>
       );
     }
@@ -89,7 +90,7 @@ export default function Page(props: Props) {
     if (isOpenEditModal) {
       return (
         <>
-          <EditModal isOpen={isOpenEditModal} setIsOpen={setIsOpenEditModal} />
+          <EditModal isOpen={isOpenEditModal} setIsOpen={setIsOpenEditModal}/>
         </>
       );
     }
@@ -98,7 +99,7 @@ export default function Page(props: Props) {
     if (isOpenDeleteProjectModal) {
       return (
         <>
-          <DeleteProjectModal isOpen={isOpenDeleteProjectModal} setIsOpen={setIsOpenDeleteProjectModal} />
+          <DeleteProjectModal isOpen={isOpenDeleteProjectModal} setIsOpen={setIsOpenDeleteProjectModal}/>
         </>
       );
     }
@@ -106,28 +107,28 @@ export default function Page(props: Props) {
 
   return (
     <MainLayout>
-      <BackButton />
+      <BackButton/>
       <FlatCard>
         <Row gap={'0'}>
           <Column align='center'>
-            <HeaderLogo height={300} width={300} color={'black'} />
+            <HeaderLogo height={300} width={300} color={'black'}/>
           </Column>
           <Column>
             <CardHeader title={props.project.name}>
               <IconButton onClick={() => window.open(props.project.github, '_blank')}>
-                <GithubIcon height={30} width={30} />
+                <GithubIcon height={30} width={30}/>
               </IconButton>
               <IconButton>
-                <SlackIcon height={45} width={45} />
+                <SlackIcon height={45} width={45}/>
               </IconButton>
             </CardHeader>
             <div>{props.project.detail}</div>
             <CardHeader subtitle={'Skills'}>
-              <AddButton onClick={() => setIsOpenSkillAddModal(!isOpenSkillAddModal)} />
+              <AddButton onClick={() => setIsOpenSkillAddModal(!isOpenSkillAddModal)}/>
               {openSkillAddModal(isOpenSkillAddModal)}
             </CardHeader>
             <table>
-              {props.skills.map((skill) => (
+              {skills.map((skill) => (
                 <tr key={skill.toString()}>
                   <th>{skill.name}</th>
                   <td>{skill.category}</td>
@@ -135,7 +136,7 @@ export default function Page(props: Props) {
               ))}
             </table>
             <CardHeader subtitle={'Members'}>
-              <AddButton onClick={() => setIsOpenUserAddModal(!isOpenUserAddModal)} />
+              <AddButton onClick={() => setIsOpenUserAddModal(!isOpenUserAddModal)}/>
               {openUserAddModal(isOpenUserAddModal)}
             </CardHeader>
             <table>
@@ -150,9 +151,9 @@ export default function Page(props: Props) {
         </Row>
       </FlatCard>
       <Row>
-        <EditButton onClick={() => setIsOpenEditModal(!isOpenEditModal)} />
+        <EditButton onClick={() => setIsOpenEditModal(!isOpenEditModal)}/>
         {openEditModal(isOpenEditModal)}
-        <DeleteButton onClick={() => setIsOpenDeleteProjectModal(!isOpenDeleteProjectModal)} />
+        <DeleteButton onClick={() => setIsOpenDeleteProjectModal(!isOpenDeleteProjectModal)}/>
         {openDeleteProjectModal(isOpenDeleteProjectModal)}
       </Row>
     </MainLayout>

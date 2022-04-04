@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       get "/get_curriculums_for_index" => "curriculums_api#get_curriculums_for_index"
       get "/get_curriculum_for_reload_index/:id" => "curriculums_api#get_curriculum_for_reload_index"
       get "/get_project_for_view/:id" => "projects_api#get_project_for_view"
+      get "/get_project_skill_for_reload_view_skills/:id" => "projects_api#get_project_skill_for_reload_view_skills"
     end
   end
   namespace :api do
