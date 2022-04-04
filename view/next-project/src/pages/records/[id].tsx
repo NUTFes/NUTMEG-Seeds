@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
@@ -51,24 +53,24 @@ export async function getServerSideProps({params}: any) {
 
 export default function Page(props: Props) {
   const RecordContentsContainer = styled.div`
-    width: 100%;
+  width: 100%;
   `;
   const RecordContentsTitle = styled.div`
-    font-size: 2.8rem;
-    padding-bottom: 1.2rem;
+  font-size: 2.8rem;
+  padding-bottom: 1.2rem;
   `;
   const RecordContents = styled.div`
-    font-size: 1.6rem;
-    padding-bottom: 3rem;
+  font-size: 1.6rem;
+  padding-bottom: 3rem;
   `;
   const ParentButtonContainer = styled.div`
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
   `;
   const ChildButtonContainer = styled.div`
-    position: absolute;
-    bottom: 50px;
-    left: -40px;
+  position: absolute;
+  bottom: 50px;
+  left: -40px;
   `;
 
   const formatDate = (date: string) => {
@@ -122,7 +124,11 @@ export default function Page(props: Props) {
               Contents
               <hr/>
             </RecordContentsTitle>
-            <RecordContents>{props.record.content}</RecordContents>
+            <RecordContents>
+              <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+                {props.record.content}
+              </ReactMarkdown>
+            </RecordContents>
             <RecordContentsTitle>
               Homework
               <hr/>

@@ -1,5 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
+import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 import {get, put} from '@utils/api_methods';
 import EditModal from '@components/common/EditModal';
 import Button from '@components/common/TestButton';
@@ -100,12 +102,12 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     (input: string) => (
       e:
         React.ChangeEvent<HTMLInputElement>
-        | React.ChangeEvent<HTMLTextAreaElement>
-        | React.ChangeEvent<HTMLSelectElement>,
-    ) => {
-      setFormData({...formData, [input]: e.target.value});
-    };
-    const teacherHandler = (input: string, query: any) => (e: React.ChangeEvent<HTMLSelectElement>) => {
+          | React.ChangeEvent<HTMLTextAreaElement>
+            | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setFormData({...formData, [input]: e.target.value});
+  };
+  const teacherHandler = (input: string, query: any) => (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTeacherData({id: "1", user_id: e.target.value, record_id: query.id.toString()});
   };
 
@@ -129,16 +131,29 @@ const RecordEditModal: FC<ModalProps> = (props) => {
       </div>
       <div>
         <h3>Contents</h3>
-        <textarea placeholder='Input' value={formData.content} onChange={handler('content')}/>
+        <div>
+          <textarea placeholder='Input' value={formData.content} onChange={handler('content')}/>
+          <div>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+              {formData.content}
+            </ReactMarkdown>
+          </div>
+        </div>
       </div>
       <div>
         <h3>Homework</h3>
-        <input type='text' placeholder='Input' value={formData.homework} onChange={handler('homework')}/>
+        <div>
+          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')}/>
+          <div>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+              {formData.homework}
+            </ReactMarkdown>
+          </div>
+        </div>
       </div>
       <div>
         <h3>Teacher</h3>
         <select defaultValue={teacherData.user_id} onChange={teacherHandler('user_id', query)}>
-          <option value={teacherData.user_id}>{record.teacher}</option>
           {users.map((data: User) => (
             <option key={data.id} value={data.id}>
               {data.name}
@@ -149,7 +164,6 @@ const RecordEditModal: FC<ModalProps> = (props) => {
       <div>
         <h3>Curriculum</h3>
         <select defaultValue={formData.curriculum_id} onChange={handler('curriculum_id')}>
-          <option value={formData.curriculum_id}>{record.curriculum_title}</option>
           {curriculums.map((data: Curriculum) => (
             <option key={data.id} value={data.id}>
               {data.title}
@@ -166,7 +180,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
       >
         Submit
       </Button>
-    </EditModal>
+      </EditModal>
   );
 };
 
