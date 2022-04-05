@@ -1,5 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 import { get, post } from '@utils/api_methods';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
@@ -117,11 +119,25 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
       </div>
       <div>
         <h3>Content</h3>
+        <div>
         <textarea placeholder='Input' value={recordData.content} onChange={recordHandler('content')} />
+          <div>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+              {recordData.content}
+            </ReactMarkdown>
+          </div>
+        </div>
       </div>
       <div>
         <h3>Homework</h3>
+        <div>
         <textarea placeholder='Input' value={recordData.homework} onChange={recordHandler('homework')} />
+          <div>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+              {recordData.homework}
+            </ReactMarkdown>
+          </div>
+        </div>
       </div>
       <div>
         <h3>Teacher</h3>

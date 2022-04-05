@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
 import { get, post } from '@utils/api_methods';
-import CurriculumList from 'src/pages/curriculums';
 
 interface Skill {
   id: string;
@@ -85,11 +86,25 @@ const ProjectAddModal = (props: ModalProps) => {
       </div>
       <div>
         <h3>Content</h3>
-        <textarea placeholder='Input' value={formData.content} onChange={handler('content')} />
+        <div>
+          <textarea placeholder='Input' value={formData.content} onChange={handler('content')} />
+          <div>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+              {formData.content}
+            </ReactMarkdown>
+          </div>
+        </div>
       </div>
       <div>
         <h3>Homework</h3>
+        <div>
         <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
+          <div>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+              {formData.homework}
+            </ReactMarkdown>
+          </div>
+        </div>
       </div>
       <div>
         <h3>Skill</h3>

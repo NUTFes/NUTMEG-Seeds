@@ -1,5 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
+import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 import {get, put} from '@utils/api_methods';
 import EditModal from '@components/common/EditModal';
 import Button from '@components/common/TestButton';
@@ -74,11 +76,11 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
     (input: string) => (
       e:
         React.ChangeEvent<HTMLInputElement>
-        | React.ChangeEvent<HTMLTextAreaElement>
-        | React.ChangeEvent<HTMLSelectElement>,
-    ) => {
-      setFormData({...formData, [input]: e.target.value});
-    };
+          | React.ChangeEvent<HTMLTextAreaElement>
+            | React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setFormData({...formData, [input]: e.target.value});
+  };
 
   const submitCurriculum = async (data: any, query: any) => {
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
@@ -94,11 +96,25 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       </div>
       <div>
         <h3>Contents</h3>
-        <textarea placeholder='Input' value={formData.content} onChange={handler('content')}/>
+        <div>
+          <textarea placeholder='Input' value={formData.content} onChange={handler('content')}/>
+          <div>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+              {formData.content}
+            </ReactMarkdown>
+          </div>
+        </div>
       </div>
       <div>
         <h3>Homework</h3>
-        <input type='text' placeholder='Input' value={formData.homework} onChange={handler('homework')}/>
+        <div>
+          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')}/>
+          <div>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+              {formData.homework}
+            </ReactMarkdown>
+          </div>
+        </div>
       </div>
       <div>
         <h3>Skill</h3>
