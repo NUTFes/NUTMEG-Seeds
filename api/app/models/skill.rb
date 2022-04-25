@@ -5,4 +5,19 @@ class Skill < ApplicationRecord
   has_many :projects, through: :project_skills
   has_many :user_skills, dependent: :destroy
   has_many :users, through: :user_skills
+
+  def self.with_category
+    @record = Skill.eager_load(:category)
+      .map{
+        |skill|
+        {
+          id: skill.id,
+          name: skill.name,
+          category_id: skill.category.id,
+          category_name: skill.category.name,
+          created_at: skill.created_at,
+        }
+    }
+  end
+
 end

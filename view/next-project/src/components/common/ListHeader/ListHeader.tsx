@@ -54,6 +54,12 @@ const ListHeader = (props: Props) => {
               <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} />
             </>
           );
+        case '/skills':
+          return (
+            <>
+              <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} />
+            </>
+          );
       }
     }
   };
