@@ -67,7 +67,6 @@ export default function Page(props: Props) {
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isOpenDeleteProjectModal, setIsOpenDeleteProjectModal] = useState(false);
   const [skills, setSkills] = useState<Skill[]>(props.skills);
-  // const [projectUsers, setProjectUsers] = useState<ProjectUser[]>(props.members);
   const [members, setMembers] = useState<Member[]>(props.members);
   const openUserAddModal = (isUserOpenAddModal: boolean) => {
     if (isOpenUserAddModal) {
