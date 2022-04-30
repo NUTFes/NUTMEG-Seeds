@@ -31,7 +31,16 @@ class Curriculum < ApplicationRecord
         {
           "curriculum": curriculum,
           "skill": curriculum.skill.name,
-          "records": curriculum.records
+          "records": curriculum.records.map{
+            |record|
+            {
+              "id": record.id,
+              "title": record.title,
+              "user": record.user.name,
+              "created_at": record.created_at,
+              "updated_at": record.updated_at,
+            }
+          }
         }
       }
   end
