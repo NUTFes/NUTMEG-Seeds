@@ -67,11 +67,14 @@ export default function Page(props: Props) {
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isOpenDeleteProjectModal, setIsOpenDeleteProjectModal] = useState(false);
   const [skills, setSkills] = useState<Skill[]>(props.skills);
+  // const [projectUsers, setProjectUsers] = useState<ProjectUser[]>(props.members);
+  const [members, setMembers] = useState<Member[]>(props.members);
   const openUserAddModal = (isUserOpenAddModal: boolean) => {
     if (isOpenUserAddModal) {
       return (
         <>
-          <UserAddModal isOpen={isOpenUserAddModal} setIsOpen={setIsOpenUserAddModal}/>
+          <UserAddModal isOpen={isOpenUserAddModal} setIsOpen={setIsOpenUserAddModal} setMembers={setMembers}
+                        members={members}/>
         </>
       );
     }
@@ -140,7 +143,7 @@ export default function Page(props: Props) {
               {openUserAddModal(isOpenUserAddModal)}
             </CardHeader>
             <table>
-              {props.members.map((member) => (
+              {members.map((member) => (
                 <tr key={member.toString()}>
                   <th>{member.name}</th>
                   <td>{member.role}</td>
