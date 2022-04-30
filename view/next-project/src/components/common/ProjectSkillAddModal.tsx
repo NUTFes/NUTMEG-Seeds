@@ -12,7 +12,7 @@ interface ModalProps {
 }
 
 interface Skill {
-  id: string;
+  id: number | string;
   name: string;
   category: string;
 }
@@ -46,7 +46,7 @@ const ProjectSkillAddModal: FC<ModalProps> = (props) => {
     const submitUrl = process.env.CSR_API_URI + '/project_skills';
     const postReq = await post(submitUrl, data);
     const postRes = await postReq.json();
-    const getSkillUrl = process.env.CSR_API_URI + '/api/v1/get_project_skill_for_reload_view_skills/' + postRes.id;
+    const getSkillUrl = process.env.CSR_API_URI + '/api/v1/get_project_skill_for_reload_view_skill/' + postRes.id;
     const getRes = await get(getSkillUrl);
     const newSkills: Skill = getRes[0];
     props.setSkills([...props.skills, newSkills]);
