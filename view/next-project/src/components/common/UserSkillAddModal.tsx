@@ -28,9 +28,11 @@ interface FormData {
 }
 
 const UserSkillAddModal: FC<ModalProps> = (props) => {
+  const router = useRouter();
+
   const [skills, setSkills] = useState<Skill[]>([{id: '', name: ''}]);
   const [formData, setFormData] = useState<FormData>({
-    user_id: useRouter().query.id,
+    user_id: router.query.id,
     skill_id: '',
   });
 
@@ -46,13 +48,11 @@ const UserSkillAddModal: FC<ModalProps> = (props) => {
     setFormData({...formData, [input]: e.target.value});
   };
 
-  const router = useRouter();
   const submitSkill = async (data: FormData) => {
     const submitUrl = process.env.CSR_API_URI + '/user_skills';
     const postRes = await post(submitUrl, data);
     const getUserSkillUrl = process.env.CSR_API_URI + '/api/v1/get_user_skills_for_reload_view/' + data.user_id;
     const getRes = await get(getUserSkillUrl);
-    console.log(getRes)
     const newSkills: UserSkill = getRes[getRes.length - 1];
     props.setUserSkills([...props.userSkills, newSkills]);
   };
