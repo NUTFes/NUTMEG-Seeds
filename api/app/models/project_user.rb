@@ -26,4 +26,16 @@ class ProjectUser < ApplicationRecord
                            }
                          }
   end
+
+  def self.with_user_projects(user_id)
+    @record = ProjectUser.eager_load(:project).where(project_users: { user_id: user_id })
+                         .map {
+                           |project_user|
+                           {
+                             "id": project_user.project.id,
+                             "project": project_user.project.name,
+                             "role": project_user.role.name,
+                           }
+                         }
+  end
 end

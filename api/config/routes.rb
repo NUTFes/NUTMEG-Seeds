@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       get "/get_project_for_view/:id" => "projects_api#get_project_for_view"
       get "/get_project_skill_for_reload_view_skill/:id" => "projects_api#get_project_skill_for_reload_view_skill"
       get "/get_project_user_for_reload_view_user/:id" => "projects_api#get_project_user_for_reload_view_user"
+      get "/get_project_user_for_reload_view_project/:id" => "projects_api#get_project_user_for_reload_view_project"
       get "/get_project_users_for_reload_view/:id" => "projects_api#get_project_users_for_reload_view"
     end
   end

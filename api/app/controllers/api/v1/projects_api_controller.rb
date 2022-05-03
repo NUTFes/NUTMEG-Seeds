@@ -20,4 +20,10 @@ class Api::V1::ProjectsApiController < ApplicationController
     @users = ProjectUser.with_project_users(params[:id])
     render json: @users
   end
+
+  # UserProjectAddModal用
+  def get_project_user_for_reload_view_project
+    @projects = ProjectUser.with_user_projects(params[:id])
+    render json: @projects
+  end
 end
