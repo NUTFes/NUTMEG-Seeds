@@ -101,10 +101,10 @@ export async function getServerSideProps({params}: any) {
 export default function Users(props: Props) {
   const user = props.user;
   const detail = props.detail;
-  const records = props.records;
 
   const [projects, setProjects] = useState<Project[]>(props.projects);
   const [skills, setSkills] = useState<Skill[]>(props.skills);
+  const [records, setRecords] = useState<Record[]>(props.records);
   const [isOpenSkillAddModal, setIsOpenSkillAddModal] = useState(false);
   const [isOpenProjectAddModal, setIsOpenProjectAddModal] = useState(false);
   const [isOpenRecordAddModal, setIsOpenRecordAddModal] = useState(false);
@@ -136,7 +136,8 @@ export default function Users(props: Props) {
     if (isOpenRecordAddModal) {
       return (
         <>
-          <RecordAddModal isOpen={isOpenRecordAddModal} setIsOpen={setIsOpenRecordAddModal}/>
+          <RecordAddModal isOpen={isOpenRecordAddModal} setIsOpen={setIsOpenRecordAddModal} userRecords={records}
+                          setUserRecords={setRecords}/>
         </>
       );
     }
@@ -230,7 +231,9 @@ export default function Users(props: Props) {
               {records.map((record) => (
                 <tr key={record.id}>
                   <th>{record.title}</th>
-                  <td>{record.teacher.name}</td>
+                  {record.teacher != null &&
+                      <td>{record.teacher.name}</td>
+                  }
                 </tr>
               ))}
             </table>

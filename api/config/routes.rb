@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       put "user/update/:id" => "users#update"
       get "get_current_user" => "current_user#get_current_user"
       get "/get_user_skills_for_reload_view/:id" => "skills_api#get_user_skills_for_reload_view"
+      get "/get_user_records_for_reload_view/:id" => "users_api#get_user_records_for_reload_view"
 
       # role
       get "get_role_1" => "users#get_role_1"
