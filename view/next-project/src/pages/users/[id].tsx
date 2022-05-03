@@ -102,9 +102,9 @@ export default function Users(props: Props) {
   const user = props.user;
   const detail = props.detail;
   const records = props.records;
-  const skills = props.skills;
 
   const [projects, setProjects] = useState<Project[]>(props.projects);
+  const [skills, setSkills] = useState<Skill[]>(props.skills);
   const [isOpenSkillAddModal, setIsOpenSkillAddModal] = useState(false);
   const [isOpenProjectAddModal, setIsOpenProjectAddModal] = useState(false);
   const [isOpenRecordAddModal, setIsOpenRecordAddModal] = useState(false);
@@ -115,7 +115,8 @@ export default function Users(props: Props) {
     if (isOpenSkillAddModal) {
       return (
         <>
-          <SkillAddModal isOpen={isOpenSkillAddModal} setIsOpen={setIsOpenSkillAddModal}/>
+          <SkillAddModal isOpen={isOpenSkillAddModal} setIsOpen={setIsOpenSkillAddModal} setUserSkills={setSkills}
+                         userSkills={skills}/>
         </>
       );
     }
