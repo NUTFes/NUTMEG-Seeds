@@ -112,7 +112,7 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
     const getRes = await get(getUserRecordUrl);
     console.log(getRes[0].records)
     const newRecord: UserRecord = getRes[0].records[getRes[0].records.length - 1];
-    props.setUserRecords([...props.userRecords, newRecord]);
+    props.setUserRecords([newRecord, ...props.userRecords]);
   };
 
   return (
