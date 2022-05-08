@@ -1,5 +1,6 @@
 import Router from 'next/router';
 import { get } from '@utils/api_methods';
+import { formatDate } from '@utils/format_date';
 import { useState } from 'react';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
@@ -24,7 +25,7 @@ type Props = {
   records: Record[];
 };
 
-export async function getServerSideProps() {
+export const getServerSideProps = async () => {
   const getUrl = process.env.SSR_API_URI + '/api/v1/get_records_for_index';
   const json = await get(getUrl);
   return {
@@ -37,13 +38,6 @@ export async function getServerSideProps() {
 export default function RecordList(props: Props) {
   const [records, setRecords] = useState<Record[]>(props.records)
   const headers = ['Student', 'Title', 'Skill', 'Date'];
-
-  const formatDate = (date: string) => {
-    let datetime = date.replace('T', ' ');
-    const datetime2 = datetime.substring(0, datetime.length - 5);
-    return datetime2;
-  };
-  console.log(records)
 
   return (
     <>

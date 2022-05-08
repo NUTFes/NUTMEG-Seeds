@@ -41,6 +41,11 @@ const Header: FC = () => {
                   <a>Member</a>
                 </Link>
               </li>
+              <li>
+                <Link href='/skills'>
+                  <a>Skills</a>
+                </Link>
+              </li>
             </ul>
           </nav>
           <IconButton onClick={logout}><Logout width={20} height={20} color={'var(--accent-0)'}/></IconButton>

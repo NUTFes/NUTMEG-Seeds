@@ -5,7 +5,8 @@ import s from './ListHeader.module.css';
 import CurriculumAddModal from '@components/common/CurriculumAddModal';
 import ProjectAddModal from '@components/common/ProjectAddModal';
 import RecordAddModal from '@components/common/RecordAddModal';
-import {get} from '@utils/api_methods';
+import SkillAddModal from '@components/common/SkillAddModal'
+import { get } from '@utils/api_methods';
 
 interface Skill {
   id: string;
@@ -19,7 +20,13 @@ interface Project {
   icon_name: string;
   github: string;
   remark: string;
-}
+
+type NewSkill = {
+  id: number;
+  name: string;
+  category_id: number;
+  category_name: string;
+  created_at: string;
 
 interface Props {
   title: string;
@@ -29,6 +36,8 @@ interface Props {
   setProjects?: Function;
   skills?: Skill[];
   projects?: Project[];
+  setNewSkills?: any;
+  newSkills?: NewSkill[];
 }
 
 const ListHeader = (props: Props) => {
@@ -65,6 +74,12 @@ const ListHeader = (props: Props) => {
             <>
               <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} projects={props.projects}
                                setProjects={props.setProjects}/>
+            </>
+          );
+        case '/skills':
+          return (
+            <>
+              <SkillAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} newSkills={props.newSkills} setNewSkills={props.setNewSkills} />
             </>
           );
       }
