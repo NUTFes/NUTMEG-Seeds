@@ -1,12 +1,14 @@
-import React, { FC, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { get, post } from '@utils/api_methods';
+import React, {FC, useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
+import {get, post} from '@utils/api_methods';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
 
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
+  setUserSkills: Function;
+  userSkills: UserSkill[];
 }
 
 interface Skill {
@@ -15,14 +17,22 @@ interface Skill {
 }
 
 interface UserSkill {
+  id: number;
+  name: string;
+  category: string;
+}
+
+interface FormData {
   user_id: string | any;
   skill_id: string;
 }
 
 const UserSkillAddModal: FC<ModalProps> = (props) => {
-  const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
-  const [formData, setFormData] = useState<UserSkill>({
-    user_id: useRouter().query.id,
+  const router = useRouter();
+
+  const [skills, setSkills] = useState<Skill[]>([{id: '', name: ''}]);
+  const [formData, setFormData] = useState<FormData>({
+    user_id: router.query.id,
     skill_id: '',
   });
 
@@ -35,13 +45,16 @@ const UserSkillAddModal: FC<ModalProps> = (props) => {
   }, []);
 
   const handler = (input: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData({ ...formData, [input]: e.target.value });
+    setFormData({...formData, [input]: e.target.value});
   };
 
-  const router = useRouter();
-  const submitSkill = async (data: UserSkill) => {
+  const submitSkill = async (data: FormData) => {
     const submitUrl = process.env.CSR_API_URI + '/user_skills';
     const postRes = await post(submitUrl, data);
+    const getUserSkillUrl = process.env.CSR_API_URI + '/api/v1/get_user_skills_for_reload_view/' + data.user_id;
+    const getRes = await get(getUserSkillUrl);
+    const newSkills: UserSkill = getRes[getRes.length - 1];
+    props.setUserSkills([...props.userSkills, newSkills]);
   };
 
   return (
@@ -61,7 +74,7 @@ const UserSkillAddModal: FC<ModalProps> = (props) => {
       <Button
         onClick={() => {
           submitSkill(formData);
-          router.reload();
+          props.setIsOpen(false);
         }}
       >
         Submit

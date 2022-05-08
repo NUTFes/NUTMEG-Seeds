@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import React, {useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
 import Button from '@components/common/AddButton';
 import s from './ListHeader.module.css';
 import CurriculumAddModal from '@components/common/CurriculumAddModal';
@@ -13,25 +13,35 @@ interface Skill {
   name: string;
 }
 
+interface Project {
+  id: number;
+  name: string;
+  detail: string;
+  icon_name: string;
+  github: string;
+  remark: string;
+
 type NewSkill = {
   id: number;
   name: string;
   category_id: number;
   category_name: string;
   created_at: string;
-}
 
 interface Props {
   title: string;
   children?: React.ReactNode;
   setRecords?: any;
   setCurriculums?: any;
+  setProjects?: Function;
+  skills?: Skill[];
+  projects?: Project[];
   setNewSkills?: any;
   newSkills?: NewSkill[];
 }
 
 const ListHeader = (props: Props) => {
-  const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
+  const [skills, setSkills] = useState<Skill[]>([{id: '', name: ''}]);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const router = useRouter();
 
@@ -49,19 +59,21 @@ const ListHeader = (props: Props) => {
         case '/records':
           return (
             <>
-              <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} setNewRecords={props.setRecords} />
+              <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} setNewRecords={props.setRecords}/>
             </>
           );
         case '/curriculums':
           return (
             <>
-              <CurriculumAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} skills={skills} setNewCurriculums={props.setCurriculums} />
+              <CurriculumAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} skills={skills}
+                                  setNewCurriculums={props.setCurriculums}/>
             </>
           );
         case '/projects':
           return (
             <>
-              <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} />
+              <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} projects={props.projects}
+                               setProjects={props.setProjects}/>
             </>
           );
         case '/skills':

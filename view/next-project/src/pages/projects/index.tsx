@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { get } from '@utils/api_methods';
+import {useState} from 'react';
+import {useRouter} from 'next/router';
+import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import ListHeader from '@components/common/ListHeader';
 import GlassCard from '@components/common/GlassCard';
@@ -8,18 +8,20 @@ import styled from 'styled-components';
 import HeaderLogo from '@components/icons/HeaderLogo';
 import Button from '@components/common/TransButton';
 
-type Projects = {
+interface Project {
   id: number;
   name: string;
   detail: string;
   icon_name: string;
   github: string;
   remark: string;
-};
+  created_at: string;
+  updated_at: string;
+}
 
-type Props = {
-  projects: Projects[];
-};
+interface Props {
+  projects: Project[];
+}
 
 export async function getServerSideProps() {
   const getUrl = process.env.SSR_API_URI + '/projects';
@@ -32,12 +34,13 @@ export async function getServerSideProps() {
 }
 
 export default function ProjectList(props: Props) {
+  const [projects, setProjects] = useState<Project[]>(props.projects)
+
   // 初期状態で詳細を非表示にするための処理
   let initialState: any = new Object();
   for (const project of props.projects) {
     initialState[project.id] = false;
   }
-  console.log(initialState);
   // マウスホバーしているかをuseStateで管理
   let [isHover, setIsHover] = useState(initialState);
 
@@ -63,24 +66,24 @@ export default function ProjectList(props: Props) {
   // プロジェクトのカードにマウスホバーした時の処理
   const onHover = (id: number) => {
     // マウスホバーしたプロジェクトのisHoverをTrueにする
-    setIsHover({ ...isHover, [id]: true });
+    setIsHover({...isHover, [id]: true});
   };
   // プロジェクトのカードからマウスホバーが外れた時の処理
   const leaveHover = (id: number) => {
-    setIsHover({ ...isHover, [id]: false });
+    setIsHover({...isHover, [id]: false});
   };
 
   const router = useRouter();
 
   // マウスホバー時のプロジェクト
-  const projectContent = (isHover: any, project: Projects) => {
+  const projectContent = (isHover: any, project: Project) => {
     if (isHover[project.id]) {
       return (
         <GlassCard width='30rem' height='25rem' align={'center'} background='white'>
           <FocusProjectNameContainer>{project.name}</FocusProjectNameContainer>
           <ProjectDetail>{project.detail}</ProjectDetail>
           <div>
-            <Button height='3rem' text='More' onClick={() => router.push('/projects/' + project.id)} />
+            <Button height='3rem' text='More' onClick={() => router.push('/projects/' + project.id)}/>
           </div>
         </GlassCard>
       );
@@ -88,7 +91,7 @@ export default function ProjectList(props: Props) {
       return (
         <GlassCard width='30rem' height='25rem' align={'center'}>
           <div onMouseEnter={() => onHover(project.id)}>
-            <HeaderLogo height={120} width={120} color={'black'} />
+            <HeaderLogo height={120} width={120} color={'black'}/>
           </div>
           <ProjectNameContainer>{project.name}</ProjectNameContainer>
         </GlassCard>
@@ -98,9 +101,9 @@ export default function ProjectList(props: Props) {
 
   return (
     <MainLayout>
-      <ListHeader title='Project' />
+      <ListHeader title='Project' projects={projects} setProjects={setProjects}/>
       <ProjectListContainer>
-        {props.projects.map((project) => (
+        {projects.map((project) => (
           <div key={project.id} onMouseLeave={() => leaveHover(project.id)}>
             {projectContent(isHover, project)}
           </div>

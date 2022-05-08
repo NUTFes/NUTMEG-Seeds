@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import { get } from '@utils/api_methods';
+import React, {useState} from 'react';
+import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import SlackIcon from '@components/icons/SlackIcon';
@@ -8,7 +7,6 @@ import GithubIcon from '@components/icons/GithubIcon';
 import BackButton from '@components/common/BackButton';
 import AddButton from '@components/common/AddButton';
 import EditButton from '@components/common/EditButton';
-import DeleteButton from '@components/common/DeleteButton';
 import IconButton from '@components/common/IconButton';
 import CardHeader from '@components/common/CardHeader';
 import SkillAddModal from '@components/common/UserSkillAddModal';
@@ -18,12 +16,11 @@ import EditModal from '@components/common/UserEditModal';
 import DeleteUserModal from '@components/common/UserDeleteModal';
 import Column from '@components/common/Column';
 import Row from '@components/layout/RowLayout';
-import { GetStaticPaths, GetStaticProps } from 'next';
 
 interface Props {
   user: User;
   detail: UserDetail;
-  projects: User[];
+  projects: Project[];
   records: Record[];
   skills: Skill[];
 }
@@ -64,12 +61,6 @@ interface UserDetail {
   pc_storage: string;
 }
 
-interface User {
-  id: number;
-  project: string;
-  role: string;
-}
-
 interface Record {
   id: string;
   title: string;
@@ -86,7 +77,13 @@ interface Skill {
   category: string;
 }
 
-export async function getServerSideProps({ params }: any) {
+interface Project {
+  id: number;
+  project: string;
+  role: string;
+}
+
+export async function getServerSideProps({params}: any) {
   console.log(params)
   const getUrl = process.env.SSR_API_URI + '/api/v1/get_user_for_member_page/' + params.id;
   const getRes = await get(getUrl);
@@ -104,11 +101,10 @@ export async function getServerSideProps({ params }: any) {
 export default function Users(props: Props) {
   const user = props.user;
   const detail = props.detail;
-  const projects = props.projects;
-  const records = props.records;
-  const skills = props.skills;
-  console.log(records);
 
+  const [projects, setProjects] = useState<Project[]>(props.projects);
+  const [skills, setSkills] = useState<Skill[]>(props.skills);
+  const [records, setRecords] = useState<Record[]>(props.records);
   const [isOpenSkillAddModal, setIsOpenSkillAddModal] = useState(false);
   const [isOpenProjectAddModal, setIsOpenProjectAddModal] = useState(false);
   const [isOpenRecordAddModal, setIsOpenRecordAddModal] = useState(false);
@@ -119,7 +115,8 @@ export default function Users(props: Props) {
     if (isOpenSkillAddModal) {
       return (
         <>
-          <SkillAddModal isOpen={isOpenSkillAddModal} setIsOpen={setIsOpenSkillAddModal} />
+          <SkillAddModal isOpen={isOpenSkillAddModal} setIsOpen={setIsOpenSkillAddModal} setUserSkills={setSkills}
+                         userSkills={skills}/>
         </>
       );
     }
@@ -128,7 +125,9 @@ export default function Users(props: Props) {
     if (isOpenProjectAddModal) {
       return (
         <>
-          <ProjectAddModal isOpen={isOpenProjectAddModal} setIsOpen={setIsOpenProjectAddModal} />
+          <ProjectAddModal isOpen={isOpenProjectAddModal} setIsOpen={setIsOpenProjectAddModal}
+                           setUserProjects={setProjects}
+                           userProjects={projects}/>
         </>
       );
     }
@@ -137,7 +136,8 @@ export default function Users(props: Props) {
     if (isOpenRecordAddModal) {
       return (
         <>
-          <RecordAddModal isOpen={isOpenRecordAddModal} setIsOpen={setIsOpenRecordAddModal} />
+          <RecordAddModal isOpen={isOpenRecordAddModal} setIsOpen={setIsOpenRecordAddModal} userRecords={records}
+                          setUserRecords={setRecords}/>
         </>
       );
     }
@@ -146,7 +146,7 @@ export default function Users(props: Props) {
     if (isOpenEditModal) {
       return (
         <>
-          <EditModal isOpen={isOpenEditModal} setIsOpen={setIsOpenEditModal} userDetaiInfo={detail} />
+          <EditModal isOpen={isOpenEditModal} setIsOpen={setIsOpenEditModal} userDetaiInfo={detail}/>
         </>
       );
     }
@@ -155,7 +155,7 @@ export default function Users(props: Props) {
     if (isOpenDeleteUserModal) {
       return (
         <>
-          <DeleteUserModal isOpen={isOpenDeleteUserModal} setIsOpen={setIsOpenDeleteUserModal} />
+          <DeleteUserModal isOpen={isOpenDeleteUserModal} setIsOpen={setIsOpenDeleteUserModal}/>
         </>
       );
     }
@@ -163,21 +163,21 @@ export default function Users(props: Props) {
 
   return (
     <MainLayout>
-      <BackButton />
+      <BackButton/>
       <FlatCard align='center' justify=''>
         <Row gap={'0'}>
           <Column>
             <Row>
-              <img src='/99a.png' />
+              <img src='/99a.png'/>
             </Row>
             <CardHeader title={user.name}>
               <IconButton onClick={() => window.open(detail.github, '_blank')}>
-                <GithubIcon height={30} width={30} />
+                <GithubIcon height={30} width={30}/>
               </IconButton>
               <IconButton onClick={() => window.open(detail.slack, '_blank')}>
-                <SlackIcon height={45} width={45} />
+                <SlackIcon height={45} width={45}/>
               </IconButton>
-              <EditButton onClick={() => setIsOpenEditModal(!isOpenEditModal)} />
+              <EditButton onClick={() => setIsOpenEditModal(!isOpenEditModal)}/>
               {openEditModal(isOpenEditModal, detail)}
             </CardHeader>
             <table>
@@ -200,7 +200,7 @@ export default function Users(props: Props) {
           </Column>
           <Column>
             <CardHeader subtitle={'Tech Stack'}>
-              <AddButton onClick={() => setIsOpenSkillAddModal(!isOpenSkillAddModal)} />
+              <AddButton onClick={() => setIsOpenSkillAddModal(!isOpenSkillAddModal)}/>
               {openSkillAddModal(isOpenSkillAddModal)}
             </CardHeader>
             <table>
@@ -212,7 +212,7 @@ export default function Users(props: Props) {
               ))}
             </table>
             <CardHeader subtitle={'Projects'}>
-              <AddButton onClick={() => setIsOpenProjectAddModal(!isOpenProjectAddModal)} />
+              <AddButton onClick={() => setIsOpenProjectAddModal(!isOpenProjectAddModal)}/>
               {openProjectAddModal(isOpenProjectAddModal)}
             </CardHeader>
             <table>
@@ -224,14 +224,16 @@ export default function Users(props: Props) {
               ))}
             </table>
             <CardHeader subtitle={'Records'}>
-              <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)} />
+              <AddButton onClick={() => setIsOpenRecordAddModal(!isOpenRecordAddModal)}/>
               {openRecordAddModal(isOpenRecordAddModal)}
             </CardHeader>
             <table>
               {records.map((record) => (
                 <tr key={record.id}>
                   <th>{record.title}</th>
-                  <td>{record.teacher.name}</td>
+                  {record.teacher != null &&
+                      <td>{record.teacher.name}</td>
+                  }
                 </tr>
               ))}
             </table>

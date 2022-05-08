@@ -1,17 +1,14 @@
-import React, { FC, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import React, {FC, useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
-import { get, post } from '@utils/api_methods';
+import {get, post} from '@utils/api_methods';
 
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
-}
-
-interface Project {
-  id: string;
-  name: string;
+  setUserProjects: Function;
+  userProjects: UserProject[];
 }
 
 interface Role {
@@ -19,15 +16,28 @@ interface Role {
   name: string;
 }
 
+interface UserProject {
+  id: number;
+  project: string;
+  role: string;
+}
+
+interface Project {
+  id: number | string;
+  name: string;
+}
+
 const UserProjectAddModal: FC<ModalProps> = (props) => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
-    user_id: useRouter().query.id,
+    user_id: router.query.id,
     project_id: '',
     role_id: '',
   });
 
-  const [projects, setProjects] = useState<Project[]>([{ id: '', name: '' }]);
-  const [roles, setRoles] = useState<Role[]>([{ id: '', name: '' }]);
+  const [projects, setProjects] = useState<Project[]>([{id: '', name: ''}]);
+  const [roles, setRoles] = useState<Role[]>([{id: '', name: ''}]);
 
   useEffect(() => {
     const getProjectsUrl = process.env.CSR_API_URI + '/projects';
@@ -43,15 +53,18 @@ const UserProjectAddModal: FC<ModalProps> = (props) => {
   }, []);
 
   const handler = (input: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData({ ...formData, [input]: e.target.value });
+    setFormData({...formData, [input]: e.target.value});
   };
 
   const submitProject = async (data: any) => {
     const submitUrl = process.env.CSR_API_URI + '/project_users';
-    const postRes = await post(submitUrl, data);
+    const postReq = await post(submitUrl, data);
+    const postRes = await postReq.json();
+    const getUserUrl = process.env.CSR_API_URI + '/api/v1/get_project_user_for_reload_view_project/' + data.user_id;
+    const getRes = await get(getUserUrl);
+    const newProjects: UserProject = getRes[getRes.length - 1];
+    props.setUserProjects([...props.userProjects, newProjects]);
   };
-
-  const router = useRouter();
 
   return (
     <AddModal show={props.isOpen} setShow={props.setIsOpen}>
@@ -81,7 +94,7 @@ const UserProjectAddModal: FC<ModalProps> = (props) => {
       <Button
         onClick={() => {
           submitProject(formData);
-          router.reload();
+          props.setIsOpen(false);
         }}
       >
         Submit
