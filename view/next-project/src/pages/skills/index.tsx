@@ -36,7 +36,7 @@ const Skills: React.VFC<Props> = (props) => {
   return(
     <>
       <MainLayout>
-        <ListHeader title='Skills' setRecords={setSkills}/>
+        <ListHeader title='Skills' newSkills={skills} setNewSkills={setSkills}/>
         <FlatCard>
           <Table headers={headers}>
             {skills.map((skill) => (

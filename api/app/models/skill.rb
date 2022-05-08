@@ -6,8 +6,21 @@ class Skill < ApplicationRecord
   has_many :user_skills, dependent: :destroy
   has_many :users, through: :user_skills
 
-  def self.with_category
+  def self.with_categories
     @record = Skill.eager_load(:category)
+      .map{
+        |skill|
+        {
+          id: skill.id,
+          name: skill.name,
+          category_id: skill.category.id,
+          category_name: skill.category.name,
+          created_at: skill.created_at,
+        }
+    }
+  end
+  def self.with_category(skill_id)
+    @record = Skill.eager_load(:category).where(skills: {id: skill_id})
       .map{
         |skill|
         {
