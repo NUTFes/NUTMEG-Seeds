@@ -1,8 +1,8 @@
-import React, {FC, useState} from 'react';
-import {get, post} from '@utils/api_methods';
+import React, { FC, useState } from 'react';
+import { get, post } from '@utils/api_methods';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 interface ModalProps {
   isOpen: boolean;
@@ -31,7 +31,7 @@ const ProjectAddModal: FC<ModalProps> = (props) => {
 
   const handler =
     (input: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-      setFormData({...formData, [input]: e.target.value});
+      setFormData({ ...formData, [input]: e.target.value });
     };
 
   const router = useRouter();
@@ -50,19 +50,19 @@ const ProjectAddModal: FC<ModalProps> = (props) => {
       <h2>New Project</h2>
       <div>
         <h3>Project Name</h3>
-        <input type='text' placeholder='Input' value={formData.name} onChange={handler('name')}/>
+        <input type='text' placeholder='Input' value={formData.name} onChange={handler('name')} />
       </div>
       <div>
         <h3>Detail</h3>
-        <textarea placeholder='Input' value={formData.detail} onChange={handler('detail')}/>
+        <textarea placeholder='Input' value={formData.detail} onChange={handler('detail')} />
       </div>
       <div>
         <h3>GitHub</h3>
-        <input type='text' placeholder='Input' value={formData.github} onChange={handler('github')}/>
+        <input type='text' placeholder='Input' value={formData.github} onChange={handler('github')} />
       </div>
       <div>
         <h3>Remark</h3>
-        <textarea placeholder='Input' value={formData.remark} onChange={handler('remark')}/>
+        <textarea placeholder='Input' value={formData.remark} onChange={handler('remark')} />
       </div>
       <Button
         onClick={() => {

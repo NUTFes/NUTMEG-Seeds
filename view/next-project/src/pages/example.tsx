@@ -17,7 +17,7 @@ type Props = {
   curriculums: Curriculum[];
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const getUrl = process.env.SSR_API_URI + '/curriculums';
   const json = await get(getUrl);
   return {
@@ -61,11 +61,7 @@ export default function Example(props: Props) {
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const AddModal = (isOpenAddModal: boolean) => {
     if (isOpenAddModal) {
-      return (
-        <>
-          <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} />
-        </>
-      );
+      return <>{/* <ProjectAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} /> */}</>;
     }
   };
   return (
