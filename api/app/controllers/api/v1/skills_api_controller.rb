@@ -4,6 +4,7 @@ class Api::V1::SkillsApiController < ApplicationController
   def get_user_skills_for_reload_view
     @skills = UserSkill.with_user_skills(params[:id])
     render json: @skills
+  end
 
   def get_skills_for_index
     @record = Skill.with_categories
