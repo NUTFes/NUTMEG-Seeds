@@ -1,34 +1,42 @@
 version: '3'
 services:
+  seeds_db:
+    image: mysql:8.0
+    container_name: 'seeds_db'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - '3306:3306'
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+
   seeds_api:
     build: ./api
     container_name: 'seeds_api'
     ports:
       - "3000:3000"
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec pumactl start"
+    command: rails server -b 0.0.0.0
     volumes:
       - ./api:/myapp
+    depends_on:
+      - seeds_db
     stdin_open: true
     tty: true
-    environment: 
-      - RAILS_ENV=production
-    env_file:
-      - nutmeg-mysql.env
 
   seeds_view: 
     build: ./view
     container_name: 'seeds_view'
     ports: 
       - "8080:8080"
-        #command: npm run build && npm run start
+    command: npm run dev
     volumes:
       - ./view:/app
     stdin_open: true
     tty: true
     environment:
-      - SEEDS_API_URI=https://seeds-api.nutfes.net
+      - SEEDS_API_URI=http://localhost:3000
 
 volumes:
   mysql-data:
     driver: local
-  code_share: 

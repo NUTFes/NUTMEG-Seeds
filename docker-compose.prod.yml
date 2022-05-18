@@ -1,16 +1,5 @@
 version: '3'
 services:
-  seeds_db:
-    image: mysql:8.0
-    container_name: 'seeds_db'
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-    ports:
-      - '3306:3306'
-    command: --default-authentication-plugin=mysql_native_password
-    volumes:
-      - mysql-data:/var/lib/mysql
-
   seeds_api:
     build: ./api
     container_name: 'seeds_api'
@@ -19,12 +8,12 @@ services:
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec pumactl start"
     volumes:
       - ./api:/myapp
-    depends_on:
-      - seeds_db
     stdin_open: true
     tty: true
     environment: 
       - RAILS_ENV=production
+    env_file:
+      - nutmeg-mysql.env
 
   seeds_view: 
     build: ./view
@@ -36,6 +25,8 @@ services:
       - ./view:/app
     stdin_open: true
     tty: true
+    environment:
+      - SEEDS_API_URI=https://seeds-api.nutfes.net
 
 volumes:
   mysql-data:
