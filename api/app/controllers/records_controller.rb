@@ -23,32 +23,32 @@ class RecordsController < ApplicationController
       render json: @record.errors, status: :unprocessable_entity
     end
 
-    # Notification to Slack
-    require 'slack-notifier'
-    # slack Incomming Webhookの設定
-    uri = ENV['SLACK_WEBHOOK_URL']
+    # # Notification to Slack
+    # require 'slack-notifier'
+    # # slack Incomming Webhookの設定
+    # uri = ENV['SLACK_WEBHOOK_URL']
 
-    # 通知内容
-    attachment = {
-      color: "good",
-      type: "mrkdwn",
-      text: "
+    # # 通知内容
+    # attachment = {
+    #   color: "good",
+    #   type: "mrkdwn",
+    #   text: "
 
-      「#{@record.user.name}」のRecordが追加されました
-      Link：#{ENV['RECORD_BASE_URL'].to_s + '/records/' + @record.id.to_s}
-      ーーーーーーーーーーーーーーーー
-      Title：#{@record.title}
-      Tech: #{@record.curriculum.skill.name}
-      Curriculum: #{@record.curriculum.title}
-      Content：
-      #{@record.content}
-      ーーーーーーーーーーーーーーーー
+    #   「#{@record.user.name}」のRecordが追加されました
+    #   Link：#{ENV['RECORD_BASE_URL'].to_s + '/records/' + @record.id.to_s}
+    #   ーーーーーーーーーーーーーーーー
+    #   Title：#{@record.title}
+    #   Tech: #{@record.curriculum.skill.name}
+    #   Curriculum: #{@record.curriculum.title}
+    #   Content：
+    #   #{@record.content}
+    #   ーーーーーーーーーーーーーーーー
 
-      "
-    }
+    #   "
+    # }
 
-    notifier = Slack::Notifier.new(uri)
-    notifier.ping '', attachments: [ attachment ]
+    # notifier = Slack::Notifier.new(uri)
+    # notifier.ping '', attachments: [ attachment ]
   end
 
   # PATCH/PUT /records/1
