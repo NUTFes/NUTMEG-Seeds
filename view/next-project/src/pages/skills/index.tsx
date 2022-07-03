@@ -40,7 +40,7 @@ const Skills: React.VFC<Props> = (props) => {
         <FlatCard>
           <Table headers={headers}>
             {skills.map((skill) => (
-              <tr key={skill.id}>
+              <tr key={skill.id} onClick={() => Router.push('/skills/' + skill.id)}>
                 <td>{skill.name}</td>
                 <td>{skill.category_name}</td>
                 <td>{formatDate(skill.created_at)}</td>
