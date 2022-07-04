@@ -12,9 +12,6 @@ const SkillDetailHeader = (props: Props) => {
   return (
     <div className={s.HeaderContainer}>
       <div className={s.TitleContainer}>{props.skillName}</div>
-      <div className={s.TextContainer}>
-        <div className={s.DescriptionContainer}>Create Date:{props.createDate}</div>
-      </div>
     </div>
   );
 };

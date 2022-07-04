@@ -13,35 +13,5 @@
   justify-content: center;
   align-items: center;
   flex-flow: row;
-}
-
-.TextContainer {
-  font-size: 1.6rem;
-  color: var(--text-secondary);
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 10px;
-  flex-flow: row;
-}
-
-.SkillContainer {
-  font-size: 1.6rem;
-  color: var(--text-secondary);
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 20px;
-  flex-flow: row;
-}
-
-.DescriptionContainer {
-  margin: 0 1.5rem;
   padding-bottom: 10px;
 }
