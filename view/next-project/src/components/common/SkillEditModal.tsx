@@ -9,6 +9,16 @@ import Button from '@components/common/TestButton';
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
+  skillCategory: SkillCategory;
+}
+
+interface SkillCategory {
+  id: number;
+  name: string;
+  detail: string;
+  category_id: number;
+  category_name: string;
+  created_at: string;
 }
 
 type Skill = {
@@ -84,6 +94,7 @@ const SkillEditModal: FC<ModalProps> = (props) => {
       <div>
         <h3>Category</h3>
         <select defaultValue={formData.category_id} onChange={handler('category_id')}>
+          <option value=''>{props.skillCategory.category_name}</option>
           {categories.map((data: Category) => (
             <option key={data.id} value={data.id}>
               {data.name}
