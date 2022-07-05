@@ -56,6 +56,7 @@ Rails.application.routes.draw do
       # For Skill
       get "/get_skills_for_index" => "skills_api#get_skills_for_index"
       get "/get_skill_for_reload_index/:id" => "skills_api#get_skill_for_reload_index"
+      get "/get_skill_for_view/:id" => "skills_api#get_skill_for_view"
 
     end
   end
