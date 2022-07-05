@@ -1,8 +1,8 @@
-import React, {FC, useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
-import {get, put} from '@utils/api_methods';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+import { get, put } from '@utils/api_methods';
 import EditModal from '@components/common/EditModal';
 import Button from '@components/common/TestButton';
 
@@ -27,23 +27,51 @@ interface CurriculumSkill {
   skill: string;
 }
 
+interface FormData {
+  title: string;
+  content: string;
+  homework: string;
+  skill_id: string;
+}
+
+// Curriculumのcontentをメモ化
+const CurriculumContent = React.memo(function CurriculumContent(props: { content: string }) {
+  return (
+    <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+      {props.content}
+    </ReactMarkdown>
+  );
+});
+
+// CurriculumのHomeworkをメモ化
+const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string }) {
+  return (
+    <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+      {props.homework}
+    </ReactMarkdown>
+  );
+});
+
 const CurriculumEditModal: FC<ModalProps> = (props) => {
+  console.log('edit modal');
   const router = useRouter();
   const query = router.query;
 
-  const [skills, setSkills] = useState<Skill[]>([{id: '', name: ''}]);
-  const [curriculumSkill, setCurriculumSkill] = useState<CurriculumSkill[]>([{
-    id: '',
-    title: '',
-    content: '',
-    homework: '',
-    skill_id: '',
-    created_at: '',
-    updated_at: '',
-    skill: '',
-  }]);
+  const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
+  const [curriculumSkill, setCurriculumSkill] = useState<CurriculumSkill[]>([
+    {
+      id: '',
+      title: '',
+      content: '',
+      homework: '',
+      skill_id: '',
+      created_at: '',
+      updated_at: '',
+      skill: '',
+    },
+  ]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     content: '',
     homework: '',
@@ -72,15 +100,29 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
     }
   }, [query, router]);
 
+  // const handler = useCallback(
+  //   (input: string) =>
+  //     (
+  //       e:
+  //         | React.ChangeEvent<HTMLInputElement>
+  //         | React.ChangeEvent<HTMLTextAreaElement>
+  //         | React.ChangeEvent<HTMLSelectElement>,
+  //     ) => {
+  //       setFormData({ ...formData, [input]: e.target.value });
+  //     },
+  //   [formData],
+  // );
+
   const handler =
-    (input: string) => (
+    (input: string) =>
+    (
       e:
-        React.ChangeEvent<HTMLInputElement>
-          | React.ChangeEvent<HTMLTextAreaElement>
-            | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setFormData({...formData, [input]: e.target.value});
-  };
+        | React.ChangeEvent<HTMLInputElement>
+        | React.ChangeEvent<HTMLTextAreaElement>
+        | React.ChangeEvent<HTMLSelectElement>,
+    ) => {
+      setFormData({ ...formData, [input]: e.target.value });
+    };
 
   const submitCurriculum = async (data: any, query: any) => {
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
@@ -92,27 +134,23 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       <h2>Edit Curriculum</h2>
       <div>
         <h3>Curriculum Name</h3>
-        <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')}/>
+        <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')} />
       </div>
       <div>
         <h3>Contents</h3>
         <div>
-          <textarea placeholder='Input' value={formData.content} onChange={handler('content')}/>
+          <textarea placeholder='Input' value={formData.content} onChange={handler('content')} />
           <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-              {formData.content}
-            </ReactMarkdown>
+            <CurriculumContent content={formData.content} />
           </div>
         </div>
       </div>
       <div>
         <h3>Homework</h3>
         <div>
-          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')}/>
+          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
           <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-              {formData.homework}
-            </ReactMarkdown>
+            <CurriculumHomework homework={formData.homework} />
           </div>
         </div>
       </div>

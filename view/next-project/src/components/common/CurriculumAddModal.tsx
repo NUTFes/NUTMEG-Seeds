@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
 import { get, post } from '@utils/api_methods';
@@ -26,8 +26,25 @@ interface Curriculum {
   skill_id: number;
 }
 
+// Curriculumのcontentをメモ化
+const CurriculumContent = React.memo(function CurriculumContent(props: { content: string }) {
+  return (
+    <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+      {props.content}
+    </ReactMarkdown>
+  );
+});
 
-const ProjectAddModal = (props: ModalProps) => {
+// CurriculumのHomeworkをメモ化
+const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string }) {
+  return (
+    <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+      {props.homework}
+    </ReactMarkdown>
+  );
+});
+
+const CurriculumAddModal = (props: ModalProps) => {
   const router = useRouter();
   const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
   const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
@@ -53,14 +70,14 @@ const ProjectAddModal = (props: ModalProps) => {
 
   const handler =
     (input: string) =>
-  (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
+    (
+      e:
+        | React.ChangeEvent<HTMLInputElement>
         | React.ChangeEvent<HTMLTextAreaElement>
-          | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setFormData({ ...formData, [input]: e.target.value });
-  };
+        | React.ChangeEvent<HTMLSelectElement>,
+    ) => {
+      setFormData({ ...formData, [input]: e.target.value });
+    };
 
   // フォームデータの送信とページの表を再レンダリング
   const submitCurriculum = async (data: Curriculum) => {
@@ -68,13 +85,11 @@ const ProjectAddModal = (props: ModalProps) => {
     const postUrl = process.env.CSR_API_URI + '/curriculums';
     const postReq = await post(postUrl, data);
     const postRes = await postReq.json();
-    console.log(postRes)
     // 最新のcurriculumsを取得
     const getCurriculumUrl = process.env.CSR_API_URI + '/api/v1/get_curriculum_for_reload_index/' + postRes.id;
     const getRes = await get(getCurriculumUrl);
-    const newCurriculums: Curriculum = getRes[0]
-    console.log(newCurriculums)
-    props.setNewCurriculums([...curriculums, newCurriculums])
+    const newCurriculums: Curriculum = getRes[0];
+    props.setNewCurriculums([...curriculums, newCurriculums]);
   };
 
   return (
@@ -89,20 +104,16 @@ const ProjectAddModal = (props: ModalProps) => {
         <div>
           <textarea placeholder='Input' value={formData.content} onChange={handler('content')} />
           <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-              {formData.content}
-            </ReactMarkdown>
+            <CurriculumContent content={formData.content} />
           </div>
         </div>
       </div>
       <div>
         <h3>Homework</h3>
         <div>
-        <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
+          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
           <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-              {formData.homework}
-            </ReactMarkdown>
+            <CurriculumHomework homework={formData.homework} />
           </div>
         </div>
       </div>
@@ -120,7 +131,7 @@ const ProjectAddModal = (props: ModalProps) => {
       <Button
         onClick={() => {
           submitCurriculum(formData);
-          props.setIsOpen(false)
+          props.setIsOpen(false);
         }}
       >
         Submit
@@ -129,4 +140,4 @@ const ProjectAddModal = (props: ModalProps) => {
   );
 };
 
-export default ProjectAddModal;
+export default CurriculumAddModal;
