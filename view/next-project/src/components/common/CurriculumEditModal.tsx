@@ -37,23 +37,26 @@ interface FormData {
 // Curriculumのcontentをメモ化
 const CurriculumContent = React.memo(function CurriculumContent(props: { content: string }) {
   return (
-    <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-      {props.content}
-    </ReactMarkdown>
+    <div>
+      <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+        {props.content}
+      </ReactMarkdown>
+    </div>
   );
 });
 
 // CurriculumのHomeworkをメモ化
 const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string }) {
   return (
-    <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-      {props.homework}
-    </ReactMarkdown>
+    <div>
+      <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+        {props.homework}
+      </ReactMarkdown>
+    </div>
   );
 });
 
 const CurriculumEditModal: FC<ModalProps> = (props) => {
-  console.log('edit modal');
   const router = useRouter();
   const query = router.query;
 
@@ -100,19 +103,6 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
     }
   }, [query, router]);
 
-  // const handler = useCallback(
-  //   (input: string) =>
-  //     (
-  //       e:
-  //         | React.ChangeEvent<HTMLInputElement>
-  //         | React.ChangeEvent<HTMLTextAreaElement>
-  //         | React.ChangeEvent<HTMLSelectElement>,
-  //     ) => {
-  //       setFormData({ ...formData, [input]: e.target.value });
-  //     },
-  //   [formData],
-  // );
-
   const handler =
     (input: string) =>
     (
@@ -140,18 +130,14 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
         <h3>Contents</h3>
         <div>
           <textarea placeholder='Input' value={formData.content} onChange={handler('content')} />
-          <div>
-            <CurriculumContent content={formData.content} />
-          </div>
+          <CurriculumContent content={formData.content} />
         </div>
       </div>
       <div>
         <h3>Homework</h3>
         <div>
           <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
-          <div>
-            <CurriculumHomework homework={formData.homework} />
-          </div>
+          <CurriculumHomework homework={formData.homework} />
         </div>
       </div>
       <div>

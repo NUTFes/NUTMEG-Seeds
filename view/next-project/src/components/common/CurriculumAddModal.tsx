@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import AddModal from '@components/common/AddModal';
@@ -29,23 +28,26 @@ interface Curriculum {
 // Curriculumのcontentをメモ化
 const CurriculumContent = React.memo(function CurriculumContent(props: { content: string }) {
   return (
-    <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-      {props.content}
-    </ReactMarkdown>
+    <div>
+      <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+        {props.content}
+      </ReactMarkdown>
+    </div>
   );
 });
 
 // CurriculumのHomeworkをメモ化
 const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string }) {
   return (
-    <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-      {props.homework}
-    </ReactMarkdown>
+    <div>
+      <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+        {props.homework}
+      </ReactMarkdown>
+    </div>
   );
 });
 
 const CurriculumAddModal = (props: ModalProps) => {
-  const router = useRouter();
   const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
   const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
   const [formData, setFormData] = useState({
@@ -103,18 +105,14 @@ const CurriculumAddModal = (props: ModalProps) => {
         <h3>Content</h3>
         <div>
           <textarea placeholder='Input' value={formData.content} onChange={handler('content')} />
-          <div>
-            <CurriculumContent content={formData.content} />
-          </div>
+          <CurriculumContent content={formData.content} />
         </div>
       </div>
       <div>
         <h3>Homework</h3>
         <div>
           <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
-          <div>
-            <CurriculumHomework homework={formData.homework} />
-          </div>
+          <CurriculumHomework homework={formData.homework} />
         </div>
       </div>
       <div>
