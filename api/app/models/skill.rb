@@ -43,5 +43,17 @@ class Skill < ApplicationRecord
       "created_at": skill.created_at,
     }
   end
-
+  def self.with_reload_skill_details
+    @record = Skill.eager_load(:category)
+      .map{
+        |skill|
+        {
+          id: skill.id,
+          name: skill.name,
+          detail: skill.detail,
+          category_id: skill.category.id,
+          created_at: skill.created_at,
+        }
+    }
+  end
 end

@@ -26,7 +26,6 @@ export async function getServerSideProps({params}: any) {
   const id = params.id;
   const getSkillUrl = process.env.SSR_API_URI + '/api/v1/get_skill_for_view/' + id;
   const getRes = await get(getSkillUrl);
-  console.log(getRes);
   return {
     props: getRes,
   };
@@ -62,11 +61,12 @@ export default function Page(props: Props) {
 
   const [isOpenEditSkillModal, setIsOpenEditSkillModal] = useState(false);
   const [isOpenDeleteSkillModal, setIsOpenDeleteSkillModal] = useState(false);
+  const [skillDetail, setSkillDetail] = useState<Props>(props);
   const openEditSkillModal = (isOpenEditSkillModal: boolean) => {
     if (isOpenEditSkillModal) {
       return (
         <>
-          <SkillEditModal isOpen={isOpenEditSkillModal} setIsOpen={setIsOpenEditSkillModal} skillCategory={props}/>
+          <SkillEditModal isOpen={isOpenEditSkillModal} setIsOpen={setIsOpenEditSkillModal} skillCategory={skillDetail} setSkillDetail={setSkillDetail}/>
         </>
       );
     }
@@ -85,8 +85,7 @@ export default function Page(props: Props) {
     <MainLayout>
       <ParentButtonContainer>
         <SkillDetailHeader
-          skillName={props.name}
-          createDate={formatDate(props.created_at)}
+          skillName={skillDetail.name}
         />
         <FlatCard width='100%'>
           <Row gap="3rem" justify="end">
@@ -102,14 +101,14 @@ export default function Page(props: Props) {
             </SkillContentsTitle>
             <SkillContents>
               <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-                {props.category_name}
+                {skillDetail.category_name}
               </ReactMarkdown>
             </SkillContents>
             <SkillContentsTitle>
               Detail
               <hr/>
             </SkillContentsTitle>
-            <SkillContents>{props.detail}</SkillContents>
+            <SkillContents>{skillDetail.detail}</SkillContents>
           </SkillContentsContainer>
         </FlatCard>
         <ChildButtonContainer>

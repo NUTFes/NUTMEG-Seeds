@@ -20,4 +20,10 @@ class Api::V1::SkillsApiController < ApplicationController
     @record = Skill.with_category_and_detail(params[:id])
     render json: @record
   end
+
+  def get_skill_detail_for_reload_view
+    @record = Skill.with_reload_skill_details
+    render json: @record
+  end
+
 end
