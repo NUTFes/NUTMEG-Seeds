@@ -14,12 +14,9 @@ import SkillEditModal from "@components/common/SkillEditModal";
 import SkillDeleteModal from "@components/common/SkillDeleteModal";
 
 interface Props {
-  id: number;
   name: string;
   detail: string;
-  category_id: number;
   category_name: string;
-  created_at: string;
 }
 
 export async function getServerSideProps({params}: any) {
@@ -96,6 +93,11 @@ export default function Page(props: Props) {
           </Row>
           <SkillContentsContainer>
             <SkillContentsTitle>
+              Detail
+              <hr/>
+            </SkillContentsTitle>
+            <SkillContents>{skillDetail.detail}</SkillContents>
+            <SkillContentsTitle>
               Category
               <hr/>
             </SkillContentsTitle>
@@ -104,11 +106,6 @@ export default function Page(props: Props) {
                 {skillDetail.category_name}
               </ReactMarkdown>
             </SkillContents>
-            <SkillContentsTitle>
-              Detail
-              <hr/>
-            </SkillContentsTitle>
-            <SkillContents>{skillDetail.detail}</SkillContents>
           </SkillContentsContainer>
         </FlatCard>
         <ChildButtonContainer>
