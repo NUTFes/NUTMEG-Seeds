@@ -9,16 +9,6 @@ import Button from '@components/common/TestButton';
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
-  skillCategory: SkillCategory;
-}
-
-interface SkillCategory {
-  id: number;
-  name: string;
-  detail: string;
-  category_id: number;
-  category_name: string;
-  created_at: string;
 }
 
 type Skill = {
@@ -38,7 +28,6 @@ const SkillEditModal: FC<ModalProps> = (props) => {
 
   const [categories, setCategories] = useState<Category[]>([{id: 0, name: ''}])
   const [skillData, setSkillData] = useState<Skill>({name: '', detail: '', category_id: 0});
-  
   const [formData, setFormData] = useState({
     name: '',
     detail: '',
@@ -96,7 +85,7 @@ const SkillEditModal: FC<ModalProps> = (props) => {
         <h3>Category</h3>
         <select defaultValue={formData.category_id} onChange={handler('category_id')}>
           {categories.map((data: Category) => {
-            if (data.id == props.skillCategory.category_id){
+            if (data.id == skillData.category_id) {
               return(
                 <option key={data.id} value={data.id} selected>
                   {data.name}

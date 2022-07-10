@@ -66,7 +66,7 @@ export default function Page(props: Props) {
     if (isOpenEditSkillModal) {
       return (
         <>
-          <SkillEditModal isOpen={isOpenEditSkillModal} setIsOpen={setIsOpenEditSkillModal} skillCategory={props}/>
+          <SkillEditModal isOpen={isOpenEditSkillModal} setIsOpen={setIsOpenEditSkillModal} />
         </>
       );
     }

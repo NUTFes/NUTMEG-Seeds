@@ -9,36 +9,6 @@ import Button from '@components/common/TestButton';
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
-  defaultParams: DefaultParams;
-}
-
-interface CurriculumDetail {
-  id: number;
-  title: string;
-  content: string;
-  homework: string;
-  skill_id: number;
-  created_at: string;
-  updated_at: string;
-}
-
-interface RecordDetail {
-  id: number;
-  title: string;
-  content: string;
-  homework: string;
-  user_id: number;
-  curriculum_id: number;
-  created_at: string;
-  updated_at: string;
-}
-
-interface DefaultParams {
-  curriculum: CurriculumDetail;
-  record: RecordDetail;
-  teacher: string;
-  user: string;
-  skill: string;
 }
 
 interface Teacher {
@@ -206,7 +176,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
         <h3>Curriculum</h3>
         <select defaultValue={formData.curriculum_id} onChange={handler('curriculum_id')}>
           {curriculums.map((data: Curriculum) => {
-            if (data.id == props.defaultParams.curriculum.id) {
+            if (data.id == teacherData.user_id) {
               return(
                 <option key={data.id} value={data.id} selected>
                   {data.title}
@@ -219,10 +189,6 @@ const RecordEditModal: FC<ModalProps> = (props) => {
                 </option>
               )
             }
-
-            <option key={data.id} value={data.id}>
-              {data.title}
-            </option>
           })}
         </select>
       </div>
