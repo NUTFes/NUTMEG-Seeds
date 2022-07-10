@@ -20,5 +20,4 @@ class Api::V1::SkillsApiController < ApplicationController
     @record = Skill.with_category_and_detail(params[:id])
     render json: @record
   end
-
 end
