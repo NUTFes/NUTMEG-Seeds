@@ -35,13 +35,9 @@ class Skill < ApplicationRecord
   def self.with_category_and_detail(skill_id)
     skill = Skill.find(skill_id)
     {
-      "id": skill.id,
       "name": skill.name,
       "detail": skill.detail,
-      "category_id": skill.category.id,
       "category_name": skill.category.name,
-      "created_at": skill.created_at,
     }
   end
-
 end

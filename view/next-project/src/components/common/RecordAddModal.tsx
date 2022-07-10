@@ -5,6 +5,7 @@ import gfm from "remark-gfm";
 import { get, post } from '@utils/api_methods';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
+import rehypeRaw from "rehype-raw"
 
 interface ModalProps {
   isOpen: boolean;
@@ -54,10 +55,20 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
   const [records, setRecords] = useState<Record[]>([]);
   const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
   const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '', record_id: '' });
+  
+  const contentSentence = '# 内容・やったこと\n\n\n' +
+                          '<!-- 具体的な内容 -->\n\n\n' +
+                          '<!-- ポイント -->\n\n\n' +
+                          '<!-- 学習の際の工夫点 -->\n\n\n' +
+                          '<!-- 使用した記事 -->\n\n\n';
+  const homeworkSentence = '<!-- 次回までの課題 -->\n\n\n' + 
+                           '<!-- 参考資料 -->\n\n\n' +
+                           '<!-- 次回までに履修しておいた方がいいこと -->\n\n\n';
+                           
   const [recordData, setRecordData] = useState<UserRecord>({
     title: '',
-    content: '',
-    homework: '',
+    content: contentSentence,
+    homework: homeworkSentence,
     user_id: useRouter().query.id,
     curriculum_id: '',
   });
@@ -122,7 +133,7 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
         <div>
         <textarea placeholder='Input' value={recordData.content} onChange={recordHandler('content')} />
           <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false} rehypePlugins={[rehypeRaw]}>
               {recordData.content}
             </ReactMarkdown>
           </div>
@@ -133,7 +144,7 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
         <div>
         <textarea placeholder='Input' value={recordData.homework} onChange={recordHandler('homework')} />
           <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false} rehypePlugins={[rehypeRaw]}>
               {recordData.homework}
             </ReactMarkdown>
           </div>
