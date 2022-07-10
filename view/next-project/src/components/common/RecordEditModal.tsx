@@ -120,6 +120,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     console.log(data);
     const submitTeacherUrl = process.env.CSR_API_URI + '/teachers/' + teacherData.id;
     await put(submitTeacherUrl, data);
+    router.reload();
   };
 
   return (
@@ -175,7 +176,6 @@ const RecordEditModal: FC<ModalProps> = (props) => {
         onClick={() => {
           submitRecord(formData, query);
           submitTeacher(teacherData, query);
-          router.reload();
         }}
       >
         Submit
