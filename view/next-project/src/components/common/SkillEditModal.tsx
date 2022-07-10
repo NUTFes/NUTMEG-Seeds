@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
-import {get, put, post} from '@utils/api_methods';
+import {get, put} from '@utils/api_methods';
 import EditModal from '@components/common/EditModal';
 import Button from '@components/common/TestButton';
 
