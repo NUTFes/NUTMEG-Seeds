@@ -56,12 +56,15 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
   const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
   const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '', record_id: '' });
   
-  const contentSentence = '<!-- # 内容・やったこと -->\n\n\n' +
-                          '<!-- # ポイント -->\n\n\n' +
-                          '<!-- # 学習の際の工夫点 -->\n\n\n' +
-                          '<!-- # 使用した記事 -->\n\n\n';
-  const homeworkSentence = '<!-- # 次回までの課題 -->\n\n\n' + 
-                           '<!-- # 参考資料 -->\n\n\n';
+  const contentSentence = '# 内容・やったこと\n\n\n' +
+                          '<!-- 具体的な内容 -->\n\n\n' +
+                          '<!-- ポイント -->\n\n\n' +
+                          '<!-- 学習の際の工夫点 -->\n\n\n' +
+                          '<!-- 使用した記事 -->\n\n\n';
+  const homeworkSentence = '<!-- 次回までの課題 -->\n\n\n' + 
+                           '<!-- 参考資料 -->\n\n\n' +
+                           '<!-- 次回までに履修しておいた方がいいこと -->\n\n\n';
+                           
   const [recordData, setRecordData] = useState<UserRecord>({
     title: '',
     content: contentSentence,

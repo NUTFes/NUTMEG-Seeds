@@ -9,6 +9,36 @@ import Button from '@components/common/TestButton';
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
+  defaultParams: DefaultParams;
+}
+
+interface CurriculumDetail {
+  id: number;
+  title: string;
+  content: string;
+  homework: string;
+  skill_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface RecordDetail {
+  id: number;
+  title: string;
+  content: string;
+  homework: string;
+  user_id: number;
+  curriculum_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface DefaultParams {
+  curriculum: CurriculumDetail;
+  record: RecordDetail;
+  teacher: string;
+  user: string;
+  skill: string;
 }
 
 interface Teacher {
@@ -120,6 +150,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     console.log(data);
     const submitTeacherUrl = process.env.CSR_API_URI + '/teachers/' + teacherData.id;
     await put(submitTeacherUrl, data);
+    router.reload();
   };
 
   return (
@@ -154,6 +185,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
       <div>
         <h3>Teacher</h3>
         <select defaultValue={teacherData.user_id} onChange={teacherHandler('user_id', query)}>
+          <option value=''>{props.defaultParams.teacher}</option>
           {users.map((data: User) => (
             <option key={data.id} value={data.id}>
               {data.name}
@@ -164,6 +196,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
       <div>
         <h3>Curriculum</h3>
         <select defaultValue={formData.curriculum_id} onChange={handler('curriculum_id')}>
+          <option value=''>{props.defaultParams.curriculum.title}</option>
           {curriculums.map((data: Curriculum) => (
             <option key={data.id} value={data.id}>
               {data.title}
@@ -175,7 +208,6 @@ const RecordEditModal: FC<ModalProps> = (props) => {
         onClick={() => {
           submitRecord(formData, query);
           submitTeacher(teacherData, query);
-          router.reload();
         }}
       >
         Submit

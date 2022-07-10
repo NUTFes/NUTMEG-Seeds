@@ -85,7 +85,7 @@ export default function Page(props: Props) {
     if (isOpenEditRecordModal) {
       return (
         <>
-          <RecordEditModal isOpen={isOpenEditRecordModal} setIsOpen={setIsOpenEditRecordModal}/>
+          <RecordEditModal isOpen={isOpenEditRecordModal} setIsOpen={setIsOpenEditRecordModal} defaultParams={props} />
         </>
       );
     }
