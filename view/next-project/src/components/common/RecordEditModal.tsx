@@ -53,7 +53,7 @@ interface User {
 }
 
 interface Curriculum {
-  id: string;
+  id: number | string;
   title: string;
 }
 
@@ -185,23 +185,45 @@ const RecordEditModal: FC<ModalProps> = (props) => {
       <div>
         <h3>Teacher</h3>
         <select defaultValue={teacherData.user_id} onChange={teacherHandler('user_id', query)}>
-          <option value=''>{props.defaultParams.teacher}</option>
-          {users.map((data: User) => (
-            <option key={data.id} value={data.id}>
-              {data.name}
-            </option>
-          ))}
+          {users.map((data: User) => {
+            if (data.id == teacherData.user_id) {
+              return(
+                <option key={data.id} value={data.id} selected>
+                  {data.name}
+                </option>
+              )
+            }else{
+              return(
+                <option key={data.id} value={data.id}>
+                  {data.name}
+                </option>
+              )
+            }
+          })}
         </select>
       </div>
       <div>
         <h3>Curriculum</h3>
         <select defaultValue={formData.curriculum_id} onChange={handler('curriculum_id')}>
-          <option value=''>{props.defaultParams.curriculum.title}</option>
-          {curriculums.map((data: Curriculum) => (
+          {curriculums.map((data: Curriculum) => {
+            if (data.id == props.defaultParams.curriculum.id) {
+              return(
+                <option key={data.id} value={data.id} selected>
+                  {data.title}
+                </option>
+              )
+            }else{
+              return(
+                <option key={data.id} value={data.id}>
+                  {data.title}
+                </option>
+              )
+            }
+
             <option key={data.id} value={data.id}>
               {data.title}
             </option>
-          ))}
+          })}
         </select>
       </div>
       <Button

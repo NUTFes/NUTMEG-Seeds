@@ -38,6 +38,7 @@ const SkillEditModal: FC<ModalProps> = (props) => {
 
   const [categories, setCategories] = useState<Category[]>([{id: 0, name: ''}])
   const [skillData, setSkillData] = useState<Skill>({name: '', detail: '', category_id: 0});
+  
   const [formData, setFormData] = useState({
     name: '',
     detail: '',
@@ -94,12 +95,21 @@ const SkillEditModal: FC<ModalProps> = (props) => {
       <div>
         <h3>Category</h3>
         <select defaultValue={formData.category_id} onChange={handler('category_id')}>
-          <option value=''>{props.skillCategory.category_name}</option>
-          {categories.map((data: Category) => (
-            <option key={data.id} value={data.id}>
-              {data.name}
-            </option>
-          ))}
+          {categories.map((data: Category) => {
+            if (data.id == props.skillCategory.category_id){
+              return(
+                <option key={data.id} value={data.id} selected>
+                  {data.name}
+                </option>
+              )
+            }else{
+              return(
+                <option key={data.id} value={data.id}>
+                  {data.name}
+                </option>
+              )
+            }
+          })}
         </select>
       </div>
       <Button
