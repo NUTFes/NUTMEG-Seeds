@@ -64,6 +64,7 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
   const homeworkSentence = '<!-- 次回までの課題 -->\n\n\n' + 
                            '<!-- 参考資料 -->\n\n\n' +
                            '<!-- 次回までに履修しておいた方がいいこと -->\n\n\n';
+                           
   const [recordData, setRecordData] = useState<UserRecord>({
     title: '',
     content: contentSentence,

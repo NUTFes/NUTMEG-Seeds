@@ -10,24 +10,16 @@ interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
   skillCategory: SkillCategory;
+  setSkillDetail: Function;
 }
 
 interface SkillCategory {
-  id: number;
   name: string;
   detail: string;
-  category_id: number;
   category_name: string;
-  created_at: string;
 }
 
-type Skill = {
-  name: string;
-  detail: string;
-  category_id: number;
-}
-
-type Category = {
+interface Category {
   id: number;
   name: string;
 }
@@ -37,7 +29,6 @@ const SkillEditModal: FC<ModalProps> = (props) => {
   const query = router.query;
 
   const [categories, setCategories] = useState<Category[]>([{id: 0, name: ''}])
-  const [skillData, setSkillData] = useState<Skill>({name: '', detail: '', category_id: 0});
   const [formData, setFormData] = useState({
     name: '',
     detail: '',
@@ -57,11 +48,6 @@ const SkillEditModal: FC<ModalProps> = (props) => {
         setFormData(await get(url));
       };
       getFormData(getFormDataUrl);
-      const getSkillDataUrl = process.env.CSR_API_URI + '/api/v1/skills/' + query.id;
-      const getSkillData = async (url: string) => {
-        setSkillData(await get(url));
-      };
-      getSkillData(getSkillDataUrl);
     }
   }, [query, router]);
 
@@ -77,7 +63,12 @@ const SkillEditModal: FC<ModalProps> = (props) => {
 
   const submitSkill = async (data: any, query: any) => {
     const submitSkillUrl = process.env.CSR_API_URI + '/skills/' + query.id;
-    await put(submitSkillUrl, data);
+    const postRes = await put(submitSkillUrl, data);
+    const getSkillDetailUrl = process.env.CSR_API_URI + '/api/v1/get_skill_for_view/' + query.id;
+    const getRes = await get(getSkillDetailUrl);
+    const newSkill: SkillCategory = getRes;
+    props.setSkillDetail(newSkill);
+    router.reload();
   };
 
   return (
@@ -105,7 +96,6 @@ const SkillEditModal: FC<ModalProps> = (props) => {
       <Button
         onClick={() => {
           submitSkill(formData, query);
-          router.reload();
         }}
       >
         Submit

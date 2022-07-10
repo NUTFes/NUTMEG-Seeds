@@ -5,7 +5,6 @@ import Tag from '@components/common/Tag';
 interface Props {
   children?: React.ReactNode;
   skillName: string;
-  createDate: string;
 }
 
 const SkillDetailHeader = (props: Props) => {
