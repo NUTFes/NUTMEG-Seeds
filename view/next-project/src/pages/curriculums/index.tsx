@@ -17,6 +17,11 @@ interface Curriculum {
 }
 
 interface Skill {
+  id: string;
+  name: string;
+}
+
+interface Skill {
   name: string;
 }
 
@@ -26,7 +31,8 @@ interface CurriculumWithSkill {
 }
 
 interface Props {
-  json: CurriculumWithSkill[]
+  curriculumsWithSkill: CurriculumWithSkill[];
+  skills: Skill[];
 }
 
 export async function getServerSideProps() {
@@ -36,27 +42,31 @@ export async function getServerSideProps() {
   const skillsJson = await get(getSkillsUrl);
   return {
     props: {
-      json: curriculumsJson,
+      curriculumsWithSkill: curriculumsJson,
+      skills: skillsJson,
     },
   };
 }
 
 export default function CurriculumList(props: Props) {
   const headers = ['Title', 'Skill', 'Date'];
-  const [curriculums, setCurriculums] = useState<CurriculumWithSkill[]>(props.json)
-  console.log(curriculums)
+  const [curriculums, setCurriculums] = useState<Curriculum[]>([
+    { id: 0, title: '', content: '', homework: '', skill_id: 0, created_at: '', updated_at: '' },
+  ]);
+
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
     const datetime2 = datetime.substring(0, datetime.length - 5);
     return datetime2;
   };
+
   return (
     <>
       <MainLayout>
-        <ListHeader title='Curriculum' setCurriculums={setCurriculums}/>
+        <ListHeader title='Curriculum' />
         <FlatCard width='100%'>
           <Table headers={headers}>
-            {curriculums.map((data: CurriculumWithSkill) => (
+            {props.curriculumsWithSkill.map((data: CurriculumWithSkill) => (
               <tr key={data.toString()} onClick={() => Router.push('/curriculums/' + data.curriculum.id)}>
                 <td>{data.curriculum.title}</td>
                 <td>{data.skill}</td>

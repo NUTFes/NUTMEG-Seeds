@@ -1,24 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
-import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
 import { get, post } from '@utils/api_methods';
+import { useUI } from '@components/ui/context';
+import router from 'next/router';
 
 interface Skill {
   id: string;
   name: string;
 }
 
-interface ModalProps {
-  isOpen: boolean;
-  setIsOpen: any;
-  children?: React.ReactNode;
-  skills: Skill[];
-  setNewCurriculums: Function;
-}
-
-interface Curriculum {
+interface FormData {
   title: string;
   content: string;
   homework: string;
@@ -26,30 +19,43 @@ interface Curriculum {
 }
 
 // Curriculumのcontentをメモ化
-const CurriculumContent = React.memo(function CurriculumContent(props: { content: string }) {
+const CurriculumContent = React.memo(function CurriculumContent(props: { content: string; handler: any }) {
   return (
     <div>
-      <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-        {props.content}
-      </ReactMarkdown>
+      <h3>Content</h3>
+      <div>
+        <textarea placeholder='Input' value={props.content} onChange={props.handler('content')} />
+        <div>
+          <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+            {props.content}
+          </ReactMarkdown>
+        </div>
+      </div>
     </div>
   );
 });
 
 // CurriculumのHomeworkをメモ化
-const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string }) {
+const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string; handler: any }) {
   return (
     <div>
-      <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-        {props.homework}
-      </ReactMarkdown>
+      <h3>Homework</h3>
+      <div>
+        <textarea placeholder='Input' value={props.homework} onChange={props.handler('homework')} />
+        <div>
+          <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+            {props.homework}
+          </ReactMarkdown>
+        </div>
+      </div>
     </div>
   );
 });
 
-const CurriculumAddModal = (props: ModalProps) => {
-  const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
-  const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
+const CurriculumAddModal = () => {
+  const { closeModal } = useUI();
+
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -58,16 +64,13 @@ const CurriculumAddModal = (props: ModalProps) => {
   });
 
   useEffect(() => {
-    const getCurriculumsUrl = process.env.CSR_API_URI + '/api/v1/get_curriculums_for_index';
-    const getCurriculums = async (url: string) => {
-      setCurriculums(await get(url));
-    };
-    getCurriculums(getCurriculumsUrl);
-    const getSkillsUrl = process.env.CSR_API_URI + '/skills';
-    const getSkills = async (url: string) => {
-      setSkills(await get(url));
-    };
-    getSkills(getSkillsUrl);
+    if (router.isReady) {
+      const getSkillsUrl = process.env.CSR_API_URI + '/skills';
+      const getSkills = async (url: string) => {
+        setSkills(await get(url));
+      };
+      getSkills(getSkillsUrl);
+    }
   }, []);
 
   const handler =
@@ -82,59 +85,43 @@ const CurriculumAddModal = (props: ModalProps) => {
     };
 
   // フォームデータの送信とページの表を再レンダリング
-  const submitCurriculum = async (data: Curriculum) => {
+  const submitCurriculum = async (data: FormData) => {
     // フォームデータの送信
     const postUrl = process.env.CSR_API_URI + '/curriculums';
-    const postReq = await post(postUrl, data);
-    const postRes = await postReq.json();
-    // 最新のcurriculumsを取得
-    const getCurriculumUrl = process.env.CSR_API_URI + '/api/v1/get_curriculum_for_reload_index/' + postRes.id;
-    const getRes = await get(getCurriculumUrl);
-    const newCurriculums: Curriculum = getRes[0];
-    props.setNewCurriculums([...curriculums, newCurriculums]);
+    await post(postUrl, data);
+    router.reload();
   };
 
   return (
-    <AddModal show={props.isOpen} setShow={props.setIsOpen}>
+    <>
       <h2>New Curriculum</h2>
       <div>
         <h3>Curriculum Title</h3>
         <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')} />
       </div>
-      <div>
-        <h3>Content</h3>
-        <div>
-          <textarea placeholder='Input' value={formData.content} onChange={handler('content')} />
-          <CurriculumContent content={formData.content} />
-        </div>
-      </div>
-      <div>
-        <h3>Homework</h3>
-        <div>
-          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
-          <CurriculumHomework homework={formData.homework} />
-        </div>
-      </div>
+      <CurriculumContent content={formData.content} handler={handler} />
+      <CurriculumHomework homework={formData.homework} handler={handler} />
       <div>
         <h3>Skill</h3>
         <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
           <option value='0'>Select</option>
-          {skills.map((data) => (
-            <option key={data.id} value={data.id}>
-              {data.name}
-            </option>
-          ))}
+          {skills &&
+            skills.map((data) => (
+              <option key={data.id} value={data.id}>
+                {data.name}
+              </option>
+            ))}
         </select>
       </div>
       <Button
         onClick={() => {
           submitCurriculum(formData);
-          props.setIsOpen(false);
+          closeModal();
         }}
       >
         Submit
       </Button>
-    </AddModal>
+    </>
   );
 };
 
