@@ -1,58 +1,32 @@
-import React, {FC, useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
-import {del, get} from '@utils/api_methods';
-import DeleteModal from '@components/common/DeleteModal';
+import React from 'react';
+import { useRouter } from 'next/router';
+import { del } from '@utils/api_methods';
 import Button from '@components/common/TestButton';
+import { useUI } from '@components/ui/context';
 
-interface ModalProps {
-  isOpen: boolean;
-  setIsOpen: Function;
-}
-
-const CurriculumDeleteModal: FC<ModalProps> = (props) => {
-  const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    homework: '',
-    skill_id: ''
-  });
+export default function CurriculumDeleteModal() {
   const router = useRouter();
   const query = router.query;
-
-  useEffect(() => {
-    if (router.isReady) {
-      const getFormDataUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
-      const getFormData = async (url: string) => {
-        setFormData(await get(url));
-      };
-      getFormData(getFormDataUrl);
-    }
-  }, [query, router]);
-
-  const handler =
-    (input: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-      setFormData({...formData, [input]: e.target.value});
-    };
+  const { closeModal } = useUI();
 
   const DeleteCurriculum = async (query: any) => {
     const deleteCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
     await del(deleteCurriculumUrl);
+    router.back();
   };
 
   return (
-    <DeleteModal show={props.isOpen} setShow={props.setIsOpen}>
+    <>
       <h2>Delete Curriculum</h2>
       <h3>Are you sure?</h3>
       <Button
         onClick={() => {
           DeleteCurriculum(query);
-          router.back();
+          closeModal();
         }}
       >
         Delete
       </Button>
-    </DeleteModal>
+    </>
   );
-};
-
-export default CurriculumDeleteModal;
+}

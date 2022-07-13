@@ -9,7 +9,6 @@ import styled from 'styled-components';
 import BackButton from '@components/common/BackButton';
 import EditButton from '@components/common/EditButton';
 import DeleteButton from '@components/common/DeleteButton';
-import CurriculumDeleteModal from '@components/common/CurriculumDeleteModal';
 import Row from '@components/layout/RowLayout';
 import { useUI } from '@components/ui/context';
 
@@ -111,18 +110,6 @@ export default function Page(props: Props) {
     return datetime2;
   };
 
-  const [isOpenDeleteCurriculumModal, setIsOpenDeleteCurriculumModal] = useState(false);
-
-  const openDeleteCurriculumModal = (isOpenDeleteCurriculumModal: boolean) => {
-    if (isOpenDeleteCurriculumModal) {
-      return (
-        <>
-          <CurriculumDeleteModal isOpen={isOpenDeleteCurriculumModal} setIsOpen={setIsOpenDeleteCurriculumModal} />
-        </>
-      );
-    }
-  };
-
   return (
     <MainLayout>
       <ParentButtonContainer>
@@ -137,8 +124,12 @@ export default function Page(props: Props) {
                     openModal();
                   }}
                 />
-                <DeleteButton onClick={() => setIsOpenDeleteCurriculumModal(!isOpenDeleteCurriculumModal)} />
-                {openDeleteCurriculumModal(isOpenDeleteCurriculumModal)}
+                <DeleteButton
+                  onClick={() => {
+                    setModalView('CURRICULUM_DELETE_MODAL');
+                    openModal();
+                  }}
+                />
               </Row>
               <CurriculumContentsContainer>
                 <CurriculumContentsTitle>
