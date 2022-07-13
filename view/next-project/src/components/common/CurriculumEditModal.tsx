@@ -111,7 +111,7 @@ export default function CurriculumEditModal() {
       <CurriculumHomework homework={formData.homework} handler={handler} />
       <div>
         <h3>Skill</h3>
-        <select onChange={handler('skill_id')}>
+        <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
           {skills.map((skill: Skill) => {
             if (skill.id == formData.skill_id) {
               return (
