@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { get } from '@utils/api_methods';
@@ -8,10 +7,8 @@ import FlatCard from '@components/common/FlatCard';
 import DetailHeader from '@components/common/DetailHeader';
 import styled from 'styled-components';
 import BackButton from '@components/common/BackButton';
-import Button from '@components/common/AddButton';
 import EditButton from '@components/common/EditButton';
 import DeleteButton from '@components/common/DeleteButton';
-import CurriculumEditModal from '@components/common/CurriculumEditModal';
 import CurriculumDeleteModal from '@components/common/CurriculumDeleteModal';
 import Row from '@components/layout/RowLayout';
 import { useUI } from '@components/ui/context';
@@ -114,26 +111,8 @@ export default function Page(props: Props) {
     return datetime2;
   };
 
-  const [isOpenEditCurriculumModal, setIsOpenEditCurriculumModal] = useState(false);
   const [isOpenDeleteCurriculumModal, setIsOpenDeleteCurriculumModal] = useState(false);
 
-  const router = useRouter();
-
-  const openEditCurriculumModal = (isOpenEditCurriculumModal: boolean) => {
-    if (isOpenEditCurriculumModal) {
-      return (
-        <>
-          <Button
-            onClick={() => {
-              setModalView('CURRICULUM_EDIT_MODAL');
-              openModal();
-            }}
-          ></Button>
-          {/* <CurriculumEditModal isOpen={isOpenEditCurriculumModal} setIsOpen={setIsOpenEditCurriculumModal}/> */}
-        </>
-      );
-    }
-  };
   const openDeleteCurriculumModal = (isOpenDeleteCurriculumModal: boolean) => {
     if (isOpenDeleteCurriculumModal) {
       return (
@@ -152,14 +131,12 @@ export default function Page(props: Props) {
           <SplitLeftContainer>
             <FlatCard width='100%' height='auto'>
               <Row gap='3rem' justify='end'>
-                {/* <EditButton onClick={() => setIsOpenEditCurriculumModal(!isOpenEditCurriculumModal)} /> */}
                 <EditButton
                   onClick={() => {
                     setModalView('CURRICULUM_EDIT_MODAL');
                     openModal();
                   }}
                 />
-                {openEditCurriculumModal(isOpenEditCurriculumModal)}
                 <DeleteButton onClick={() => setIsOpenDeleteCurriculumModal(!isOpenDeleteCurriculumModal)} />
                 {openDeleteCurriculumModal(isOpenDeleteCurriculumModal)}
               </Row>
