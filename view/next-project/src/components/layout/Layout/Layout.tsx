@@ -6,13 +6,14 @@ import AddModal from '@components/common/AddModal';
 import EditModal from '@components/common/EditModal';
 import DeleteModal from '@components/common/DeleteModal';
 import CurriculumAddModal from '@components/common/CurriculumAddModal';
+import CurriculumEditModal from '@components/common/CurriculumEditModal';
 
 const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({ modalView, closeModal }) => {
   return (
     <>
       <AddModal onClose={closeModal}>{modalView === 'CURRICULUM_ADD_MODAL' && <CurriculumAddModal />}</AddModal>
-      {/* <EditModal onClose={closeModal}>{modalView === 'CURRICULUM_ADD_MODAL' && <CurriculumAddModalView />}</EditModal>
-      <DeleteModal onClose={closeModal}>
+      <EditModal onClose={closeModal}>{modalView === 'CURRICULUM_EDIT_MODAL' && <CurriculumEditModal />}</EditModal>
+      {/* <DeleteModal onClose={closeModal}>
         {modalView === 'CURRICULUM_ADD_MODAL' && <CurriculumAddModalView />}
       </DeleteModal> */}
     </>
