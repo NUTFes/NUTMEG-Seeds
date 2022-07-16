@@ -1,5 +1,6 @@
 class Curriculum < ApplicationRecord
-  belongs_to :skill
+  has_many :curriculum_skills, dependent: :destroy
+  has_many :skills, through: :curriculum_skills
   has_many :records
 
   def self.with_skills
