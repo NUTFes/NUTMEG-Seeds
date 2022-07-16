@@ -22,7 +22,7 @@ type Record = {
   teacher_name: string;
   curriculum_id: number;
   curriculum_title: string;
-  skill: string;
+  skill: string[];
   created_at: string;
   updated_at: string;
 };

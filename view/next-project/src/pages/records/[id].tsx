@@ -18,7 +18,6 @@ interface Curriculum {
   title: string;
   content: string;
   homework: string;
-  skill_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -34,12 +33,17 @@ interface Record {
   updated_at: string;
 }
 
+interface Skill {
+  id: number;
+  name: string;
+}
+
 interface Props {
   curriculum: Curriculum;
   record: Record;
   teacher: string;
   user: string;
-  skill: string;
+  skills: Skill[];
 }
 
 export async function getServerSideProps({params}: any) {
@@ -108,7 +112,7 @@ export default function Page(props: Props) {
           createDate={formatDate(props.record.created_at)}
           updateDate={formatDate(props.record.updated_at)}
           curriculumTitle={props.curriculum.title}
-          skill={props.skill}
+          skill={props.skills}
           user={props.user}
           teacher={props.teacher}
         />

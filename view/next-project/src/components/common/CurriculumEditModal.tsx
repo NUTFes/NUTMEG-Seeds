@@ -24,7 +24,7 @@ interface CurriculumSkill {
   skill_id: number | string;
   created_at: string;
   updated_at: string;
-  skill: string;
+  skills: Skill[];
 }
 
 const CurriculumEditModal: FC<ModalProps> = (props) => {
@@ -40,7 +40,7 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
     skill_id: '',
     created_at: '',
     updated_at: '',
-    skill: '',
+    skills: [],
   }]);
 
   const [formData, setFormData] = useState({
@@ -119,7 +119,7 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       <div>
         <h3>Skill</h3>
         <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
-          <option value=''>{curriculumSkill[0].skill}</option>
+          <option value=''>{curriculumSkill[0].skills[0].id}</option>
           {skills.map((skill: Skill) => (
             <option key={skill.id} value={skill.id}>
               {skill.name}

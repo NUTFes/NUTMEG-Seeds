@@ -11,18 +11,18 @@ interface Curriculum {
   title: string;
   content: string;
   homework: string;
-  skill_id: number;
   created_at: string;
   updated_at: string;
 }
 
 interface Skill {
+  id: number;
   name: string;
 }
 
 interface CurriculumWithSkill {
   curriculum: Curriculum;
-  skill: Skill;
+  skills: Skill[];
 }
 
 interface Props {
@@ -59,7 +59,11 @@ export default function CurriculumList(props: Props) {
             {curriculums.map((data: CurriculumWithSkill) => (
               <tr key={data.toString()} onClick={() => Router.push('/curriculums/' + data.curriculum.id)}>
                 <td>{data.curriculum.title}</td>
-                <td>{data.skill}</td>
+                <td>
+                  {data.skills.map((skill: Skill) => {
+                    return(<><span>{skill.name}</span><br/></>);
+                  })}
+                </td>
                 <td>{formatDate(data.curriculum.created_at)}</td>
               </tr>
             ))}

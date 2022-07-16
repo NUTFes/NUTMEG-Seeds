@@ -13,12 +13,16 @@ import CurriculumEditModal from "@components/common/CurriculumEditModal";
 import CurriculumDeleteModal from "@components/common/CurriculumDeleteModal";
 import Row from "@components/layout/RowLayout";
 
+interface Skill {
+  id: number;
+  name: string;
+}
+
 interface Curriculum {
   id: number;
   title: string;
   content: string;
   homework: string;
-  skill_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -36,7 +40,7 @@ interface Record {
 
 interface Props {
   curriculum: Curriculum;
-  skill: string;
+  skills: Skill[];
   records: Record[];
 }
 
@@ -50,6 +54,7 @@ export async function getServerSideProps({params}: any) {
 }
 
 export default function Page(props: Props) {
+  console.log(props);
   const SplitParentContainer = styled.div`
   display: flex;
   width: 100%;
@@ -133,7 +138,7 @@ export default function Page(props: Props) {
   return (
     <MainLayout>
       <ParentButtonContainer>
-        <DetailHeader curriculum={props.curriculum} skill={props.skill}/>
+        <DetailHeader curriculum={props.curriculum} skills={props.skills}/>
         <SplitParentContainer>
           <SplitLeftContainer>
             <FlatCard width='100%' height="auto">
