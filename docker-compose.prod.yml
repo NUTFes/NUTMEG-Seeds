@@ -5,30 +5,32 @@ services:
     container_name: 'seeds_api'
     ports:
       - "3000:3000"
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec pumactl start"
+    command: bash -c "bundle exec pumactl start"
     volumes:
       - ./api:/myapp
     stdin_open: true
     tty: true
-    environment: 
+    environment:
       - RAILS_ENV=production
+      - RAILS_LOG_TO_STDOUT=ON
     env_file:
       - nutmeg-mysql.env
 
-  seeds_view: 
+  seeds_view:
     build: ./view
     container_name: 'seeds_view'
-    ports: 
-      - "8080:8080"
-        #command: npm run build && npm run start
+    ports:
+      - 8080:8080
+    command: bash -c "npm run start"
     volumes:
       - ./view:/app
     stdin_open: true
     tty: true
     environment:
       - SEEDS_API_URI=https://seeds-api.nutfes.net
+      - NODE_ENV=production
 
 volumes:
   mysql-data:
     driver: local
-  code_share: 
+  code_share:
