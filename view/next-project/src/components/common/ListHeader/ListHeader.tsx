@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Button from '@components/common/AddButton';
 import s from './ListHeader.module.css';
-import CurriculumAddModal from '@components/common/CurriculumAddModal';
 import ProjectAddModal from '@components/common/ProjectAddModal';
 import RecordAddModal from '@components/common/RecordAddModal';
 import SkillAddModal from '@components/common/SkillAddModal';
-import { get } from '@utils/api_methods';
+import { useUI } from '@components/ui/context';
 
 interface Skill {
   id: string;
@@ -32,50 +31,27 @@ interface NewSkill {
 
 interface Props {
   title: string;
-  children?: React.ReactNode;
   setRecords?: any;
-  setCurriculums?: any;
-  setProjects?: Function;
-  skills?: Skill[];
-  projects?: Project[];
-  setNewSkills?: any;
   newSkills?: NewSkill[];
+  setNewSkills?: any;
 }
 
 const ListHeader = (props: Props) => {
-  const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
+  const { setModalView, openModal } = useUI();
+
   const [projects, setProjects] = useState<Project[]>([
     { id: 1, name: '', detail: '', icon_name: '', github: '', remark: '' },
   ]);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const getSkillsUrl = process.env.CSR_API_URI + '/skills';
-    const getSkills = async (url: string) => {
-      setSkills(await get(url));
-    };
-    getSkills(getSkillsUrl);
-  }, []);
-
   const AddModal = (isOpenAddModal: boolean) => {
-    if (isOpenAddModal) {
+    if (isOpenAddModal && router.pathname !== '/curriculums') {
       switch (router.pathname) {
         case '/records':
           return (
             <>
               <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} setNewRecords={props.setRecords} />
-            </>
-          );
-        case '/curriculums':
-          return (
-            <>
-              <CurriculumAddModal
-                isOpen={isOpenAddModal}
-                setIsOpen={setIsOpenAddModal}
-                skills={skills}
-                setNewCurriculums={props.setCurriculums}
-              />
             </>
           );
         case '/projects':
@@ -109,7 +85,17 @@ const ListHeader = (props: Props) => {
         <h1>{props.title}</h1>
       </div>
       <div className={s.SplitRightContainer}>
-        <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}></Button>
+        {/* curriculumsのみモーダルの再レンダリング対策しているためこのような記述にしている */}
+        {router.pathname === '/curriculums' ? (
+          <Button
+            onClick={() => {
+              setModalView('CURRICULUM_ADD_MODAL');
+              openModal();
+            }}
+          ></Button>
+        ) : (
+          <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}></Button>
+        )}
         {AddModal(isOpenAddModal)}
       </div>
     </div>
