@@ -54,7 +54,6 @@ export async function getServerSideProps({params}: any) {
 }
 
 export default function Page(props: Props) {
-  console.log(props);
   const SplitParentContainer = styled.div`
   display: flex;
   width: 100%;

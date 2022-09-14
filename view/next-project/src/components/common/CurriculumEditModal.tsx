@@ -12,18 +12,21 @@ interface ModalProps {
 }
 
 interface Skill {
-  id: string;
+  id: string | number;
   name: string;
 }
 
-interface CurriculumSkill {
-  id: number | string;
+interface Curriculum {
+  id: string | number;
   title: string;
   content: string;
   homework: string;
-  skill_id: number | string;
   created_at: string;
   updated_at: string;
+}
+
+interface CurriculumSkill {
+  curriculum: Curriculum;
   skills: Skill[];
 }
 
@@ -33,21 +36,22 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
 
   const [skills, setSkills] = useState<Skill[]>([{id: '', name: ''}]);
   const [curriculumSkill, setCurriculumSkill] = useState<CurriculumSkill[]>([{
-    id: '',
-    title: '',
-    content: '',
-    homework: '',
-    skill_id: '',
-    created_at: '',
-    updated_at: '',
-    skills: [],
+    curriculum: {
+      id: '',
+      title: '',
+      content: '',
+      homework: '',
+      created_at: '',
+      updated_at: '',
+    },
+    skills: [{id: '', name: ''}]
   }]);
 
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     homework: '',
-    skill_id: '',
+    skill_id: 0,
   });
 
   useEffect(() => {
@@ -66,6 +70,7 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
 
       const getCurriculumsUrl = process.env.CSR_API_URI + '/api/v1/get_curriculum_for_view/' + query.id;
       const getCurriculumSkill = async (url: string) => {
+        const res = await get(url);
         setCurriculumSkill(await get(url));
       };
       getCurriculumSkill(getCurriculumsUrl);
@@ -86,7 +91,7 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
     await put(submitCurriculumUrl, data);
   };
-
+  
   return (
     <EditModal show={props.isOpen} setShow={props.setIsOpen}>
       <h2>Edit Curriculum</h2>
@@ -118,13 +123,36 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       </div>
       <div>
         <h3>Skill</h3>
-        <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
-          <option value=''>{curriculumSkill[0].skills[0].id}</option>
-          {skills.map((skill: Skill) => (
-            <option key={skill.id} value={skill.id}>
-              {skill.name}
-            </option>
-          ))}
+        {/* {curriculumSkill[0].skills[0].id} */}
+        <select defaultValue={formData.skill_id} onChange={handler('skill_id')} multiple>
+          {skills.map((data: Skill) => {
+            // {curriculumSkill[0].skills.map((skill: Skill) => {
+            //   if (data.id === skill.id) {
+            //     console.log(skill.name);
+            //     return (
+            //       <option key={data.id} value={data.id}>{data.name}</option>
+            //     );
+            //   }else {
+            //     console.log(data.name);
+            //     return (
+            //       <option key={data.id} value={data.id}>{data.name}</option>
+            //     );
+            //   }
+            // })};
+              if (curriculumSkill[0].skills.includes(data)) {
+                return (
+                  <option key={data.id} value={data.id} selected>
+                    {data.name}
+                  </option>
+                );
+              } else {
+                return (
+                  <option key={data.id} value={data.id}>
+                    {data.name}
+                  </option>
+                );
+              }
+          })}
         </select>
       </div>
       <Button

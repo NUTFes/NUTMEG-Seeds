@@ -23,7 +23,6 @@ interface Props {
 }
 
 const DetailHeader = (props: Props) => {
-  console.log(props.skills);
   return (
     <div className={s.HeaderContainer}>
       <div className={s.TitleContainer}>{props.curriculum.title}</div>
