@@ -1,17 +1,16 @@
-import React, {useState} from 'react';
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
-import {get} from '@utils/api_methods';
+import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import DetailHeader from '@components/common/DetailHeader';
 import styled from 'styled-components';
-import Button from '@components/common/BackButton';
-import EditButton from "@components/common/EditButton";
-import DeleteButton from "@components/common/DeleteButton";
-import CurriculumEditModal from "@components/common/CurriculumEditModal";
-import CurriculumDeleteModal from "@components/common/CurriculumDeleteModal";
-import Row from "@components/layout/RowLayout";
+import BackButton from '@components/common/BackButton';
+import EditButton from '@components/common/EditButton';
+import DeleteButton from '@components/common/DeleteButton';
+import Row from '@components/layout/RowLayout';
+import { useUI } from '@components/ui/context';
 
 interface Curriculum {
   id: number;
@@ -40,7 +39,7 @@ interface Props {
   records: Record[];
 }
 
-export async function getServerSideProps({params}: any) {
+export async function getServerSideProps({ params }: any) {
   const id = params.id;
   const getUrl = process.env.SSR_API_URI + '/api/v1/get_curriculum_for_view/' + id;
   const json = await get(getUrl);
@@ -51,57 +50,59 @@ export async function getServerSideProps({params}: any) {
 
 export default function Page(props: Props) {
   const SplitParentContainer = styled.div`
-  display: flex;
-  width: 100%;
+    display: flex;
+    width: 100%;
   `;
   const SplitLeftContainer = styled.div`
-  width: 70%;
+    width: 70%;
   `;
   const SplitRightContainer = styled.div`
-  width: 30%;
-  margin-left: 2rem;
-  margin-bottom: 40px;
+    width: 30%;
+    margin-left: 2rem;
+    margin-bottom: 40px;
   `;
 
   const CurriculumContentsContainer = styled.div`
-  width: 100%;
+    width: 100%;
   `;
   const CurriculumContentsTitle = styled.div`
-  font-size: 2.8rem;
-  padding-bottom: 1.2rem;
+    font-size: 2.8rem;
+    padding-bottom: 1.2rem;
   `;
   const CurriculumContents = styled.div`
-  font-size: 1.6rem;
-  padding-bottom: 3rem;
+    font-size: 1.6rem;
+    padding-bottom: 3rem;
   `;
   const ParentButtonContainer = styled.div`
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
   `;
   const ChildButtonContainer = styled.div`
-  position: absolute;
-  bottom: 50px;
-  left: -40px;
+    position: absolute;
+    bottom: 50px;
+    left: -40px;
   `;
   const RecordContainer = styled.div`
-  padding-bottom: 1rem;
+    padding-bottom: 1rem;
   `;
   const RecordMember = styled.div`
-  font-size: 1.4rem;
-  font-weight: bold;
-  width: 100%;
-  padding-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    width: 100%;
+    padding-bottom: 1rem;
   `;
   const RecordContents = styled.div`
-  font-size: 1.4rem;
-  width: 100%;
-  padding-bottom: 1rem;
+    font-size: 1.4rem;
+    width: 100%;
+    padding-bottom: 1rem;
   `;
   const RecordDate = styled.div`
-  font-size: 1.2rem;
-  width: 100%;
-  text-align: right;
+    font-size: 1.2rem;
+    width: 100%;
+    text-align: right;
   `;
+
+  const { setModalView, openModal } = useUI();
 
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
@@ -109,44 +110,31 @@ export default function Page(props: Props) {
     return datetime2;
   };
 
-  const [isOpenEditCurriculumModal, setIsOpenEditCurriculumModal] = useState(false);
-  const [isOpenDeleteCurriculumModal, setIsOpenDeleteCurriculumModal] = useState(false);
-  const openEditCurriculumModal = (isOpenEditCurriculumModal: boolean) => {
-    if (isOpenEditCurriculumModal) {
-      return (
-        <>
-          <CurriculumEditModal isOpen={isOpenEditCurriculumModal} setIsOpen={setIsOpenEditCurriculumModal}/>
-        </>
-      );
-    }
-  };
-  const openDeleteCurriculumModal = (isOpenDeleteCurriculumModal: boolean) => {
-    if (isOpenDeleteCurriculumModal) {
-      return (
-        <>
-          <CurriculumDeleteModal isOpen={isOpenDeleteCurriculumModal} setIsOpen={setIsOpenDeleteCurriculumModal}/>
-        </>
-      );
-    }
-  };
-
   return (
     <MainLayout>
       <ParentButtonContainer>
-        <DetailHeader curriculum={props.curriculum} skill={props.skill}/>
+        <DetailHeader curriculum={props.curriculum} skill={props.skill} />
         <SplitParentContainer>
           <SplitLeftContainer>
-            <FlatCard width='100%' height="auto">
-              <Row gap="3rem" justify="end">
-                <EditButton onClick={() => setIsOpenEditCurriculumModal(!isOpenEditCurriculumModal)}/>
-                {openEditCurriculumModal(isOpenEditCurriculumModal)}
-                <DeleteButton onClick={() => setIsOpenDeleteCurriculumModal(!isOpenDeleteCurriculumModal)}/>
-                {openDeleteCurriculumModal(isOpenDeleteCurriculumModal)}
+            <FlatCard width='100%' height='auto'>
+              <Row gap='3rem' justify='end'>
+                <EditButton
+                  onClick={() => {
+                    setModalView('CURRICULUM_EDIT_MODAL');
+                    openModal();
+                  }}
+                />
+                <DeleteButton
+                  onClick={() => {
+                    setModalView('CURRICULUM_DELETE_MODAL');
+                    openModal();
+                  }}
+                />
               </Row>
               <CurriculumContentsContainer>
                 <CurriculumContentsTitle>
                   Contents
-                  <hr/>
+                  <hr />
                 </CurriculumContentsTitle>
                 <CurriculumContents>
                   <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
@@ -155,24 +143,24 @@ export default function Page(props: Props) {
                 </CurriculumContents>
                 <CurriculumContentsTitle>
                   Homework
-                  <hr/>
+                  <hr />
                 </CurriculumContentsTitle>
                 <CurriculumContents>{props.curriculum.homework}</CurriculumContents>
               </CurriculumContentsContainer>
             </FlatCard>
             <ChildButtonContainer>
-              <Button/>
+              <BackButton />
             </ChildButtonContainer>
           </SplitLeftContainer>
           <SplitRightContainer>
             <RecordContainer>
               {props.records.map((record) => (
                 <RecordContents key={record.title.toString()}>
-                <FlatCard  height="auto">
-                  <RecordMember>{record.user}</RecordMember>
-                  <RecordContents>{record.title}</RecordContents>
-                  <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>
-                </FlatCard>
+                  <FlatCard height='auto'>
+                    <RecordMember>{record.user}</RecordMember>
+                    <RecordContents>{record.title}</RecordContents>
+                    <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>
+                  </FlatCard>
                 </RecordContents>
               ))}
             </RecordContainer>

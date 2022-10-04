@@ -1,49 +1,66 @@
-import React, {FC, useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
-import {get, put} from '@utils/api_methods';
-import EditModal from '@components/common/EditModal';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+import { get, put } from '@utils/api_methods';
 import Button from '@components/common/TestButton';
-
-interface ModalProps {
-  isOpen: boolean;
-  setIsOpen: Function;
-}
+import { useUI } from '@components/ui/context';
 
 interface Skill {
   id: string;
   name: string;
 }
 
-interface CurriculumSkill {
-  id: number | string;
+interface FormData {
   title: string;
   content: string;
   homework: string;
-  skill_id: number | string;
-  created_at: string;
-  updated_at: string;
-  skill: string;
+  skill_id: string;
 }
 
-const CurriculumEditModal: FC<ModalProps> = (props) => {
+// Curriculumのcontentをメモ化
+const CurriculumContent = React.memo(function CurriculumContent(props: { content: string; handler: any }) {
+  return (
+    <div>
+      <h3>Contents</h3>
+      <div>
+        <textarea placeholder='Input' value={props.content} onChange={props.handler('content')} />
+        <div>
+          <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+            {props.content}
+          </ReactMarkdown>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// CurriculumのHomeworkをメモ化
+const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string; handler: any }) {
+  return (
+    <div>
+      <h3>Homework</h3>
+      <div>
+        <textarea placeholder='Input' value={props.homework} onChange={props.handler('homework')} />
+        <div>
+          <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+            {props.homework}
+          </ReactMarkdown>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+export default function CurriculumEditModal() {
+  const { closeModal } = useUI();
+
   const router = useRouter();
   const query = router.query;
 
-  const [skills, setSkills] = useState<Skill[]>([{id: '', name: ''}]);
-  const [curriculumSkill, setCurriculumSkill] = useState<CurriculumSkill[]>([{
-    id: '',
-    title: '',
-    content: '',
-    homework: '',
-    skill_id: '',
-    created_at: '',
-    updated_at: '',
-    skill: '',
-  }]);
+  const [skills, setSkills] = useState<Skill[]>([]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     content: '',
     homework: '',
@@ -51,92 +68,75 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
   });
 
   useEffect(() => {
-    const getSkillsUrl = process.env.CSR_API_URI + '/skills';
-    const getSkills = async (url: string) => {
-      setSkills(await get(url));
-    };
-    getSkills(getSkillsUrl);
-
     if (router.isReady) {
+      const getSkillsUrl = process.env.CSR_API_URI + '/skills';
+      const getSkills = async (url: string) => {
+        setSkills(await get(url));
+      };
+      getSkills(getSkillsUrl);
+
       const getFormDataUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
       const getFormData = async (url: string) => {
         setFormData(await get(url));
       };
       getFormData(getFormDataUrl);
-
-      const getCurriculumsUrl = process.env.CSR_API_URI + '/api/v1/get_curriculum_for_view/' + query.id;
-      const getCurriculumSkill = async (url: string) => {
-        setCurriculumSkill(await get(url));
-      };
-      getCurriculumSkill(getCurriculumsUrl);
     }
   }, [query, router]);
 
   const handler =
-    (input: string) => (
+    (input: string) =>
+    (
       e:
-        React.ChangeEvent<HTMLInputElement>
-          | React.ChangeEvent<HTMLTextAreaElement>
-            | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setFormData({...formData, [input]: e.target.value});
-  };
+        | React.ChangeEvent<HTMLInputElement>
+        | React.ChangeEvent<HTMLTextAreaElement>
+        | React.ChangeEvent<HTMLSelectElement>,
+    ) => {
+      setFormData({ ...formData, [input]: e.target.value });
+    };
 
   const submitCurriculum = async (data: any, query: any) => {
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
     await put(submitCurriculumUrl, data);
+    router.reload();
   };
 
   return (
-    <EditModal show={props.isOpen} setShow={props.setIsOpen}>
+    <>
       <h2>Edit Curriculum</h2>
       <div>
         <h3>Curriculum Name</h3>
-        <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')}/>
+        <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')} />
       </div>
-      <div>
-        <h3>Contents</h3>
-        <div>
-          <textarea placeholder='Input' value={formData.content} onChange={handler('content')}/>
-          <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-              {formData.content}
-            </ReactMarkdown>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3>Homework</h3>
-        <div>
-          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')}/>
-          <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-              {formData.homework}
-            </ReactMarkdown>
-          </div>
-        </div>
-      </div>
+      <CurriculumContent content={formData.content} handler={handler} />
+      <CurriculumHomework homework={formData.homework} handler={handler} />
       <div>
         <h3>Skill</h3>
         <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
-          <option value=''>{curriculumSkill[0].skill}</option>
-          {skills.map((skill: Skill) => (
-            <option key={skill.id} value={skill.id}>
-              {skill.name}
-            </option>
-          ))}
+          {skills.map((skill: Skill) => {
+            if (skill.id == formData.skill_id) {
+              return (
+                <option key={skill.id} value={skill.id} selected>
+                  {skill.name}
+                </option>
+              );
+            } else {
+              return (
+                <option key={skill.id} value={skill.id}>
+                  {skill.name}
+                </option>
+              );
+            }
+          })}
         </select>
       </div>
       <Button
         onClick={() => {
           submitCurriculum(formData, query);
-          router.reload();
+          closeModal();
         }}
       >
         Submit
       </Button>
-    </EditModal>
+    </>
   );
-};
-
-export default CurriculumEditModal;
+}
