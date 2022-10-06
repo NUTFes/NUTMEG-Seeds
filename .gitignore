@@ -110,5 +110,6 @@ typings/
 
 # Notification Slack
 /api/.env
+/seeds.env
 
 /api/config/credentials.yml.enc
