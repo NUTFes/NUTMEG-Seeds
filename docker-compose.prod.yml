@@ -1,8 +1,8 @@
-version: '3'
+version: "3"
 services:
   seeds_api:
     build: ./api
-    container_name: 'seeds_api'
+    container_name: "seeds_api"
     ports:
       - "3000:3000"
     command: bash -c "bundle exec pumactl start"
@@ -14,11 +14,11 @@ services:
       - RAILS_ENV=production
       - RAILS_LOG_TO_STDOUT=ON
     env_file:
-      - nutmeg-mysql.env
+      - seeds.env
 
   seeds_view:
     build: ./view
-    container_name: 'seeds_view'
+    container_name: "seeds_view"
     ports:
       - 8080:8080
     command: bash -c "npm run start"
