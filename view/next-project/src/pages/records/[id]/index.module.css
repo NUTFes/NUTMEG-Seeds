@@ -1,0 +1,66 @@
+.recordContentsContainer {
+  width: 100%;
+}
+.recordContentsTitle {
+  font-size: 2.8rem;
+  padding-bottom: 1.2rem;
+}
+.recordContents {
+  font-size: 1.6rem;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+}
+.parentButton {
+  position: relative;
+  width: 100%;
+}
+.childButton {
+  position: absolute;
+  bottom: 50px;
+  left: -40px;
+}
+.markdown h1 h2 {
+  margin-top: 2.3em;
+  margin-bottom: 0.5em;
+}
+.markdown h1 {
+  padding-bottom: 0.2em;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid #5c93bb2b;
+}
+.markdown h2 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #5c93bb2b;
+}
+.markdown h3 {
+  margin-top: 1em;
+  margin-bottom: 0.4em;
+}
+.markdown h4 {
+  margin-top: 1em;
+  margin-bottom: 0.3em;
+}
+.markdown h5 {
+  margin-top: 1em;
+  margin-bottom: 0.2em;
+}
+.markdown h6 {
+  margin-top: 1em;
+}
+
+.markdown a {
+  font-size: 1.6rem;
+}
+.markdown p {
+  margin-top: 1em;
+}
+
+.markdown ul {
+  padding-left: 1.8em;
+  line-height: 1.7;
+}
+
+.markdown ul li {
+  margin: 0.4rem 0;
+}

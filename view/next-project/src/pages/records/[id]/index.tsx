@@ -1,17 +1,23 @@
-import React, {useState} from 'react';
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
-import {get} from '@utils/api_methods';
+import React, { useState, useMemo } from 'react';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import RecordDetailHeader from '@components/common/RecordDetailHeader';
 import styled from 'styled-components';
+import s from './index.module.css';
 import Button from '@components/common/BackButton';
 import Row from '@components/layout/RowLayout';
 import EditButton from '@components/common/EditButton';
 import DeleteButton from '@components/common/DeleteButton';
-import RecordEditModal from "@components/common/RecordEditModal";
-import RecordDeleteModal from "@components/common/RecordDeleteModal";
+import RecordEditModal from '@components/common/RecordEditModal';
+import RecordDeleteModal from '@components/common/RecordDeleteModal';
+import SimpleMde from 'react-simplemde-editor';
+import 'easymde/dist/easymde.min.css';
+import { marked } from 'marked';
+import highlight from 'highlight.js';
+import 'highlightjs/styles/docco.css';
 
 interface Curriculum {
   id: number;
@@ -42,7 +48,7 @@ interface Props {
   skill: string;
 }
 
-export async function getServerSideProps({params}: any) {
+export async function getServerSideProps({ params }: any) {
   const id = params.id;
   const getRecordUrl = process.env.SSR_API_URI + '/api/v1/get_record_for_view/' + id;
   const getRes = await get(getRecordUrl);
@@ -52,26 +58,11 @@ export async function getServerSideProps({params}: any) {
 }
 
 export default function Page(props: Props) {
-  const RecordContentsContainer = styled.div`
-  width: 100%;
-  `;
-  const RecordContentsTitle = styled.div`
-  font-size: 2.8rem;
-  padding-bottom: 1.2rem;
-  `;
-  const RecordContents = styled.div`
-  font-size: 1.6rem;
-  padding-bottom: 3rem;
-  `;
-  const ParentButtonContainer = styled.div`
-  position: relative;
-  width: 100%;
-  `;
-  const ChildButtonContainer = styled.div`
-  position: absolute;
-  bottom: 50px;
-  left: -40px;
-  `;
+  marked.setOptions({
+    highlight: function (code, lang) {
+      return highlight.highlightAuto(code, [lang.split(':')[0]]).value;
+    },
+  });
 
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
@@ -94,7 +85,7 @@ export default function Page(props: Props) {
     if (isOpenDeleteRecordModal) {
       return (
         <>
-          <RecordDeleteModal isOpen={isOpenDeleteRecordModal} setIsOpen={setIsOpenDeleteRecordModal}/>
+          <RecordDeleteModal isOpen={isOpenDeleteRecordModal} setIsOpen={setIsOpenDeleteRecordModal} />
         </>
       );
     }
@@ -102,7 +93,7 @@ export default function Page(props: Props) {
 
   return (
     <MainLayout>
-      <ParentButtonContainer>
+      <div className={s.parentButton}>
         <RecordDetailHeader
           recordTitle={props.record.title}
           createDate={formatDate(props.record.created_at)}
@@ -113,33 +104,32 @@ export default function Page(props: Props) {
           teacher={props.teacher}
         />
         <FlatCard width='100%'>
-          <Row gap="3rem" justify="end">
-            <EditButton onClick={() => setIsOpenEditRecordModal(!isOpenEditRecordModal)}/>
+          {/* <SimpleMde value={props.record.content} onChange={onChange} /> */}
+          <Row gap='3rem' justify='end'>
+            <EditButton onClick={() => setIsOpenEditRecordModal(!isOpenEditRecordModal)} />
             {openEditRecordModal(isOpenEditRecordModal)}
-            <DeleteButton onClick={() => setIsOpenDeleteRecordModal(!isOpenDeleteRecordModal)}/>
+            <DeleteButton onClick={() => setIsOpenDeleteRecordModal(!isOpenDeleteRecordModal)} />
             {openDeleteRecordModal(isOpenDeleteRecordModal)}
           </Row>
-          <RecordContentsContainer>
-            <RecordContentsTitle>
+          <div className={s.recordContentsContainer}>
+            <div className={s.recordContentsTitle}>
               Contents
-              <hr/>
-            </RecordContentsTitle>
-            <RecordContents>
-              <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-                {props.record.content}
-              </ReactMarkdown>
-            </RecordContents>
-            <RecordContentsTitle>
+              <hr />
+            </div>
+            <div className={s.markdown}>
+              <div dangerouslySetInnerHTML={{ __html: marked(props.record.content) }} />
+            </div>
+            <div className={s.recordContentsTitle}>
               Homework
-              <hr/>
-            </RecordContentsTitle>
-            <RecordContents>{props.record.homework}</RecordContents>
-          </RecordContentsContainer>
+              <hr />
+            </div>
+            <div className={s.recordContents}>{props.record.homework}</div>
+          </div>
         </FlatCard>
-        <ChildButtonContainer>
-          <Button/>
-        </ChildButtonContainer>
-      </ParentButtonContainer>
+        <div className={s.childButton}>
+          <Button />
+        </div>
+      </div>
     </MainLayout>
   );
 }
