@@ -22,8 +22,8 @@
   width: 100%;
   z-index: 15;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  /* align-items: center; */
   flex-flow: column;
   padding: 50px 50px;
   color: var(--accent-7);
@@ -107,7 +107,19 @@
   outline: 0;
 }
 
+.modalName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .modalContentClose {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+
+.modalContentCloseIcon {
   background: none;
   border: none;
   margin: -20px;

@@ -163,9 +163,9 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     <div className={s.modalContainer}>
       <div className={s.modalInnerContainer}>
         <div className={s.modalContent}>
-          <div className={s.modalContentContents}>
+          <div className={s.modalContentClose}>
             <button
-              className={s.modalContentClose}
+              className={s.modalContentCloseIcon}
               onClick={() => {
                 props.setIsOpen(false);
               }}
@@ -173,7 +173,9 @@ const RecordEditModal: FC<ModalProps> = (props) => {
               <Close width={24} height={24} color={'var(--accent-4)'} />
             </button>
           </div>
-          <h2>Edit Record</h2>
+          <div className={s.modalName}>
+            <h2>Edit Record</h2>
+          </div>
           <h3 className={s.contentsTitle}>Record Name</h3>
           <div className={s.modalContentContents}>
             <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')} />
