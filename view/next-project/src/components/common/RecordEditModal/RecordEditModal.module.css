@@ -132,5 +132,11 @@
   align-items: center;
 }
 
+.modalSubmitButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .textButton:active {
 }

@@ -224,14 +224,16 @@ const RecordEditModal: FC<ModalProps> = (props) => {
               })}
             </select>
           </div>
-          <Button
-            onClick={() => {
-              submitRecord(formData, query);
-              submitTeacher(teacherData);
-            }}
-          >
-            Submit
-          </Button>
+          <div className={s.modalSubmitButton}>
+            <Button
+              onClick={() => {
+                submitRecord(formData, query);
+                submitTeacher(teacherData);
+              }}
+            >
+              Submit
+            </Button>
+          </div>
         </div>
       </div>
     </div>
