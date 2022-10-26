@@ -22,8 +22,6 @@
   width: 100%;
   z-index: 15;
   display: flex;
-  /* justify-content: center; */
-  /* align-items: center; */
   flex-flow: column;
   padding: 50px 50px;
   color: var(--accent-7);
@@ -42,10 +40,8 @@
   flex-wrap: nowrap;
 }
 .modalContentContents {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   width: 100%;
-  /* display: flex; */
+  display: flex;
   justify-content: start;
   align-items: start;
   flex-flow: row;
