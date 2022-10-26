@@ -1,16 +1,10 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import ReactMarkdown from 'react-markdown';
-import gfm from 'remark-gfm';
 import { get, put } from '@utils/api_methods';
-import EditModal from '@components/common/EditModal';
 import Button from '@components/common/TestButton';
 import Close from '@components/icons/Close';
 import s from './RecordEditModal.module.css';
 import 'easymde/dist/easymde.min.css';
-import { marked } from 'marked';
-import highlight from 'highlight.js';
-import 'highlightjs/styles/docco.css';
 import dynamic from 'next/dynamic';
 
 const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false });
@@ -74,11 +68,6 @@ const RecordEditModal: FC<ModalProps> = (props) => {
   });
   const [recordMarkdown, setRecordMarkdown] = useState<string>('');
   const [homeworkMarkdown, setHomeworkMarkdown] = useState<string>('');
-  // marked.setOptions({
-  //   highlight: function (code, lang) {
-  //     return highlight.highlightAuto(code, [lang.split(':')[0]]).value;
-  //   },
-  // });
 
   useEffect(() => {
     const getCurriculumsUrl = process.env.CSR_API_URI + '/curriculums';
