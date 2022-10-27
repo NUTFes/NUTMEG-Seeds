@@ -27,6 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           rel='stylesheet'
           href='https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap'
         />
+        <link href='https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap' rel='stylesheet'></link>
       </Head>
       <ManagedUIContext>
         <Layout>
