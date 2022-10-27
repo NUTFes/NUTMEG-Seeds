@@ -1,11 +1,13 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
 import { get, post } from '@utils/api_methods';
-import AddModal from '@components/common/AddModal';
+import s from './RecordAddModal.module.css';
 import Button from '@components/common/TestButton';
-import rehypeRaw from "rehype-raw"
+import Close from '@components/icons/Close';
+import 'easymde/dist/easymde.min.css';
+import dynamic from 'next/dynamic';
+
+const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
 interface ModalProps {
   isOpen: boolean;
@@ -46,32 +48,38 @@ interface UserRecord {
   title: string;
   content: string;
   homework: string;
-  user_id: number | any;
+  user_id: number | string | undefined;
   curriculum_id: string;
 }
 
-const UserRecordAddModal: FC<ModalProps> = (props) => {
+const RecordAddModal: FC<ModalProps> = (props) => {
+  const router = useRouter();
+  const query = router.query.toString();
+
   const [curriculums, setCurriculums] = useState<Curriculum[]>([{ id: '', title: '' }]);
   const [records, setRecords] = useState<Record[]>([]);
   const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
   const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '', record_id: '' });
-  
-  const contentSentence = '# 内容・やったこと\n\n\n' +
-                          '<!-- 具体的な内容 -->\n\n\n' +
-                          '<!-- ポイント -->\n\n\n' +
-                          '<!-- 学習の際の工夫点 -->\n\n\n' +
-                          '<!-- 使用した記事 -->\n\n\n';
-  const homeworkSentence = '<!-- 次回までの課題 -->\n\n\n' + 
-                           '<!-- 参考資料 -->\n\n\n' +
-                           '<!-- 次回までに履修しておいた方がいいこと -->\n\n\n';
-                           
+
+  const contentSentence =
+    '# 内容・やったこと \n\n\n' +
+    '# 具体的な内容 \n\n\n' +
+    '# ポイント \n\n\n' +
+    '# 学習の際の工夫点 \n\n\n' +
+    '# 使用した記事 \n\n\n';
+  const homeworkSentence =
+    '# 次回までの課題 \n\n\n' + '# 参考資料 \n\n\n' + '# 次回までに勉強しておいた方がいいこと\n\n\n';
+
   const [recordData, setRecordData] = useState<UserRecord>({
     title: '',
     content: contentSentence,
     homework: homeworkSentence,
-    user_id: useRouter().query.id,
-    curriculum_id: '',
+    user_id: localStorage.getItem('user_id')?.toString(),
+    curriculum_id: '1',
   });
+
+  const [recordMarkdown, setRecordMarkdown] = useState<string>(contentSentence);
+  const [homeworkMarkdown, setHomeworkMarkdown] = useState<string>(homeworkSentence);
 
   useEffect(() => {
     const getCurriculumsUrl = process.env.CSR_API_URI + '/curriculums';
@@ -107,92 +115,117 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
     setTeacherData({ ...teacherData, user_id: e.target.value });
   };
 
+  // レコード編集用ハンドラー
+  const recordMarkdownHandler = useCallback((value: string) => {
+    setRecordMarkdown(value);
+  }, []);
+  // Homework編集用ハンドラー
+  const homeworkMarkdownHandler = useCallback((value: string) => {
+    setHomeworkMarkdown(value);
+  }, []);
+
   // フォームデータの送信とページの表を再レンダリング
   const submitRecord = async (recordData: any, teacherData: any) => {
     const submitRecordUrl = process.env.CSR_API_URI + '/records';
-    const req = await post(submitRecordUrl, recordData);
-    const res = await req.json()
+    const submitData = {
+      title: recordData.title,
+      content: recordMarkdown,
+      homework: homeworkMarkdown,
+      user_id: recordData.user_id,
+      curriculum_id: recordData.curriculum_id,
+    };
+    console.log('postdata: ', submitData);
+    const req = await post(submitRecordUrl, submitData);
+    const res = await req.json();
+    console.log('res: ', res);
     const submitTeacherUrl = process.env.CSR_API_URI + '/teachers';
-    await post(submitTeacherUrl, {user_id: teacherData.user_id, record_id: res.id});
+    await post(submitTeacherUrl, { user_id: teacherData.user_id, record_id: res.id });
 
     const getRecordUrl = process.env.CSR_API_URI + '/api/v1/get_record_for_index_reload/' + res.id;
     const getRes = await get(getRecordUrl);
-    const newRecord: Record = getRes[0]
-    props.setNewRecords([...records, newRecord])
+    const newRecord: Record = getRes[0];
+    props.setNewRecords([...records, newRecord]);
   };
 
   return (
-    <AddModal show={props.isOpen} setShow={props.setIsOpen}>
-      <h2>New Record</h2>
-      <div>
-        <h3>Record title</h3>
-        <input type='text' placeholder='Input' value={recordData.title} onChange={recordHandler('title')} />
-      </div>
-      <div>
-        <h3>Content</h3>
-        <div>
-        <textarea placeholder='Input' value={recordData.content} onChange={recordHandler('content')} />
-          <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false} rehypePlugins={[rehypeRaw]}>
-              {recordData.content}
-            </ReactMarkdown>
+    <div className={s.modalContainer}>
+      <div className={s.modalInnerContainer}>
+        <div className={s.modalContent}>
+          <div className={s.modalContentClose}>
+            <button
+              className={s.modalContentCloseIcon}
+              onClick={() => {
+                props.setIsOpen(false);
+              }}
+            >
+              <Close width={24} height={24} color={'var(--accent-4)'} />
+            </button>
+          </div>
+          <div className={s.modalName}>
+            <h2>New Record</h2>
+          </div>
+          <h3 className={s.contentsTitle}>Record Name</h3>
+          <div className={s.modalContentContents}>
+            <input type='text' placeholder='Input' value={recordData.title} onChange={recordHandler('title')} />
+          </div>
+          <h3 className={s.contentsTitle}>Contents</h3>
+          <SimpleMde value={recordMarkdown} onChange={recordMarkdownHandler} className={s.contentsMde} />
+          <h3 className={s.contentsTitle}>Homework</h3>
+          <SimpleMde value={homeworkMarkdown} onChange={homeworkMarkdownHandler} className={s.homeworkMde} />
+          <h3 className={s.contentsTitle}>Teacher</h3>
+          <div className={s.modalContentContents}>
+            <select defaultValue={teacherData.user_id} onChange={teacherHandler(query)}>
+              {users.map((data: User) => {
+                if (data.id == teacherData.user_id) {
+                  return (
+                    <option key={data.id} value={data.id} selected>
+                      {data.name}
+                    </option>
+                  );
+                } else {
+                  return (
+                    <option key={data.id} value={data.id}>
+                      {data.name}
+                    </option>
+                  );
+                }
+              })}
+            </select>
+          </div>
+          <h3 className={s.contentsTitle}>Curriculum</h3>
+          <div className={s.modalContentContents}>
+            <select defaultValue={recordData.curriculum_id} onChange={recordHandler('curriculum_id')}>
+              {curriculums.map((data: Curriculum) => {
+                if (data.id == recordData.curriculum_id) {
+                  return (
+                    <option key={data.id} value={data.id} selected>
+                      {data.title}
+                    </option>
+                  );
+                } else {
+                  return (
+                    <option key={data.id} value={data.id}>
+                      {data.title}
+                    </option>
+                  );
+                }
+              })}
+            </select>
+          </div>
+          <div className={s.modalSubmitButton}>
+            <Button
+              onClick={() => {
+                submitRecord(recordData, teacherData);
+                props.setIsOpen(false);
+              }}
+            >
+              Submit
+            </Button>
           </div>
         </div>
       </div>
-      <div>
-        <h3>Homework</h3>
-        <div>
-        <textarea placeholder='Input' value={recordData.homework} onChange={recordHandler('homework')} />
-          <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false} rehypePlugins={[rehypeRaw]}>
-              {recordData.homework}
-            </ReactMarkdown>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3>Teacher</h3>
-        <select defaultValue={teacherData.user_id} onChange={teacherHandler('user_id')}>
-          <option value=''>Select</option>
-          {users.map((data: User) => (
-            <option key={data.id} value={data.id}>
-              {data.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <h3>Student</h3>
-        <select defaultValue={recordData.user_id} onChange={recordHandler('user_id')}>
-          <option value=''>Select</option>
-          {users.map((data: User) => (
-            <option key={data.id} value={data.id}>
-              {data.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <h3>Curriculum</h3>
-        <select defaultValue={recordData.curriculum_id} onChange={recordHandler('curriculum_id')}>
-          <option value=''>Select</option>
-          {curriculums.map((data: Curriculum) => (
-            <option key={data.id} value={data.id}>
-              {data.title}
-            </option>
-          ))}
-        </select>
-      </div>
-      <Button
-        onClick={() => {
-          submitRecord(recordData, teacherData);
-          props.setIsOpen(false)
-        }}
-      >
-        Submit
-      </Button>
-    </AddModal>
+    </div>
   );
 };
 
-export default UserRecordAddModal;
+export default RecordAddModal;
