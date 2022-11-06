@@ -16,8 +16,10 @@ class RecordsController < ApplicationController
   # POST /records
   def create
     @record = Record.new(record_params)
-
+    
     if @record.save
+      @teacher = Teacher.create(user_id: teacher_params[:user_id], record_id: @record.id)
+
       render json: @record, status: :created, location: @record
     else
       render json: @record.errors, status: :unprocessable_entity
@@ -37,9 +39,10 @@ class RecordsController < ApplicationController
       「#{@record.user.name}」のRecordが追加されました
       Link：#{ENV['RECORD_BASE_URL'].to_s + '/records/' + @record.id.to_s}
       ーーーーーーーーーーーーーーーー
-      Title：#{@record.title}
-      Tech: #{@record.curriculum.skill.name}
-      Curriculum: #{@record.curriculum.title}
+      Title： #{@record.title}
+      Teacher： #{@record.teacher.user.name}
+      Skill： #{@record.curriculum.skill.name}
+      Curriculum： #{@record.curriculum.title}
       Content：
       #{@record.content}
       ーーーーーーーーーーーーーーーー
@@ -73,6 +76,9 @@ class RecordsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def record_params
-    params.permit(:title, :content, :homework, :user_id, :curriculum_id)
+    params.require(:record).permit(:title, :content, :homework, :user_id, :curriculum_id)
+  end
+  def teacher_params
+    params.require(:teacher).permit(:user_id, :record_id)
   end
 end

@@ -111,7 +111,8 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     ) => {
       setRecordData({ ...recordData, [input]: e.target.value });
     };
-  const teacherHandler = (input: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
+
+  const teacherHandler = () => (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTeacherData({ ...teacherData, user_id: e.target.value });
   };
 
@@ -128,19 +129,20 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const submitRecord = async (recordData: any, teacherData: any) => {
     const submitRecordUrl = process.env.CSR_API_URI + '/records';
     const submitData = {
-      title: recordData.title,
-      content: recordMarkdown,
-      homework: homeworkMarkdown,
-      user_id: recordData.user_id,
-      curriculum_id: recordData.curriculum_id,
+      record: {
+        title: recordData.title,
+        content: recordMarkdown,
+        homework: homeworkMarkdown,
+        user_id: recordData.user_id,
+        curriculum_id: recordData.curriculum_id,
+      },
+      teacher: {
+        user_id: teacherData.user_id,
+        record_id: 1,
+      },
     };
-    console.log('postdata: ', submitData);
     const req = await post(submitRecordUrl, submitData);
     const res = await req.json();
-    console.log('res: ', res);
-    const submitTeacherUrl = process.env.CSR_API_URI + '/teachers';
-    await post(submitTeacherUrl, { user_id: teacherData.user_id, record_id: res.id });
-
     const getRecordUrl = process.env.CSR_API_URI + '/api/v1/get_record_for_index_reload/' + res.id;
     const getRes = await get(getRecordUrl);
     const newRecord: Record = getRes[0];
@@ -174,9 +176,29 @@ const RecordAddModal: FC<ModalProps> = (props) => {
           <SimpleMde value={homeworkMarkdown} onChange={homeworkMarkdownHandler} className={s.homeworkMde} />
           <h3 className={s.contentsTitle}>Teacher</h3>
           <div className={s.modalContentContents}>
-            <select defaultValue={teacherData.user_id} onChange={teacherHandler(query)}>
+            <select defaultValue={teacherData.user_id} onChange={teacherHandler()}>
               {users.map((data: User) => {
                 if (data.id == teacherData.user_id) {
+                  return (
+                    <option key={data.id} value={data.id} selected>
+                      {data.name}
+                    </option>
+                  );
+                } else {
+                  return (
+                    <option key={data.id} value={data.id}>
+                      {data.name}
+                    </option>
+                  );
+                }
+              })}
+            </select>
+          </div>
+          <h3 className={s.contentsTitle}>Student</h3>
+          <div className={s.modalContentContents}>
+            <select defaultValue={recordData.user_id} onChange={recordHandler('user_id')}>
+              {users.map((data: User) => {
+                if (data.id == recordData.user_id) {
                   return (
                     <option key={data.id} value={data.id} selected>
                       {data.name}
