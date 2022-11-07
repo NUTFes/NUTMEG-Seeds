@@ -1,8 +1,8 @@
-import React, {FC, useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
-import {get, put} from '@utils/api_methods';
+import React, { FC, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+import { get, put } from '@utils/api_methods';
 import EditModal from '@components/common/EditModal';
 import Button from '@components/common/TestButton';
 
@@ -17,92 +17,95 @@ interface Skill {
 }
 
 interface Curriculum {
-  id: string | number;
   title: string;
   content: string;
   homework: string;
-  created_at: string;
-  updated_at: string;
+  skill_ids: string[];
 }
 
-interface CurriculumSkill {
-  curriculum: Curriculum;
-  skills: Skill[];
+interface CurriculumskillId {
+  curriculum_id: string | number;
+  skill_id: string | number;
 }
 
 const CurriculumEditModal: FC<ModalProps> = (props) => {
   const router = useRouter();
   const query = router.query;
 
-  const [skills, setSkills] = useState<Skill[]>([{id: '', name: ''}]);
-  const [curriculumSkill, setCurriculumSkill] = useState<CurriculumSkill[]>([{
-    curriculum: {
-      id: '',
-      title: '',
-      content: '',
-      homework: '',
-      created_at: '',
-      updated_at: '',
-    },
-    skills: [{id: '', name: ''}]
-  }]);
+  const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
 
-  const [formData, setFormData] = useState({
+  const [curriculumSkillIds, setCurriculumSkillIds] = useState<CurriculumskillId[]>([
+    { curriculum_id: '', skill_id: '' },
+  ]);
+
+  const [formData, setFormData] = useState<Curriculum>({
     title: '',
     content: '',
     homework: '',
-    skill_id: 0,
+    skill_ids: []
   });
 
   useEffect(() => {
     const getSkillsUrl = process.env.CSR_API_URI + '/skills';
     const getSkills = async (url: string) => {
-      setSkills(await get(url));
+      const res = await get(url);
+      setSkills(res);
     };
     getSkills(getSkillsUrl);
+
+    const getCurriculumSkillIdsUrl = process.env.CSR_API_URI + '/curriculum_skills';
+    const getCurriculumSkillIds = async (url: string) => {
+      const res = await get(url);
+      setCurriculumSkillIds(res);
+    };
+    getCurriculumSkillIds(getCurriculumSkillIdsUrl);
 
     if (router.isReady) {
       const getFormDataUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
       const getFormData = async (url: string) => {
-        setFormData(await get(url));
+        const res = await get(url);
+        setFormData(res);
       };
       getFormData(getFormDataUrl);
-
-      const getCurriculumsUrl = process.env.CSR_API_URI + '/api/v1/get_curriculum_for_view/' + query.id;
-      const getCurriculumSkill = async (url: string) => {
-        const res = await get(url);
-        setCurriculumSkill(await get(url));
-      };
-      getCurriculumSkill(getCurriculumsUrl);
     }
   }, [query, router]);
 
   const handler =
-    (input: string) => (
+    (input: string) =>
+    (
       e:
-        React.ChangeEvent<HTMLInputElement>
-          | React.ChangeEvent<HTMLTextAreaElement>
-            | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setFormData({...formData, [input]: e.target.value});
+        | React.ChangeEvent<HTMLInputElement>
+        | React.ChangeEvent<HTMLTextAreaElement>
+        | React.ChangeEvent<HTMLSelectElement>,
+    ) => {
+      setFormData({ ...formData, [input]: e.target.value });
+    };
+
+  const handleSkillChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const skillId = e.target.value as string;
+    setFormData({ ...formData, skill_ids: [skillId] });
   };
 
-  const submitCurriculum = async (data: any, query: any) => {
+  const submitCurriculum = async (data: any, ids: any, query: any) => {
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
+    console.log(data.title, data.content, data.homework, data.skill_ids);
     await put(submitCurriculumUrl, data);
+
+    // const submitCurriculumSkillUrl = process.env.CSR_API_URI + '/curriculum_skills/1';
+    // await put(submitCurriculumSkillUrl, {curriculum_id: 1, skill_id: 2});
   };
-  
+
   return (
     <EditModal show={props.isOpen} setShow={props.setIsOpen}>
       <h2>Edit Curriculum</h2>
       <div>
         <h3>Curriculum Name</h3>
-        <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')}/>
+        <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')} />
       </div>
       <div>
         <h3>Contents</h3>
         <div>
-          <textarea placeholder='Input' value={formData.content} onChange={handler('content')}/>
+          <textarea placeholder='Input' value={formData.content} onChange={handler('content')} />
           <div>
             <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
               {formData.content}
@@ -113,7 +116,7 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       <div>
         <h3>Homework</h3>
         <div>
-          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')}/>
+          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
           <div>
             <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
               {formData.homework}
@@ -123,41 +126,23 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       </div>
       <div>
         <h3>Skill</h3>
-        {/* {curriculumSkill[0].skills[0].id} */}
-        <select defaultValue={formData.skill_id} onChange={handler('skill_id')} multiple>
-          {skills.map((data: Skill) => {
-            // {curriculumSkill[0].skills.map((skill: Skill) => {
-            //   if (data.id === skill.id) {
-            //     console.log(skill.name);
-            //     return (
-            //       <option key={data.id} value={data.id}>{data.name}</option>
-            //     );
-            //   }else {
-            //     console.log(data.name);
-            //     return (
-            //       <option key={data.id} value={data.id}>{data.name}</option>
-            //     );
-            //   }
-            // })};
-              if (curriculumSkill[0].skills.includes(data)) {
-                return (
-                  <option key={data.id} value={data.id} selected>
-                    {data.name}
-                  </option>
-                );
-              } else {
-                return (
-                  <option key={data.id} value={data.id}>
-                    {data.name}
-                  </option>
-                );
-              }
+        <select onChange={handleSkillChange} multiple>
+          {skills.map((data: Skill, index) => {
+            const isContain = curriculumSkillIds.some((curriculumSkillId: CurriculumskillId) => {
+              return curriculumSkillId.skill_id === data.id && curriculumSkillId.curriculum_id == query.id;
+            });
+
+            return (
+              <option key={data.id} value={data.id} selected={isContain}>
+                {data.name}
+              </option>
+            );
           })}
         </select>
       </div>
       <Button
         onClick={() => {
-          submitCurriculum(formData, query);
+          submitCurriculum(formData, curriculumSkillIds, query);
           router.reload();
         }}
       >
