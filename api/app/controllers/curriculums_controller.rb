@@ -26,6 +26,9 @@ class CurriculumsController < ApplicationController
 
   # PATCH/PUT /curriculums/1
   def update
+    print "=" * 100
+    print "curriculum_params: "
+    print curriculum_params
     if @curriculum.update(curriculum_params)
       render json: @curriculum
     else
@@ -46,6 +49,6 @@ class CurriculumsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def curriculum_params
-      params.require(:curriculum).permit(:title, :content, :homework, { skill_ids: [] })
+      params.require(:curriculum).permit(:id, :title, :content, :homework, :created_at, :updated_at, { skill_ids: [] })
     end
 end

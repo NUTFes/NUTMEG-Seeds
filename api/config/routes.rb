@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :user_details
   resources :groups
   resources :curriculums
+  resources :curriculum_skills
   resources :categories
   resources :teachers
   resources :records
