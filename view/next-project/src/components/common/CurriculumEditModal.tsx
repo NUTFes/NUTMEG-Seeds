@@ -20,7 +20,6 @@ interface Curriculum {
   title: string;
   content: string;
   homework: string;
-  skill_ids: string[];
 }
 
 interface CurriculumskillId {
@@ -42,7 +41,6 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
     title: '',
     content: '',
     homework: '',
-    skill_ids: []
   });
 
   useEffect(() => {
@@ -81,18 +79,27 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       setFormData({ ...formData, [input]: e.target.value });
     };
 
-  const handleSkillChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const skillId = e.target.value as string;
-    setFormData({ ...formData, skill_ids: [skillId] });
+  // selectで複数選択した値をsetCurriculumSkillIdsに更新
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOptions = Array.from(e.target.selectedOptions);
+    const selectedSkillIds = selectedOptions.map((option) => option.value);
+    const newCurriculumSkillIds = selectedSkillIds.map((skillId) => {
+      return { curriculum_id: query.id, skill_id: skillId } as CurriculumskillId;
+    });
+    setCurriculumSkillIds(newCurriculumSkillIds);
   };
 
   const submitCurriculum = async (data: any, ids: any, query: any) => {
-    const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
-    console.log(data.title, data.content, data.homework, data.skill_ids);
-    await put(submitCurriculumUrl, data);
+    const submitData = {
+      curriculum: data,
+      curriculum_skill: ids,
+    }
 
-    // const submitCurriculumSkillUrl = process.env.CSR_API_URI + '/curriculum_skills/1';
-    // await put(submitCurriculumSkillUrl, {curriculum_id: 1, skill_id: 2});
+    const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
+    console.log(submitData.curriculum_skill);
+    await put(submitCurriculumUrl, submitData);
+
+    router.reload();
   };
 
   return (
@@ -126,7 +133,7 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       </div>
       <div>
         <h3>Skill</h3>
-        <select onChange={handleSkillChange} multiple>
+        <select onChange={handleSelect} multiple>
           {skills.map((data: Skill, index) => {
             const isContain = curriculumSkillIds.some((curriculumSkillId: CurriculumskillId) => {
               return curriculumSkillId.skill_id === data.id && curriculumSkillId.curriculum_id == query.id;
@@ -143,7 +150,6 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       <Button
         onClick={() => {
           submitCurriculum(formData, curriculumSkillIds, query);
-          router.reload();
         }}
       >
         Submit
