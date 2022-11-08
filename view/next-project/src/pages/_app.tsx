@@ -3,12 +3,18 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import router from 'next/router';
+import { ManagedUIContext } from '@components/ui/context';
+import Layout from '@components/layout/Layout';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     if (localStorage.getItem('user_id') === null) {
-      router.push('/')
+      router.push('/');
     }
+  }, []);
+
+  useEffect(() => {
+    document.body.classList?.remove('loading');
   }, []);
 
   return (
@@ -21,9 +27,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           rel='stylesheet'
           href='https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap'
         />
-
+        <link href='https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap' rel='stylesheet'></link>
       </Head>
-      <Component {...pageProps} />
+      <ManagedUIContext>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ManagedUIContext>
     </>
   );
 }

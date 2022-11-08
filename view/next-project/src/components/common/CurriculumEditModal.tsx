@@ -1,22 +1,17 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import { get, put } from '@utils/api_methods';
-import EditModal from '@components/common/EditModal';
 import Button from '@components/common/TestButton';
-
-interface ModalProps {
-  isOpen: boolean;
-  setIsOpen: Function;
-}
+import { useUI } from '@components/ui/context';
 
 interface Skill {
   id: string | number;
   name: string;
 }
 
-interface Curriculum {
+interface FormData {
   title: string;
   content: string;
   homework: string;
@@ -27,17 +22,52 @@ interface CurriculumskillId {
   skill_id: string | number;
 }
 
-const CurriculumEditModal: FC<ModalProps> = (props) => {
+// Curriculumのcontentをメモ化
+const CurriculumContent = React.memo(function CurriculumContent(props: { content: string; handler: any }) {
+  return (
+    <div>
+      <h3>Contents</h3>
+      <div>
+        <textarea placeholder='Input' value={props.content} onChange={props.handler('content')} />
+        <div>
+          <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+            {props.content}
+          </ReactMarkdown>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// CurriculumのHomeworkをメモ化
+const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string; handler: any }) {
+  return (
+    <div>
+      <h3>Homework</h3>
+      <div>
+        <textarea placeholder='Input' value={props.homework} onChange={props.handler('homework')} />
+        <div>
+          <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
+            {props.homework}
+          </ReactMarkdown>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+export default function CurriculumEditModal() {
+  const { closeModal } = useUI();
+
   const router = useRouter();
   const query = router.query;
 
   const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
-
   const [curriculumSkillIds, setCurriculumSkillIds] = useState<CurriculumskillId[]>([
     { curriculum_id: '', skill_id: '' },
   ]);
 
-  const [formData, setFormData] = useState<Curriculum>({
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     content: '',
     homework: '',
@@ -97,42 +127,20 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       curriculum: data,
       curriculum_skill: ids,
     }
-
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
     await put(submitCurriculumUrl, submitData);
-
     router.reload();
   };
 
   return (
-    <EditModal show={props.isOpen} setShow={props.setIsOpen}>
+    <>
       <h2>Edit Curriculum</h2>
       <div>
         <h3>Curriculum Name</h3>
         <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')} />
       </div>
-      <div>
-        <h3>Contents</h3>
-        <div>
-          <textarea placeholder='Input' value={formData.content} onChange={handler('content')} />
-          <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-              {formData.content}
-            </ReactMarkdown>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3>Homework</h3>
-        <div>
-          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
-          <div>
-            <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-              {formData.homework}
-            </ReactMarkdown>
-          </div>
-        </div>
-      </div>
+      <CurriculumContent content={formData.content} handler={handler} />
+      <CurriculumHomework homework={formData.homework} handler={handler} />
       <div>
         <h3>Skill</h3>
         <select onChange={handleSelect} multiple>
@@ -152,12 +160,11 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
       <Button
         onClick={() => {
           submitCurriculum(formData, curriculumSkillIds, query);
+          closeModal();
         }}
       >
         Submit
       </Button>
-    </EditModal>
+    </>
   );
-};
-
-export default CurriculumEditModal;
+}
