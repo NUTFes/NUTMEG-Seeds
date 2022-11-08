@@ -15,9 +15,17 @@ class CurriculumSkillsController < ApplicationController
 
   # POST /curriculum_skills
   def create
-    @curriculum_skill = CurriculumSkill.new(curriculum_skill_params)
+    p "curriculum_skill_params"
+    p "=" * 50
+    p curriculum_skill_params
 
-    if @curriculum_skill.save
+    is_success = true
+    curriculum_skill_params.each do |curriculum_skill|
+      @curriculum_skill = CurriculumSkill.new(curriculum_skill)
+      is_success = false unless @curriculum_skill.save
+    end
+    # @curriculum_skill = CurriculumSkill.new(curriculum_skill_params)
+    if is_success
       render json: @curriculum_skill, status: :created, location: @curriculum_skill
     else
       render json: @curriculum_skill.errors, status: :unprocessable_entity
@@ -46,6 +54,9 @@ class CurriculumSkillsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def curriculum_skill_params
-      params.require(:curriculum_skill).permit(:curriculum_id, :skill_id)
+      # 複数のcurriculum_skillがあるので、配列で受け取る
+      params.require(:curriculum_skill).map do |curriculum_skill|
+        curriculum_skill.permit(:curriculum_id, :skill_id)
+      end
     end
 end

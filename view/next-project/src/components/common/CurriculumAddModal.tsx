@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
 import { get, post } from '@utils/api_methods';
@@ -23,19 +23,17 @@ interface Curriculum {
   title: string;
   content: string;
   homework: string;
-  skills: Skill[];
 }
-
 
 const ProjectAddModal = (props: ModalProps) => {
   const router = useRouter();
   const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
   const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
+  const [skillIds, setSkillIds] = useState<string[]>([]);
   const [formData, setFormData] = useState<Curriculum>({
     title: '',
     content: '',
     homework: '',
-    skills: [],
   });
 
   useEffect(() => {
@@ -51,30 +49,46 @@ const ProjectAddModal = (props: ModalProps) => {
     getSkills(getSkillsUrl);
   }, []);
 
-  const handler =
-    (input: string) =>
-  (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-        | React.ChangeEvent<HTMLTextAreaElement>
-          | React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setFormData({ ...formData, [input]: e.target.value });
+  const skillChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOptions = Array.from(e.target.selectedOptions);
+    const selectedSkillIds = selectedOptions.map((option) => option.value);
+    setSkillIds(selectedSkillIds);
   };
 
+  const handler =
+    (input: string) =>
+    (
+      e:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.ChangeEvent<HTMLTextAreaElement>
+        | React.ChangeEvent<HTMLSelectElement>,
+    ) => {
+      setFormData({ ...formData, [input]: e.target.value });
+    };
+
   // フォームデータの送信とページの表を再レンダリング
-  const submitCurriculum = async (data: Curriculum) => {
+  const submitCurriculum = async (data: Curriculum, ids: string[]) => {
     // フォームデータの送信
     const postUrl = process.env.CSR_API_URI + '/curriculums';
     const postReq = await post(postUrl, data);
     const postRes = await postReq.json();
-    console.log(postRes)
+
+    // CuriiculumSkillの送信
+    const postCurriculumSkillUrl = process.env.CSR_API_URI + '/curriculum_skills';
+    const curriculumSkillData = skillIds.map((skillId) => {
+      return {
+        curriculum_id: postRes.id,
+        skill_id: skillId,
+      };
+    });
+    const postData = { curriculum_skill: curriculumSkillData };
+    const postCurriculumSkillReq = await post(postCurriculumSkillUrl, postData);
+
     // 最新のcurriculumsを取得
     const getCurriculumUrl = process.env.CSR_API_URI + '/api/v1/get_curriculum_for_reload_index/' + postRes.id;
     const getRes = await get(getCurriculumUrl);
-    const newCurriculums: Curriculum = getRes[0]
-    console.log(newCurriculums)
-    props.setNewCurriculums([...curriculums, newCurriculums])
+    const newCurriculums: Curriculum = getRes[0];
+    props.setNewCurriculums([...curriculums, newCurriculums]);
   };
 
   return (
@@ -98,7 +112,7 @@ const ProjectAddModal = (props: ModalProps) => {
       <div>
         <h3>Homework</h3>
         <div>
-        <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
+          <textarea placeholder='Input' value={formData.homework} onChange={handler('homework')} />
           <div>
             <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
               {formData.homework}
@@ -108,8 +122,7 @@ const ProjectAddModal = (props: ModalProps) => {
       </div>
       <div>
         <h3>Skill</h3>
-        <select defaultValue='0' onChange={handler('skill_id')}>
-          <option value='0'>Select</option>
+        <select defaultValue='0' onChange={skillChangeHandler} multiple>
           {skills.map((data) => (
             <option key={data.id} value={data.id}>
               {data.name}
@@ -119,8 +132,8 @@ const ProjectAddModal = (props: ModalProps) => {
       </div>
       <Button
         onClick={() => {
-          submitCurriculum(formData);
-          props.setIsOpen(false)
+          submitCurriculum(formData, skillIds);
+          props.setIsOpen(false);
         }}
       >
         Submit
