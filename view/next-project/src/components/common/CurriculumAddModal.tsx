@@ -114,12 +114,6 @@ const CurriculumAddModal = () => {
     const postData = { curriculum_skill: curriculumSkillData };
     const postCurriculumSkillReq = await post(postCurriculumSkillUrl, postData);
 
-    // 最新のcurriculumsを取得
-    const getCurriculumUrl = process.env.CSR_API_URI + '/api/v1/get_curriculum_for_reload_index/' + postRes.id;
-    const getRes = await get(getCurriculumUrl);
-    const newCurriculums: FormData = getRes[0];
-    props.setNewCurriculums([...curriculums, newCurriculums]);
-
     router.reload();
   };
 

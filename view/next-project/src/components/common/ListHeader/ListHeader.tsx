@@ -34,6 +34,7 @@ interface Props {
   setRecords?: any;
   newSkills?: NewSkill[];
   setNewSkills?: any;
+  setCurriculums?: any;
 }
 
 const ListHeader = (props: Props) => {
