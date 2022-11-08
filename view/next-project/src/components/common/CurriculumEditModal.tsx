@@ -54,7 +54,10 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
     const getCurriculumSkillIdsUrl = process.env.CSR_API_URI + '/curriculum_skills';
     const getCurriculumSkillIds = async (url: string) => {
       const res = await get(url);
-      setCurriculumSkillIds(res);
+      const setData = res.filter((curriculumSkillId: CurriculumskillId) => {
+        return curriculumSkillId.curriculum_id == query.id;
+      });
+      setCurriculumSkillIds(setData);
     };
     getCurriculumSkillIds(getCurriculumSkillIdsUrl);
 
@@ -96,7 +99,6 @@ const CurriculumEditModal: FC<ModalProps> = (props) => {
     }
 
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
-    console.log(submitData.curriculum_skill);
     await put(submitCurriculumUrl, submitData);
 
     router.reload();
