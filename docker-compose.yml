@@ -16,7 +16,7 @@ services:
     container_name: "seeds_api"
     ports:
       - "3000:3000"
-    command: /bin/sh -c "rm -f tmp/pids/server.pid &&  rails server -b 0.0.0.0"
+    command: /bin/sh -c "rm -f tmp/pids/server.pid && rails server -b 0.0.0.0"
     volumes:
       - ./api:/myapp
     depends_on:
@@ -36,6 +36,18 @@ services:
     tty: true
     environment:
       - SEEDS_API_URI=http://localhost:3000
+
+  # 定期実行用コンテナ
+  cron:
+    image: nutmeg-seeds_seeds_api:latest
+    command: >
+      sh -c "whenever --update-cron &&
+      cron -f -l 2"
+    restart: always
+    volumes:
+      - ./api:/usr/src/app
+    depends_on:
+      - seeds_api
 
 volumes:
   mysql-data:

@@ -11,16 +11,20 @@ namespace :monthly_award do
     # レコード数をカウントしてソート
     ## [[user_id, count], ...] という配列が返ってくる
     @sorted_user_ids_array = @user_ids.tally
-    # 1位のuser_idを取得
-    @first_user_id = @sorted_user_ids_array.max_by{|k, v| v}[0]
+
+    # 1位のuser_id, record数を取得
+    @first_user_id = @sorted_user_ids_array.sort_by{|k, v| v}.reverse[0][0]
+    @first_user_record_num = @sorted_user_ids_array.sort_by{|k, v| v}.reverse[0][1]
     # 1位のuser_idをもとにuserを取得
     @first_user = User.find(@first_user_id)
-    # 2位のuser_idを取得
-    @second_user_id = @sorted_user_ids_array.sort_by{|k, v| v}[1][0]
+    # 2位のuser_id, record数を取得
+    @second_user_id = @sorted_user_ids_array.sort_by{|k, v| v}.reverse[1][0]
+    @second_user_record_num = @sorted_user_ids_array.sort_by{|k, v| v}.reverse[1][1]
     # 2位のuser_idをもとにuserを取得
     @second_user = User.find(@second_user_id)
-    # 3位のuser_idを取得
-    @third_user_id = @sorted_user_ids_array.sort_by{|k, v| v}[2][0]
+    # 3位のuser_id, レコード数を取得
+    @third_user_id = @sorted_user_ids_array.sort_by{|k, v| v}.reverse[2][0]
+    @third_user_record_num = @sorted_user_ids_array.sort_by{|k, v| v}.reverse[2][1]
     # 3位のuser_idをもとにuserを取得
     @third_user = User.find(@third_user_id)
 
@@ -36,9 +40,9 @@ namespace :monthly_award do
       text: "
 
       :nutmeg: 今月のRecord数ランキングを発表します :nutmeg:
-      :first_place_medal: #{@first_user.name}（#{@sorted_user_ids_array.max_by{|k, v| v}[1]}レコード）
-      :second_place_medal: #{@second_user.name}（#{@sorted_user_ids_array.sort_by{|k, v| v}[1][1]}レコード）
-      :third_place_medal: #{@third_user.name}（#{@sorted_user_ids_array.sort_by{|k, v| v}[2][1]}レコード）
+      :first_place_medal: #{@first_user.name}（#{@first_user_record_num}レコード）
+      :second_place_medal: #{@second_user.name}（#{@second_user_record_num}レコード）
+      :third_place_medal: #{@third_user.name}（#{@third_user_record_num}レコード）
 
       みなさん多くの勉強記録を残していただきありがとうございます:clap:
       来月もみんなで頑張りましょう:muscle:
