@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2022_07_16_043827) do
     t.string "title"
     t.text "content"
     t.text "homework"
+    t.integer "skill_ids"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
