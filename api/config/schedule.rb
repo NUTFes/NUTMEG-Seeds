@@ -7,6 +7,6 @@ ENV.each { |k, v| env(k, v) }
 # # environment は設定しないと production になってしまう
 set :environment, 'development'
 
-every 1.minutes do
+every '0 0 27-31 * *' do
   rake "monthly_award:monthly_award"
 end 
