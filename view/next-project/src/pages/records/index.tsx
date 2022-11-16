@@ -16,7 +16,7 @@ type Record = {
   teacher_name: string;
   curriculum_id: number;
   curriculum_title: string;
-  skill: string;
+  skills: {name: string}[];
   created_at: string;
   updated_at: string;
 };
@@ -49,7 +49,11 @@ export default function RecordList(props: Props) {
               <tr key={record.id} onClick={() => Router.push('/records/' + record.id)}>
                 <td>{record.user_name}</td>
                 <td>{record.title}</td>
-                <td>{record.skill}</td>
+                <td>
+                  {record.skills.map((skill) => {
+                    return(<><span>{skill.name}</span><br/></>);
+                  })}
+                </td>
                 <td>{formatDate(record.created_at)}</td>
               </tr>
             ))}

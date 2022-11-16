@@ -7,17 +7,21 @@ import FlatCard from '@components/common/FlatCard';
 import DetailHeader from '@components/common/DetailHeader';
 import styled from 'styled-components';
 import BackButton from '@components/common/BackButton';
-import EditButton from '@components/common/EditButton';
-import DeleteButton from '@components/common/DeleteButton';
-import Row from '@components/layout/RowLayout';
-import { useUI } from '@components/ui/context';
+import EditButton from "@components/common/EditButton";
+import DeleteButton from "@components/common/DeleteButton";
+import Row from "@components/layout/RowLayout";
+import { useUI } from "@components/ui/context";
+
+interface Skill {
+  id: number;
+  name: string;
+}
 
 interface Curriculum {
   id: number;
   title: string;
   content: string;
   homework: string;
-  skill_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -35,7 +39,7 @@ interface Record {
 
 interface Props {
   curriculum: Curriculum;
-  skill: string;
+  skills: Skill[];
   records: Record[];
 }
 
@@ -113,7 +117,7 @@ export default function Page(props: Props) {
   return (
     <MainLayout>
       <ParentButtonContainer>
-        <DetailHeader curriculum={props.curriculum} skill={props.skill} />
+        <DetailHeader curriculum={props.curriculum} skills={props.skills}/>
         <SplitParentContainer>
           <SplitLeftContainer>
             <FlatCard width='100%' height='auto'>

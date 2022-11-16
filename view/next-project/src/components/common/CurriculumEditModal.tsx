@@ -7,7 +7,7 @@ import Button from '@components/common/TestButton';
 import { useUI } from '@components/ui/context';
 
 interface Skill {
-  id: string;
+  id: string | number;
   name: string;
 }
 
@@ -15,7 +15,11 @@ interface FormData {
   title: string;
   content: string;
   homework: string;
-  skill_id: string;
+}
+
+interface CurriculumskillId {
+  curriculum_id: string | number;
+  skill_id: string | number;
 }
 
 // Curriculumのcontentをメモ化
@@ -58,26 +62,40 @@ export default function CurriculumEditModal() {
   const router = useRouter();
   const query = router.query;
 
-  const [skills, setSkills] = useState<Skill[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([{ id: '', name: '' }]);
+  const [curriculumSkillIds, setCurriculumSkillIds] = useState<CurriculumskillId[]>([
+    { curriculum_id: '', skill_id: '' },
+  ]);
 
   const [formData, setFormData] = useState<FormData>({
     title: '',
     content: '',
     homework: '',
-    skill_id: '',
   });
 
   useEffect(() => {
-    if (router.isReady) {
-      const getSkillsUrl = process.env.CSR_API_URI + '/skills';
-      const getSkills = async (url: string) => {
-        setSkills(await get(url));
-      };
-      getSkills(getSkillsUrl);
+    const getSkillsUrl = process.env.CSR_API_URI + '/skills';
+    const getSkills = async (url: string) => {
+      const res = await get(url);
+      setSkills(res);
+    };
+    getSkills(getSkillsUrl);
 
+    const getCurriculumSkillIdsUrl = process.env.CSR_API_URI + '/curriculum_skills';
+    const getCurriculumSkillIds = async (url: string) => {
+      const res = await get(url);
+      const setData = res.filter((curriculumSkillId: CurriculumskillId) => {
+        return curriculumSkillId.curriculum_id == query.id;
+      });
+      setCurriculumSkillIds(setData);
+    };
+    getCurriculumSkillIds(getCurriculumSkillIdsUrl);
+
+    if (router.isReady) {
       const getFormDataUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
       const getFormData = async (url: string) => {
-        setFormData(await get(url));
+        const res = await get(url);
+        setFormData(res);
       };
       getFormData(getFormDataUrl);
     }
@@ -94,9 +112,23 @@ export default function CurriculumEditModal() {
       setFormData({ ...formData, [input]: e.target.value });
     };
 
-  const submitCurriculum = async (data: any, query: any) => {
+  // selectで複数選択した値をsetCurriculumSkillIdsに更新
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOptions = Array.from(e.target.selectedOptions);
+    const selectedSkillIds = selectedOptions.map((option) => option.value);
+    const newCurriculumSkillIds = selectedSkillIds.map((skillId) => {
+      return { curriculum_id: query.id, skill_id: skillId } as CurriculumskillId;
+    });
+    setCurriculumSkillIds(newCurriculumSkillIds);
+  };
+
+  const submitCurriculum = async (data: any, ids: any, query: any) => {
+    const submitData = {
+      curriculum: data,
+      curriculum_skill: ids,
+    }
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
-    await put(submitCurriculumUrl, data);
+    await put(submitCurriculumUrl, submitData);
     router.reload();
   };
 
@@ -111,27 +143,23 @@ export default function CurriculumEditModal() {
       <CurriculumHomework homework={formData.homework} handler={handler} />
       <div>
         <h3>Skill</h3>
-        <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
-          {skills.map((skill: Skill) => {
-            if (skill.id == formData.skill_id) {
-              return (
-                <option key={skill.id} value={skill.id} selected>
-                  {skill.name}
-                </option>
-              );
-            } else {
-              return (
-                <option key={skill.id} value={skill.id}>
-                  {skill.name}
-                </option>
-              );
-            }
+        <select onChange={handleSelect} multiple>
+          {skills.map((data: Skill, index) => {
+            const isContain = curriculumSkillIds.some((curriculumSkillId: CurriculumskillId) => {
+              return curriculumSkillId.skill_id === data.id && curriculumSkillId.curriculum_id == query.id;
+            });
+
+            return (
+              <option key={data.id} value={data.id} selected={isContain}>
+                {data.name}
+              </option>
+            );
           })}
         </select>
       </div>
       <Button
         onClick={() => {
-          submitCurriculum(formData, query);
+          submitCurriculum(formData, curriculumSkillIds, query);
           closeModal();
         }}
       >

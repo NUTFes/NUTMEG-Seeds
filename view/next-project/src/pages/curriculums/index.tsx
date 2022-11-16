@@ -11,14 +11,8 @@ interface Curriculum {
   title: string;
   content: string;
   homework: string;
-  skill_id: number;
   created_at: string;
   updated_at: string;
-}
-
-interface Skill {
-  id: string;
-  name: string;
 }
 
 interface Skill {
@@ -27,7 +21,7 @@ interface Skill {
 
 interface CurriculumWithSkill {
   curriculum: Curriculum;
-  skill: Skill;
+  skills: Skill[];
 }
 
 interface Props {
@@ -50,9 +44,6 @@ export async function getServerSideProps() {
 
 export default function CurriculumList(props: Props) {
   const headers = ['Title', 'Skill', 'Date'];
-  const [curriculums, setCurriculums] = useState<Curriculum[]>([
-    { id: 0, title: '', content: '', homework: '', skill_id: 0, created_at: '', updated_at: '' },
-  ]);
 
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
@@ -69,7 +60,11 @@ export default function CurriculumList(props: Props) {
             {props.curriculumsWithSkill.map((data: CurriculumWithSkill) => (
               <tr key={data.toString()} onClick={() => Router.push('/curriculums/' + data.curriculum.id)}>
                 <td>{data.curriculum.title}</td>
-                <td>{data.skill}</td>
+                <td>
+                  {data.skills.map((skill: Skill) => {
+                    return(<><span>{skill.name}</span><br/></>);
+                  })}
+                </td>
                 <td>{formatDate(data.curriculum.created_at)}</td>
               </tr>
             ))}

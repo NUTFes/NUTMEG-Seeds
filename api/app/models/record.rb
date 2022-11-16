@@ -11,7 +11,13 @@ class Record < ApplicationRecord
       "curriculum_title": record.curriculum.title,
       "teacher": record.teacher.user.name,
       "user": record.user.name,
-      "skill": record.curriculum.skill.name,
+      "skills": record.curriculum.skills.map{
+        |skill|
+        {
+          "id": skill.id,
+          "name": skill.name,
+        }
+      }
     }
   end
 
@@ -28,7 +34,12 @@ class Record < ApplicationRecord
           "teacher_name": record.teacher.nil? ? nil: record.teacher.user.name,
           "curriculum_id": record.curriculum.nil? ? nil: record.curriculum.id,
           "curriculum_title": record.curriculum.nil? ? nil: record.curriculum.title,
-          "skill": record.curriculum.nil? ? nil: record.curriculum.skill.name,
+          "skills": record.curriculum.nil? ? nil: record.curriculum.skills.map{
+            |skill|
+            {
+              "name": skill.name,
+            }
+          },
           "created_at": record.created_at,
           "updated_at": record.updated_at,
         }

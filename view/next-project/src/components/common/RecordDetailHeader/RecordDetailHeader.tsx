@@ -2,6 +2,11 @@ import React from 'react';
 import s from './RecordDetailHeader.module.css';
 import Tag from '@components/common/Tag';
 
+interface Skill {
+  id: number;
+  name: string;
+}
+
 interface Props {
   children?: React.ReactNode;
   recordTitle: string;
@@ -10,7 +15,7 @@ interface Props {
   curriculumTitle: string;
   teacher: string;
   user: string;
-  skill: string;
+  skill: Skill[];
 }
 
 const RecordDetailHeader = (props: Props) => {
@@ -27,7 +32,9 @@ const RecordDetailHeader = (props: Props) => {
         <div className={s.DescriptionContainer}>Update Date:{props.updateDate}</div>
       </div>
       <div className={s.SkillContainer}>
-        <Tag text={props.skill} />
+        {props.skill.map((skill) => (
+          <Tag>{skill.name}</Tag>
+        ))}
       </div>
     </div>
   );

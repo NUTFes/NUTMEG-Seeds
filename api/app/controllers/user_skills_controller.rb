@@ -7,7 +7,7 @@ class UserSkillsController < ApplicationController
 
     render json: @user_skills
   end
-
+  
   # GET /user_skills/1
   def show
     render json: @user_skill

@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
+import AddModal from '@components/common/AddModal';
 import Button from '@components/common/TestButton';
 import { get, post } from '@utils/api_methods';
 import { useUI } from '@components/ui/context';
@@ -15,7 +17,6 @@ interface FormData {
   title: string;
   content: string;
   homework: string;
-  skill_id: number;
 }
 
 // Curriculumのcontentをメモ化
@@ -34,7 +35,6 @@ const CurriculumContent = React.memo(function CurriculumContent(props: { content
     </div>
   );
 });
-
 // CurriculumのHomeworkをメモ化
 const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string; handler: any }) {
   return (
@@ -54,17 +54,23 @@ const CurriculumHomework = React.memo(function CurriculumHomework(props: { homew
 
 const CurriculumAddModal = () => {
   const { closeModal } = useUI();
-
+  const [curriculums, setCurriculums] = useState<FormData[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
-  const [formData, setFormData] = useState({
+  const [skillIds, setSkillIds] = useState<string[]>([]);
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     content: '',
     homework: '',
-    skill_id: 0,
   });
 
   useEffect(() => {
     if (router.isReady) {
+      const getCurriculumsUrl = process.env.CSR_API_URI + '/api/v1/get_curriculums_for_index';
+      const getCurriculums = async (url: string) => {
+        setCurriculums(await get(url));
+      };
+      getCurriculums(getCurriculumsUrl);
+
       const getSkillsUrl = process.env.CSR_API_URI + '/skills';
       const getSkills = async (url: string) => {
         setSkills(await get(url));
@@ -72,6 +78,12 @@ const CurriculumAddModal = () => {
       getSkills(getSkillsUrl);
     }
   }, []);
+
+  const skillChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOptions = Array.from(e.target.selectedOptions);
+    const selectedSkillIds = selectedOptions.map((option) => option.value);
+    setSkillIds(selectedSkillIds);
+  };
 
   const handler =
     (input: string) =>
@@ -85,10 +97,23 @@ const CurriculumAddModal = () => {
     };
 
   // フォームデータの送信とページの表を再レンダリング
-  const submitCurriculum = async (data: FormData) => {
+  const submitCurriculum = async (data: FormData, ids: string[]) => {
     // フォームデータの送信
     const postUrl = process.env.CSR_API_URI + '/curriculums';
-    await post(postUrl, data);
+    const postReq = await post(postUrl, data);
+    const postRes = await postReq.json();
+
+    // CuriiculumSkillの送信
+    const postCurriculumSkillUrl = process.env.CSR_API_URI + '/curriculum_skills';
+    const curriculumSkillData = skillIds.map((skillId) => {
+      return {
+        curriculum_id: postRes.id,
+        skill_id: skillId,
+      };
+    });
+    const postData = { curriculum_skill: curriculumSkillData };
+    const postCurriculumSkillReq = await post(postCurriculumSkillUrl, postData);
+
     router.reload();
   };
 
@@ -103,19 +128,17 @@ const CurriculumAddModal = () => {
       <CurriculumHomework homework={formData.homework} handler={handler} />
       <div>
         <h3>Skill</h3>
-        <select defaultValue={formData.skill_id} onChange={handler('skill_id')}>
-          <option value='0'>Select</option>
-          {skills &&
-            skills.map((data) => (
-              <option key={data.id} value={data.id}>
-                {data.name}
-              </option>
-            ))}
+        <select defaultValue='0' onChange={skillChangeHandler} multiple>
+          {skills.map((data) => (
+            <option key={data.id} value={data.id}>
+              {data.name}
+            </option>
+          ))}
         </select>
       </div>
       <Button
         onClick={() => {
-          submitCurriculum(formData);
+          submitCurriculum(formData, skillIds);
           closeModal();
         }}
       >
