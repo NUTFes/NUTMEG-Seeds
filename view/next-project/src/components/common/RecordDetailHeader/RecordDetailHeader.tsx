@@ -33,7 +33,7 @@ const RecordDetailHeader = (props: Props) => {
       </div>
       <div className={s.SkillContainer}>
         {props.skill.map((skill) => (
-          <Tag>{skill.name}</Tag>
+          <Tag key={skill.id}>{skill.name}</Tag>
         ))}
       </div>
     </div>
