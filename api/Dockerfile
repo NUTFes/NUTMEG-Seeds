@@ -6,7 +6,8 @@ RUN wget -qO - https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
       && apt-get update -qq \
       && apt-get install -y nodejs yarn \
       && mkdir /myapp
-
+# corn のインストール
+RUN apt-get install -y cron
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
 COPY Gemfile.lock /myapp/Gemfile.lock
