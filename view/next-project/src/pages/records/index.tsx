@@ -6,6 +6,7 @@ import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import Table from '@components/common/Table';
 import ListHeader from '@components/common/ListHeader';
+import RecordAddAnimation from '@components/common/RecordAddAnimation';
 
 type Record = {
   id: number;
@@ -42,6 +43,7 @@ export default function RecordList(props: Props) {
   return (
     <>
       <MainLayout>
+        <RecordAddAnimation />
         <ListHeader title='Records' setRecords={setRecords}/>
         <FlatCard>
           <Table headers={headers}>
