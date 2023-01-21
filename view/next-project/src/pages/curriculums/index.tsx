@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Router from 'next/router';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
@@ -63,7 +62,6 @@ export async function getServerSideProps() {
 
 export default function CurriculumList(props: Props) {
   const headers = ['Title', 'Skill', 'Date'];
-  const chapterHead = ['Title', 'chapter', 'Date']
 
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
@@ -83,19 +81,6 @@ export default function CurriculumList(props: Props) {
                 <td>
                   {data.skills.map((skill: Skill) => {
                     return(<><span>{skill.name}</span><br/></>);
-                  })}
-                </td>
-                <td>{formatDate(data.curriculum.created_at)}</td>
-              </tr>
-            ))}
-          </Table>
-          <Table headers={chapterHead}>
-            {props.curriculumsWithChapter.map((data: CurriculumWithChapter) => (
-              <tr key={data.toString()} onClick={() => Router.push('/curriculums/' + data.curriculum.id)}>
-                <td>{data.curriculum.title}</td>
-                <td>
-                  {data.chapters.map((chapter: Chapter) => {
-                    return (<><span>{chapter.title}{chapter.homework}{chapter.content}</span><br /></>);
                   })}
                 </td>
                 <td>{formatDate(data.curriculum.created_at)}</td>
