@@ -5,6 +5,7 @@ import MainLayout from '@components/layout/MainLayout';
 import ShadowCard from '@components/common/ShadowCard';
 import s from './Chapters.module.css';
 import { switchChapterIcon } from '@utils/switchChapterIcon';
+import NavigateNext from '@components/icons/NavigateNext';
 
 interface Curriculum {
   id: number;
@@ -65,6 +66,9 @@ export default function Chapters(props: Props) {
                   <div className={s.chapterInfo}>
                     <span className={s.chapterTitle}>{chapter.title}</span>
                     <span className={s.chapterContent}>{chapter.content}</span>
+                  </div>
+                  <div className={s.navigateNextIcon}>
+                    <NavigateNext width={28} height={28} color={'#FFAC5D'} />
                   </div>
                 </div>
               </ShadowCard>

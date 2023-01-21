@@ -11,7 +11,8 @@
 }
 
 .chapter {
-  width: 30%;
+  width: 32%;
+  cursor: pointer;
 }
 
 .chapterContainer {
@@ -22,12 +23,17 @@
 }
 
 .chapterIcon {
-  width: 20%;
+  width: 15%;
   display: grid;
   place-content: center;
 }
+
 .chapterInfo {
-  width: 80%;
+  width: 75%;
+}
+
+.navigateNextIcon {
+  width: 10%;
 }
 
 .chapterTitle {

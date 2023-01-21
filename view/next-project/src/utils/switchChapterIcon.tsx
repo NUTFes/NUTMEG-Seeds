@@ -6,10 +6,10 @@ import Psychiatry from '@components/icons/Psychiatry';
 // chapterページで表示するアイコンを切り替える関数
 export const switchChapterIcon = (length: number, index: number) => {
   const icons = [
-    <PottedPlant width={40} height={40} color={'#9d9'} />,
-    <Psychiatry width={40} height={40} color={'#9d9'} />,
-    <Park width={40} height={40} color={'#9d9'} />,
-    <Forest width={40} height={40} color={'#9d9'} />,
+    <PottedPlant width={32} height={32} color={'#9d9'} />,
+    <Psychiatry width={32} height={32} color={'#9d9'} />,
+    <Park width={32} height={32} color={'#9d9'} />,
+    <Forest width={32} height={32} color={'#9d9'} />,
   ];
   const iconLength = icons.length;
   const iconLengthValue = [];
