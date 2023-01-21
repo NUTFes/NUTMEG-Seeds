@@ -1,0 +1,46 @@
+.parentButton {
+  position: relative;
+  width: 100%;
+}
+
+.chapters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px 10px;
+  justify-content: space-between;
+}
+
+.chapter {
+  width: 30%;
+}
+
+.chapterContainer {
+  display: flex;
+  place-content: center;
+  place-items: center;
+  height: 100%;
+}
+
+.chapterIcon {
+  width: 20%;
+  display: grid;
+  place-content: center;
+}
+.chapterInfo {
+  width: 80%;
+}
+
+.chapterTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  display: block;
+}
+
+.chapterContent {
+  font-size: 1.4rem;
+  font-weight: 400;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
