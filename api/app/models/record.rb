@@ -59,7 +59,7 @@ class Record < ApplicationRecord
           "teacher_name": record.teacher.nil? ? nil: record.teacher.user.name,
           "curriculum_id": record.curriculum.id,
           "curriculum_title": record.curriculum.title,
-          "skill": record.curriculum.skills.map{
+          "skills": record.curriculum.skills.map{
             |skill|
             {
               "name": skill.name,
