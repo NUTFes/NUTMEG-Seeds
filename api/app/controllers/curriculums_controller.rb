@@ -53,7 +53,7 @@ class CurriculumsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def curriculum_params
-      params.require(:curriculum).permit(:id, :title, :content, :homework, :created_at, :updated_at)
+      params.require(:curriculum).permit(:id, :title, :graduation_assignment, :created_at, :updated_at)
     end
 
     # curriculum_skillが複数あるので、配列で受け取る
@@ -62,4 +62,10 @@ class CurriculumsController < ApplicationController
         curriculum_skill.permit(:curriculum_id, :skill_id)
       end
     end
+
+    # def curriculum_chapter_params
+    #   params.require(:chapter).map do |chapter|
+    #     chapter.permit(:curriculum_id)
+    #   end
+    # end
 end
