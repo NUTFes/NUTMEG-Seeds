@@ -5,6 +5,7 @@ import s from './ListHeader.module.css';
 import ProjectAddModal from '@components/common/ProjectAddModal';
 import RecordAddModal from '@components/common/RecordAddModal';
 import SkillAddModal from '@components/common/SkillAddModal';
+import CategoryAddModal from '@components/common/CategoryAddModal';
 import { useUI } from '@components/ui/context';
 
 interface Skill {
@@ -29,12 +30,20 @@ interface NewSkill {
   created_at: string;
 }
 
+interface newCategory {
+  id: number;
+  name: string;
+  created_at: string;
+}
+
 interface Props {
   title: string;
   setRecords?: any;
   newSkills?: NewSkill[];
   setNewSkills?: any;
   setCurriculums?: any;
+  newCategories?: newCategory[];
+  setNewCategories?: any;
 }
 
 const ListHeader = (props: Props) => {
@@ -74,6 +83,17 @@ const ListHeader = (props: Props) => {
                 setIsOpen={setIsOpenAddModal}
                 newSkills={props.newSkills}
                 setNewSkills={props.setNewSkills}
+              />
+            </>
+          );
+        case '/categories':
+          return (
+            <>
+              <CategoryAddModal
+                isOpen={isOpenAddModal}
+                setIsOpen={setIsOpenAddModal}
+                setNewCategories={props.setNewCategories}
+                newCategories={props.newCategories}
               />
             </>
           );
