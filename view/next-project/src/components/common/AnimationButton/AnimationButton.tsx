@@ -6,7 +6,7 @@ interface ButtonProps {
   children: React.ReactNode;
 }
 
-const RecordAddAnimation: FC<ButtonProps> = (props) => {
+const AnimationButton: FC<ButtonProps> = (props) => {
   return (
     <>
       <button className={s.button} onClick={props.onClick}>
@@ -16,4 +16,4 @@ const RecordAddAnimation: FC<ButtonProps> = (props) => {
   );
 };
 
-export default RecordAddAnimation;
+export default AnimationButton;
