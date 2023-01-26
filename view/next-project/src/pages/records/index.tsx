@@ -47,7 +47,7 @@ export default function RecordList(props: Props) {
           <Table headers={headers}>
             {records.map((record) => (
               <tr key={record.id} onClick={() => Router.push('/records/' + record.id)}>
-                <td>{record.user_name }</td>
+                <td>{record.user_name}</td>
                 <td>{record.title}</td>
                 <td>
                   {record.skills.map((skill) => {

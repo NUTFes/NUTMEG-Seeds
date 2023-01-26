@@ -116,7 +116,6 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     };
 
   const teacherHandler = () => (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
     setTeacherData({ ...teacherData, user_id: e.target.value });
   };
 
@@ -147,7 +146,6 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     };
     const req = await post(submitRecordUrl, submitData);
     const res = await req.json();
-    console.log(res);
     const getRecordUrl = process.env.CSR_API_URI + '/api/v1/get_record_for_index_reload/' + res.id;
     setNewRecordId(res.id);
     const getRes = await get(getRecordUrl);
