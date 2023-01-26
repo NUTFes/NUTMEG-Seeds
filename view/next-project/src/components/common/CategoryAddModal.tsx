@@ -38,7 +38,6 @@ const CategoryAddModal: VFC<ModalProps> = (props) => {
       setCategoryData({ ...categoryData, [input]: e.target.value });
   }
 
-  // フォームデータの送信とページの表を再レンダリング
   const submitCategory = async (categoryData: any) => {
     const submitCategoryUrl = process.env.CSR_API_URI + '/categories';
     const req = await post(submitCategoryUrl, categoryData);
@@ -47,7 +46,6 @@ const CategoryAddModal: VFC<ModalProps> = (props) => {
     const getCategoryUrl = process.env.CSR_API_URI + '/categories/' + res.id;
     const getRes = await get(getCategoryUrl);
     const newCategory: Category = getRes[0]
-    console.log(newCategory)
     props.setNewCategories([...props.newCategories, newCategory])
     router.reload();
   };
