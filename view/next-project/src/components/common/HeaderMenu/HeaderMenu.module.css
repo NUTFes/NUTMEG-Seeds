@@ -1,0 +1,49 @@
+.container {
+  position: relative;
+}
+
+.button {
+  background-color: var(--background-color);
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+
+.button:hover {
+  background-color: white;
+  color: black;
+  transition: 0.25s;
+}
+
+.menu {
+  position: absolute;
+  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  background-color: white;
+  color: black;
+  border-radius: 0.5rem;
+  padding: 2rem 1rem;
+  box-shadow: 0 0 0.25rem 0.25rem rgba(0, 0, 0, 0.1);
+  right: 0;
+}
+
+.menuItem {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.menuItem:hover {
+  box-shadow: 0 0 0.25rem 0.25rem rgba(0, 0, 0, 0.1);
+  transition: 0.25s;
+}
