@@ -15,21 +15,25 @@ const HeaderMenu: FC = () => {
       <button className={s.button} onClick={() => setIsMenuOpen(!isMenuOpen)}>
         Menu
       </button>
-      {isMenuOpen && (
-        <div className={s.menu}>
-          <div
-            className={s.menuItem}
-            onClick={() => {
-              router.push('/profile');
-            }}
-          >
-            Profile
-          </div>
-          <div className={s.menuItem} onClick={logout}>
-            Logout
-          </div>
+      <div
+        className={s.menu}
+        style={{
+          transition: '0.1s',
+          opacity: isMenuOpen ? 1 : 0,
+        }}
+      >
+        <div
+          className={s.menuItem}
+          onClick={() => {
+            router.push('/profile');
+          }}
+        >
+          Profile
         </div>
-      )}
+        <div className={s.menuItem} onClick={logout}>
+          Logout
+        </div>
+      </div>
     </div>
   );
 };
