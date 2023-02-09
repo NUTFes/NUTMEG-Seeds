@@ -6,6 +6,8 @@ import ShadowCard from '@components/common/ShadowCard';
 import s from './Chapters.module.css';
 import { switchChapterIcon } from '@utils/switchChapterIcon';
 import NavigateNext from '@components/icons/NavigateNext';
+import ChapterDetailHeader from '@components/common/ChapterDetailHeader';
+import { formatDate } from '@utils/format_date';
 
 interface Curriculum {
   id: number;
@@ -14,6 +16,11 @@ interface Curriculum {
   graduation_assignment: string;
   created_at: string;
   updated_at: string;
+}
+
+interface Skill {
+  id: number;
+  name: string;
 }
 
 interface Chapter {
@@ -33,6 +40,7 @@ interface Record {
 
 interface Props {
   curriculum: Curriculum;
+  skills: Skill[];
   chapters: Chapter[];
   records: Record[];
 }
@@ -44,6 +52,7 @@ export async function getServerSideProps({ params }: any) {
   return {
     props: {
       curriculum: json[0].curriculum,
+      skills: json[0].skills,
       chapters: json[0].chapter,
       records: json[0].records,
     },
@@ -53,6 +62,12 @@ export async function getServerSideProps({ params }: any) {
 export default function Chapters(props: Props) {
   return (
     <MainLayout>
+      <ChapterDetailHeader
+        title={props.curriculum.title}
+        createDate={formatDate(props.curriculum.created_at)}
+        updateDate={formatDate(props.curriculum.updated_at)}
+        skills={props.skills}
+      />
       <div className={s.parentButton}>
         <div className={s.chapters}>
           {props.chapters.map((chapter: Chapter, index: number) => (
