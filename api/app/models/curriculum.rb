@@ -109,6 +109,13 @@ class Curriculum < ApplicationRecord
         |curriculum|
         {
           "curriculum": curriculum,
+          "skills": curriculum.skills.map{
+            |skill|
+            {
+              "id": skill.id,
+              "name": skill.name,
+            }
+          },
           "chapter": curriculum.chapters.map{
             |chapter|
             {
