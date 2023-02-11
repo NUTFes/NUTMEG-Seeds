@@ -47,11 +47,11 @@ const CategoryEditModal: FC<ModalProps> = (props) => {
       setFormData({ ...formData, [input]: e.target.value });
     };
 
-  const submitSkill = async (data: any, query: any) => {
-    const submitSkillUrl = process.env.CSR_API_URI + '/categories/' + query.id;
-    const postRes = await put(submitSkillUrl, data);
-    const getSkillDetailUrl = process.env.CSR_API_URI + '/categories/' + query.id;
-    const getRes = await get(getSkillDetailUrl);
+  const submitCategory = async (data: any, query: any) => {
+    const submitCategoryUrl = process.env.CSR_API_URI + '/categories/' + query.id;
+    const postRes = await put(submitCategoryUrl, data);
+    const getCategoryDetailUrl = process.env.CSR_API_URI + '/categories/' + query.id;
+    const getRes = await get(getCategoryDetailUrl);
     const newCategory: Category = getRes;
     props.setCategoryDetail(newCategory);
     props.setIsOpen(false);
@@ -70,7 +70,7 @@ const CategoryEditModal: FC<ModalProps> = (props) => {
       </div>
       <Button
         onClick={() => {
-          submitSkill(formData, query);
+          submitCategory(formData, query);
         }}
       >
         Submit
