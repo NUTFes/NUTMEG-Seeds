@@ -6,6 +6,7 @@ import Button from '@components/common/TestButton';
 import Close from '@components/icons/Close';
 import 'easymde/dist/easymde.min.css';
 import dynamic from 'next/dynamic';
+import RecordAddAnimation from '@components/common/RecordAddAnimation';
 
 const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
@@ -59,7 +60,9 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const [curriculums, setCurriculums] = useState<Curriculum[]>([{ id: '', title: '' }]);
   const [records, setRecords] = useState<Record[]>([]);
   const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
-  const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '', record_id: '' });
+  const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '1', record_id: '' });
+  const [isAnimationOpen, setIsAnimationOpen] = useState(false);
+  const [newRecordId, setNewRecordId] = useState('');
 
   const contentSentence =
     '# 内容・やったこと \n\n\n' +
@@ -144,6 +147,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     const req = await post(submitRecordUrl, submitData);
     const res = await req.json();
     const getRecordUrl = process.env.CSR_API_URI + '/api/v1/get_record_for_index_reload/' + res.id;
+    setNewRecordId(res.id);
     const getRes = await get(getRecordUrl);
     const newRecord: Record = getRes[0];
     props.setNewRecords([...records, newRecord]);
@@ -151,6 +155,14 @@ const RecordAddModal: FC<ModalProps> = (props) => {
 
   return (
     <div className={s.modalContainer}>
+      {isAnimationOpen && (
+        <RecordAddAnimation
+          isOpen={isAnimationOpen}
+          setIsOpen={setIsAnimationOpen}
+          newRecordId={newRecordId}
+          setAddModalOpen={props.setIsOpen}
+        />
+      )}
       <div className={s.modalInnerContainer}>
         <div className={s.modalContent}>
           <div className={s.modalContentClose}>
@@ -238,7 +250,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
             <Button
               onClick={() => {
                 submitRecord(recordData, teacherData);
-                props.setIsOpen(false);
+                setIsAnimationOpen(true);
               }}
             >
               Submit
