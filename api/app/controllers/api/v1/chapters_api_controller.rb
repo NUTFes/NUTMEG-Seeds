@@ -1,7 +1,7 @@
 class Api::V1::ChaptersApiController < ApplicationController
 
   def get_chapters_for_index
-    @chapters = Chapter.with_records
+    @chapters = Chapter.for_chapter_index
     render json: @chapters
   end
 
