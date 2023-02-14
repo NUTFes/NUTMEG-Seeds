@@ -1,6 +1,6 @@
 class Record < ApplicationRecord
   belongs_to :user
-  belongs_to :curriculum
+  belongs_to :chapter
   has_one :teacher, dependent: :destroy
 
   def self.with_curriculum_and_teacher(record_id)
@@ -22,7 +22,7 @@ class Record < ApplicationRecord
   end
 
   def self.with_teacher_and_skills
-    @records = Record.eager_load(:teacher, :curriculum, :user)
+    @records = Record.eager_load(:teacher, :chapter, :user)
       .map{
         |record|
         {
@@ -32,8 +32,8 @@ class Record < ApplicationRecord
           "user_name": record.user.name,
           "teacher_id": record.teacher.nil? ? nil: record.teacher.user.id,
           "teacher_name": record.teacher.nil? ? nil: record.teacher.user.name,
-          "curriculum_id": record.curriculum.nil? ? nil: record.curriculum.id,
-          "curriculum_title": record.curriculum.nil? ? nil: record.curriculum.title,
+          "chapter_id": record.chapter.nil? ? nil: record.chapter.id,
+          "chapter_title": record.chapter.nil? ? nil: record.chapter.title,
           "skills": record.curriculum.nil? ? nil: record.curriculum.skills.map{
             |skill|
             {

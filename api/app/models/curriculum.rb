@@ -2,7 +2,6 @@ class Curriculum < ApplicationRecord
   has_many :curriculum_skills, dependent: :destroy
   has_many :skills, through: :curriculum_skills
   has_many :chapters, dependent: :destroy
-  has_many :records
 
   def self.with_skills
     @records = Curriculum.eager_load(:skills)
