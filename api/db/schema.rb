@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2023_02_07_094508) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "detail"
   end
 
   create_table "chapters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
