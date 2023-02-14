@@ -13,6 +13,8 @@ type Skill = {
   name: string;
   category_id: number;
   category_name: string;
+  type_id: number;
+  type_name: string;
   created_at: string;
 }
 
@@ -32,7 +34,7 @@ export const getServerSideProps = async() => {
 
 const Skills: React.VFC<Props> = (props) => {
   const [skills, setSkills] = useState<Skill[]>(props.skills)
-  const headers = ['Name', 'Category', 'Date'];
+  const headers = ['Name', 'Category', 'Type', 'Date'];
   return(
     <>
       <MainLayout>
@@ -43,6 +45,7 @@ const Skills: React.VFC<Props> = (props) => {
               <tr key={skill.id} onClick={() => Router.push('/skills/' + skill.id)}>
                 <td>{skill.name}</td>
                 <td>{skill.category_name}</td>
+                <td>{skill.type_name}</td>
                 <td>{formatDate(skill.created_at)}</td>
               </tr>
             ))}
