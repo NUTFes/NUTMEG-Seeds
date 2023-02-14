@@ -39,6 +39,11 @@ const Header: FC = () => {
                   <a>Skills</a>
                 </Link>
               </li>
+              <li>
+                <Link href='/categories'>
+                  <a>Categories</a>
+                </Link>
+              </li>
             </ul>
           </nav>
           <HeaderMenu />
