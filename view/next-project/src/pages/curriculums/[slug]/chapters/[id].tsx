@@ -10,6 +10,7 @@ import EditButton from '@components/common/EditButton';
 import DeleteButton from '@components/common/DeleteButton';
 import Row from '@components/layout/RowLayout';
 import { useUI } from '@components/ui/context';
+import ChapterDetailHeader from '@components/common/ChapterDetailHeader';
 
 interface Skill {
   id: number;
@@ -45,7 +46,7 @@ interface Record {
 
 interface CurriculumWithChapter {
   curriculum: Curriculum;
-  chapters: Chapter[];
+  chapter: Chapter[];
 }
 
 interface Props {
@@ -53,16 +54,16 @@ interface Props {
   skills: Skill[];
   records: Record[];
   curriculumsWithChapter: CurriculumWithChapter[];
-  chapters: Chapter[];
+  chapter: Chapter;
 }
 
 export async function getServerSideProps({ params }: any) {
   const id = params.id;
-  const getUrl = process.env.SSR_API_URI + '/api/v1/get_curriculum_for_view/' + id;
+  const getUrl = `${process.env.SSR_API_URI}/api/v1/get_curriculum_for_view/${id}`;
   const json = await get(getUrl);
-  const getCurriculumsChapterUrl = process.env.SSR_API_URI + '/api/v1/get_curriculums_chapter_for_index';
-  const getChaptersUrl = process.env.SSR_API_URI + '/chapters';
-  const curriculumsChapterJson = await get(getCurriculumsChapterUrl);
+  const getCurriculumChapterUrl = `${process.env.SSR_API_URI}/api/v1/get_curriculum_chapter_for_view/${id}`;
+  const getChaptersUrl = `${process.env.SSR_API_URI}/chapters/${id}`;
+  const curriculumsChapterJson = await get(getCurriculumChapterUrl);
   const chaptersJson = await get(getChaptersUrl);
   return {
     props: {
@@ -70,7 +71,7 @@ export async function getServerSideProps({ params }: any) {
       skills: json[0].skills,
       records: json[0].records,
       curriculumsWithChapter: curriculumsChapterJson,
-      chapters: chaptersJson,
+      chapter: chaptersJson,
     },
   };
 }
@@ -136,9 +137,16 @@ export default function Page(props: Props) {
     const datetime2 = datetime.substring(0, datetime.length - 5);
     return datetime2;
   };
+  console.log(props);
 
   return (
     <MainLayout>
+      <ChapterDetailHeader
+        title={props.chapter.title}
+        createDate={formatDate(props.curriculum.created_at)}
+        updateDate={formatDate(props.curriculum.updated_at)}
+        skills={props.skills}
+      />
       <ParentButtonContainer>
         <SplitParentContainer>
           <SplitLeftContainer>
@@ -164,7 +172,7 @@ export default function Page(props: Props) {
                 </CurriculumContentsTitle>
                 <CurriculumContents>
                   <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-                    {props.chapters[0].content}
+                    {props.chapter.content}
                   </ReactMarkdown>
                 </CurriculumContents>
                 <CurriculumContentsTitle>
