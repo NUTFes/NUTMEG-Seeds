@@ -7,11 +7,11 @@
 }
 
 .setting {
-    width: 80%;
+  width: 100%;
   display: grid;
-  grid-template-columns: 0.2fr 0.25fr 0.1fr;
-  gap: 1rem;
-  margin: 2rem 0;
+  grid-template-columns: 0.5fr 2fr 0.5fr;
+  gap: 2rem;
+  margin: 2rem 0;;
   align-items: center;
 }
 
@@ -25,6 +25,21 @@
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid var(--primary);
+}
+
+.select {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--primary);
+}
+
+.textarea {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--primary);
+  height: 10rem;
 }
 
 .button {
