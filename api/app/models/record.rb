@@ -34,7 +34,7 @@ class Record < ApplicationRecord
           "teacher_name": record.teacher.nil? ? nil: record.teacher.user.name,
           "chapter_id": record.chapter.nil? ? nil: record.chapter.id,
           "chapter_title": record.chapter.nil? ? nil: record.chapter.title,
-          "skills": record.curriculum.nil? ? nil: record.curriculum.skills.map{
+          "skills": record.chapter.curriculum.nil? ? nil: record.chapter.curriculum.skills.map{
             |skill|
             {
               "name": skill.name,
@@ -57,9 +57,9 @@ class Record < ApplicationRecord
           "user_name": record.user.name,
           "teacher_id": record.teacher.nil? ? nil: record.teacher.user.id,
           "teacher_name": record.teacher.nil? ? nil: record.teacher.user.name,
-          "curriculum_id": record.curriculum.id,
-          "curriculum_title": record.curriculum.title,
-          "skill": record.curriculum.skill.name,
+          "chapter_id": record.chapter.id,
+          "chapter_title": record.chapter.title,
+          "skill": record.chapter.curriculum.skill.name,
           "created_at": record.created_at,
           "updated_at": record.updated_at,
         }
