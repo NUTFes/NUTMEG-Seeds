@@ -5,12 +5,17 @@ import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import styled from 'styled-components';
+import s from './Chapter.module.css';
 import BackButton from '@components/common/BackButton';
 import EditButton from '@components/common/EditButton';
 import DeleteButton from '@components/common/DeleteButton';
 import Row from '@components/layout/RowLayout';
 import { useUI } from '@components/ui/context';
 import ChapterDetailHeader from '@components/common/ChapterDetailHeader';
+
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+// 任意のテーマをimport
+import { materialDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 interface Skill {
   id: number;
@@ -59,19 +64,14 @@ interface Props {
 
 export async function getServerSideProps({ params }: any) {
   const id = params.id;
-  const getUrl = `${process.env.SSR_API_URI}/api/v1/get_curriculum_for_view/${id}`;
+  const getUrl = `${process.env.SSR_API_URI}/api/v1/get_chapter_for_detail/${id}`;
   const json = await get(getUrl);
-  const getCurriculumChapterUrl = `${process.env.SSR_API_URI}/api/v1/get_curriculum_chapter_for_view/${id}`;
-  const getChaptersUrl = `${process.env.SSR_API_URI}/chapters/${id}`;
-  const curriculumsChapterJson = await get(getCurriculumChapterUrl);
-  const chaptersJson = await get(getChaptersUrl);
   return {
     props: {
-      curriculum: json[0].curriculum,
-      skills: json[0].skills,
-      records: json[0].records,
-      curriculumsWithChapter: curriculumsChapterJson,
-      chapter: chaptersJson,
+      chapter: json.chapter,
+      curriculum: json.curriculum,
+      skills: json.skills,
+      records: json.records,
     },
   };
 }
@@ -139,6 +139,37 @@ export default function Page(props: Props) {
   };
   console.log(props);
 
+  // コードブロックのレンダリング
+  const markdownComponents = {
+    pre: (pre: any) => {
+      // 中身がcodeでなければ普通に表示させる
+      if (pre.children[0].type !== 'code') {
+        return <pre>{pre.children}</pre>;
+      }
+
+      const code = pre.children[0];
+      // 正規表現で"language-言語名:ファイル名"をマッチする
+      const matchResult = code.props.className ? code.props.className.match(/language-(\w+)(:(.+))?/) : '';
+      const language = matchResult?.[1] || '';
+      const filename = matchResult?.[3] || undefined;
+
+      return (
+        <SyntaxHighlighter
+          language={language}
+          style={materialDark}
+          // // ファイル名がある場合、表示用の余白を作る
+          // customStyle={filename && { paddingTop: '2.5rem' }}
+          showLineNumbers
+          className={s.syntaxHighlighter}
+          // // CSSの擬似要素を使ってファイル名を表示させるため
+          // fileName={fileName}
+        >
+          {code.props.children[0]}
+        </SyntaxHighlighter>
+      );
+    },
+  };
+
   return (
     <MainLayout>
       <ChapterDetailHeader
@@ -171,15 +202,17 @@ export default function Page(props: Props) {
                   <hr />
                 </CurriculumContentsTitle>
                 <CurriculumContents>
-                  <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-                    {props.chapter.content}
-                  </ReactMarkdown>
+                  <div className={s.markdown}>
+                    <ReactMarkdown components={markdownComponents}>{props.chapter.content}</ReactMarkdown>
+                  </div>
                 </CurriculumContents>
                 <CurriculumContentsTitle>
                   Homework
                   <hr />
                 </CurriculumContentsTitle>
-                <CurriculumContents>{props.curriculum.graduation_assignment}</CurriculumContents>
+                <div className={s.markdown}>
+                  <ReactMarkdown components={markdownComponents}>{props.chapter.homework}</ReactMarkdown>
+                </div>
               </CurriculumContentsContainer>
             </FlatCard>
             <ChildButtonContainer>
