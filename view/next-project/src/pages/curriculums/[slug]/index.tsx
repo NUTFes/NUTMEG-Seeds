@@ -51,10 +51,10 @@ export async function getServerSideProps({ params }: any) {
   const json = await get(getUrl);
   return {
     props: {
-      curriculum: json[0].curriculum,
-      skills: json[0].skills,
-      chapters: json[0].chapter,
-      records: json[0].records,
+      curriculum: json[0].curriculum || null,
+      skills: json[0].skills || null,
+      chapters: json[0].chapter || null,
+      records: json[0].records || null,
     },
   };
 }
