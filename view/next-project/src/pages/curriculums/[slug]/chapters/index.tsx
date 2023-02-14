@@ -6,7 +6,7 @@ import ShadowCard from '@components/common/ShadowCard';
 import s from './Chapters.module.css';
 import { switchChapterIcon } from '@utils/switchChapterIcon';
 import NavigateNext from '@components/icons/NavigateNext';
-import ChapterDetailHeader from '@components/common/ChapterDetailHeader';
+import CurriculumDetailHeader from '@components/common/CurriculumDetailHeader';
 import { formatDate } from '@utils/format_date';
 
 interface Curriculum {
@@ -62,7 +62,7 @@ export async function getServerSideProps({ params }: any) {
 export default function Chapters(props: Props) {
   return (
     <MainLayout>
-      <ChapterDetailHeader
+      <CurriculumDetailHeader
         title={props.curriculum.title}
         createDate={formatDate(props.curriculum.created_at)}
         updateDate={formatDate(props.curriculum.updated_at)}
