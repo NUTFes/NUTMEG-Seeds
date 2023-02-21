@@ -137,7 +137,6 @@ export default function Page(props: Props) {
     const datetime2 = datetime.substring(0, datetime.length - 5);
     return datetime2;
   };
-  console.log(props);
 
   // コードブロックのレンダリング
   const markdownComponents = {

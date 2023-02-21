@@ -8,6 +8,8 @@ import DeleteModal from '@components/common/DeleteModal';
 import CurriculumAddModal from '@components/common/CurriculumAddModal';
 import CurriculumEditModal from '@components/common/CurriculumEditModal';
 import CurriculumDeleteModal from '@components/common/CurriculumDeleteModal';
+import ChapterAddModal from '@components/common/ChapterAddModal';
+import ChapterDeleteModal from '@components/common/ChapterDeleteModal';
 
 const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({ modalView, closeModal }) => {
   return (
@@ -25,6 +27,16 @@ const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({ modalVi
       {modalView === 'CURRICULUM_DELETE_MODAL' && (
         <DeleteModal onClose={closeModal}>
           <CurriculumDeleteModal />
+        </DeleteModal>
+      )}
+      {modalView === 'CHAPTER_ADD_MODAL' && (
+        <AddModal onClose={closeModal}>
+          <ChapterAddModal />
+        </AddModal>
+      )}
+      {modalView === 'CHAPTER_DELETE_MODAL' && (
+        <DeleteModal onClose={closeModal}>
+          <ChapterDeleteModal />
         </DeleteModal>
       )}
     </>
