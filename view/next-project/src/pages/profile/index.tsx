@@ -1,5 +1,5 @@
 import { get, put } from '@utils/api_methods';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import s from './index.module.css';
@@ -76,9 +76,13 @@ export default function Profile(props: Props) {
     mode: 'onChange',
   });
 
+  const user_id = useMemo(() => {
+    return localStorage.getItem('user_id')?.toString();
+  }, []);
+
   useEffect(() => {
     const fetchUserDetail = async () => {
-      const userDetailUrl = process.env.CSR_API_URI + '/user_details/' + 1;
+      const userDetailUrl = process.env.CSR_API_URI + '/user_details/' + user_id;
       const getRes = await get(userDetailUrl);
       setValue('grade_id', getRes.grade_id);
       setValue('department_id', getRes.department_id);
@@ -87,7 +91,7 @@ export default function Profile(props: Props) {
       setValue('biography', getRes.biography);
     };
     fetchUserDetail();
-  }, [setValue]);
+  }, [setValue, user_id]);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
