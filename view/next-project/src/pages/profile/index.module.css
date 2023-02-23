@@ -21,7 +21,7 @@
 
 .input {
   height: 3rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid var(--primary);
@@ -48,13 +48,32 @@
   border: 1px solid white;
   padding: 0.5rem 1rem;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
   cursor: pointer;
   border-radius: 0.5rem;
+  font-size: 1.5rem;
 }
 
 .button:hover {
   box-shadow: 0 0 0 0.25rem var(--primary);
   transition: 0.25s;
+}
+
+.submit {
+  display: flex;
+  justify-content: center;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+}
+
+.status {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
 }

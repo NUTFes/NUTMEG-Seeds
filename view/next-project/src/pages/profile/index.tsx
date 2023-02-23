@@ -1,9 +1,9 @@
-import { get } from '@utils/api_methods';
-import { formatDate } from '@utils/format_date';
-import { useState, useMemo, useEffect } from 'react';
+import { get, put } from '@utils/api_methods';
+import { useState, useEffect } from 'react';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import s from './index.module.css';
+import { useForm } from 'react-hook-form';
 
 interface User {
   id: number;
@@ -65,25 +65,46 @@ export const getServerSideProps = async () => {
       bureauList,
     },
   };
-}
+};
 
 export default function Profile(props: Props) {
-  const [userDetail, setUserDetail] = useState<UserDetail>();
+  const {
+    register,
+    handleSubmit,
+    setValue
+  } = useForm<UserDetail>({
+    mode: 'onChange',
+  });
 
   useEffect(() => {
     const fetchUserDetail = async () => {
       const userDetailUrl = process.env.CSR_API_URI + '/user_details/' + 1;
-      setUserDetail(await get(userDetailUrl));
+      const getRes = await get(userDetailUrl);
+      setValue('grade_id', getRes.grade_id);
+      setValue('department_id', getRes.department_id);
+      setValue('bureau_id', getRes.bureau_id);
+      setValue('github', getRes.github);
+      setValue('biography', getRes.biography);
     };
     fetchUserDetail();
-  }, []);
-
-  useEffect(() => {
-    console.log(userDetail);
-  }, [userDetail]);
+  }, [setValue]);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const onSubmit = async (data: UserDetail) => {
+    const putRes = await put(process.env.CSR_API_URI + '/user_details/' + 1, data);
+    console.log(putRes);
+    if (putRes.status === 200) {
+      setSuccess(true);
+      setError(false);
+    } else {
+      setSuccess(false);
+      setError(true);
+    }
+  }
 
   return (
     <>
@@ -104,53 +125,57 @@ export default function Profile(props: Props) {
               <button className={s.button}>Update</button>
             </div>
           </div>
-          <div>
-            <h2 className={s.sub}>Edit Profile</h2>
-            <hr />
+          <h2 className={s.sub}>Edit Profile</h2>
+          <hr />
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className={s.setting}>
               <p>学年</p>
-              <select className={s.select}>
+              <select className={s.select} {...register('grade_id')}>
                 {props.gradeList.map((grade) => (
                   <option key={grade.id} value={grade.id}>
                     {grade.name}
                   </option>
                 ))}
               </select>
-              <button className={s.button}>Update</button>
             </div>
             <div className={s.setting}>
               <p>所属</p>
-              <select className={s.select}>
+              <select className={s.select} {...register('department_id')}>
                 {props.departmentList.map((department) => (
                   <option key={department.id} value={department.id}>
                     {department.name}
                   </option>
                 ))}
               </select>
-              <button className={s.button}>Update</button>
             </div>
             <div className={s.setting}>
               <p>局</p>
-              <select className={s.select}>
+              <select className={s.select} {...register('bureau_id')}>
                 {props.bureauList.map((bureau) => (
                   <option key={bureau.id} value={bureau.id}>
                     {bureau.name}
                   </option>
                 ))}
               </select>
-              <button className={s.button}>Update</button>
             </div>
             <div className={s.setting}>
               <p>GitHub</p>
-              <input type='text' placeholder={userDetail?.github} className={s.input} />
-              <button className={s.button}>Update</button>
+              <input type='text' className={s.input} {...register('github')} />
             </div>
             <div className={s.setting}>
               <p>紹介文</p>
-              <textarea placeholder={userDetail?.biography} className={s.textarea} />
-              <button className={s.button}>Update</button>
+              <textarea className={s.textarea} {...register('biography')} />
             </div>
-          </div>
+            <div className={s.submit}>
+              <button type='submit' className={s.button}>
+                Profile Update
+              </button>
+            </div>
+            <div className={s.status}>
+            {success && <p className={s.success}>プロフィールを更新しました</p>}
+            {error && <p className={s.error}>プロフィールの更新に失敗しました</p>}
+            </div>
+          </form>
         </FlatCard>
       </MainLayout>
     </>
