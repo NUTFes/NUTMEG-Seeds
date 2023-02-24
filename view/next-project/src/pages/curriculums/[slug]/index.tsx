@@ -8,6 +8,7 @@ import { switchChapterIcon } from '@utils/switchChapterIcon';
 import NavigateNext from '@components/icons/NavigateNext';
 import CurriculumDetailHeader from '@components/common/CurriculumDetailHeader';
 import { formatDate } from '@utils/format_date';
+import ListHeader from '@components/common/ListHeader';
 
 interface Curriculum {
   id: number;
@@ -68,6 +69,7 @@ export default function Chapters(props: Props) {
         updateDate={formatDate(props.curriculum.updated_at)}
         skills={props.skills}
       />
+      <ListHeader title='Chapters' />
       <div className={s.parentButton}>
         <div className={s.chapters}>
           {props.chapters.map((chapter: Chapter, index: number) => (

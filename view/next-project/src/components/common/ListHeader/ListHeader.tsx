@@ -6,6 +6,7 @@ import ProjectAddModal from '@components/common/ProjectAddModal';
 import RecordAddModal from '@components/common/RecordAddModal';
 import SkillAddModal from '@components/common/SkillAddModal';
 import { useUI } from '@components/ui/context';
+import ChapterAddModal from '@components/common/ChapterAddModal';
 
 interface Skill {
   id: string;
@@ -46,59 +47,70 @@ const ListHeader = (props: Props) => {
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const router = useRouter();
 
-  const AddModal = (isOpenAddModal: boolean) => {
-    if (isOpenAddModal && router.pathname !== '/curriculums') {
-      switch (router.pathname) {
-        case '/records':
-          return (
-            <>
+  const AddModalUI = (isOpenAddModal: boolean) => {
+    switch (router.pathname) {
+      case '/records':
+        return (
+          <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
+            {isOpenAddModal && (
               <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} setNewRecords={props.setRecords} />
-            </>
-          );
-        case '/projects':
-          return (
-            <>
+            )}
+          </Button>
+        );
+      case '/projects':
+        return (
+          <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
+            {isOpenAddModal && (
               <ProjectAddModal
                 isOpen={isOpenAddModal}
                 setIsOpen={setIsOpenAddModal}
                 projects={projects}
                 setProjects={setProjects}
               />
-            </>
-          );
-        case '/skills':
-          return (
-            <>
+            )}
+          </Button>
+        );
+      case '/skills':
+        return (
+          <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
+            {isOpenAddModal && (
               <SkillAddModal
                 isOpen={isOpenAddModal}
                 setIsOpen={setIsOpenAddModal}
                 newSkills={props.newSkills}
                 setNewSkills={props.setNewSkills}
               />
-            </>
-          );
-      }
-    }
-  };
-  return (
-    <div className={s.HeaderContainer}>
-      <div className={s.SplitLeftContainer}>
-        <h1>{props.title}</h1>
-      </div>
-      <div className={s.SplitRightContainer}>
-        {/* curriculumsのみモーダルの再レンダリング対策しているためこのような記述にしている */}
-        {router.pathname === '/curriculums' ? (
+            )}
+          </Button>
+        );
+      // curriculumとchapterのみモーダルの再レンダリング対策しているためこのような記述にしている
+      case '/curriculums':
+        return (
           <Button
             onClick={() => {
               setModalView('CURRICULUM_ADD_MODAL');
               openModal();
             }}
-          ></Button>
-        ) : (
-          <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}></Button>
-        )}
-        {AddModal(isOpenAddModal)}
+          />
+        );
+      case '/curriculums/[slug]':
+        return (
+          <Button
+            onClick={() => {
+              setModalView('CHAPTER_ADD_MODAL');
+              openModal();
+            }}
+          />
+        );
+    }
+  };
+
+  return (
+    <div className={s.HeaderContainer}>
+      <div className={s.SplitLeftContainer}>
+        <h1>{props.title}</h1>
       </div>
+      <div className={s.SplitRightContainer}>{AddModalUI(isOpenAddModal)}</div>
     </div>
   );
 };

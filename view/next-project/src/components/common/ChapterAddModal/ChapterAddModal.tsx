@@ -10,50 +10,20 @@ import { useUI } from '@components/ui/context';
 
 const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
-type Record = {
-  id: number;
-  title: string;
-  user_id: string;
-  user_name: string;
-  teacher_id: string;
-  teacher_name: string;
-  curriculum_id: number;
-  curriculum_title: string;
-  skill: string;
-  created_at: string;
-  updated_at: string;
-};
-
-interface Curriculum {
-  id: string;
-  title: string;
-}
-
-interface Teacher {
-  user_id: string;
-  record_id: string;
-}
-
-interface User {
-  id: number | string;
-  name: string;
-}
-
-interface UserRecord {
+interface Chapter {
+  id?: number;
   title: string;
   content: string;
   homework: string;
-  user_id: number | string | undefined;
   curriculum_id: string;
+  order: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
-const RecordAddModal: FC = () => {
+const ChapterAddModal: FC = () => {
+  const router = useRouter();
   const { closeModal } = useUI();
-
-  const [curriculums, setCurriculums] = useState<Curriculum[]>([{ id: '', title: '' }]);
-  const [records, setRecords] = useState<Record[]>([]);
-  const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
-  const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '', record_id: '' });
 
   const contentSentence =
     '# 内容・やったこと \n\n\n' +
@@ -64,38 +34,28 @@ const RecordAddModal: FC = () => {
   const homeworkSentence =
     '# 次回までの課題 \n\n\n' + '# 参考資料 \n\n\n' + '# 次回までに勉強しておいた方がいいこと\n\n\n';
 
-  const [recordData, setRecordData] = useState<UserRecord>({
+  const [chapter, setChapter] = useState<Chapter>({
     title: '',
     content: contentSentence,
     homework: homeworkSentence,
-    user_id: localStorage.getItem('user_id')?.toString(),
-    curriculum_id: '1',
+    curriculum_id: router.query.slug as string,
+    order: 0,
   });
 
-  const [recordMarkdown, setRecordMarkdown] = useState<string>(contentSentence);
+  const [chapterMarkdown, setChapterMarkdown] = useState<string>(contentSentence);
   const [homeworkMarkdown, setHomeworkMarkdown] = useState<string>(homeworkSentence);
 
+  // orderの初期値を設定
   useEffect(() => {
-    const getCurriculumsUrl = process.env.CSR_API_URI + '/curriculums';
-    const getCurriculums = async (url: string) => {
-      setCurriculums(await get(url));
-    };
-    getCurriculums(getCurriculumsUrl);
-
-    const getRecordsUrl = process.env.CSR_API_URI + '/api/v1/get_records_for_index';
-    const getRecords = async (url: string) => {
-      setRecords(await get(url));
-    };
-    getRecords(getRecordsUrl);
-
-    const getUsersUrl = process.env.CSR_API_URI + '/api/v1/users';
-    const getUsers = async (url: string) => {
-      setUsers(await get(url));
-    };
-    getUsers(getUsersUrl);
+    (async () => {
+      const id = router.query.slug;
+      const getUrl = `${process.env.CSR_API_URI}/api/v1/get_curriculum_chapter_for_view/${id}`;
+      const json = await get(getUrl);
+      setChapter({ ...chapter, order: json[0].chapter.length + 1 });
+    })();
   }, []);
 
-  const recordHandler =
+  const handler =
     (input: string) =>
     (
       e:
@@ -103,16 +63,12 @@ const RecordAddModal: FC = () => {
         | React.ChangeEvent<HTMLTextAreaElement>
         | React.ChangeEvent<HTMLSelectElement>,
     ) => {
-      setRecordData({ ...recordData, [input]: e.target.value });
+      setChapter({ ...chapter, [input]: e.target.value });
     };
 
-  const teacherHandler = () => (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTeacherData({ ...teacherData, user_id: e.target.value });
-  };
-
-  // レコード編集用ハンドラー
-  const recordMarkdownHandler = useCallback((value: string) => {
-    setRecordMarkdown(value);
+  // コンテンツ編集用ハンドラー
+  const chapterMarkdownHandler = useCallback((value: string) => {
+    setChapterMarkdown(value);
   }, []);
   // Homework編集用ハンドラー
   const homeworkMarkdownHandler = useCallback((value: string) => {
@@ -120,26 +76,11 @@ const RecordAddModal: FC = () => {
   }, []);
 
   // フォームデータの送信とページの表を再レンダリング
-  const submitRecord = async (recordData: any, teacherData: any) => {
-    const submitRecordUrl = process.env.CSR_API_URI + '/records';
-    const submitData = {
-      record: {
-        title: recordData.title,
-        content: recordMarkdown,
-        homework: homeworkMarkdown,
-        user_id: recordData.user_id,
-        curriculum_id: recordData.curriculum_id,
-      },
-      teacher: {
-        user_id: teacherData.user_id,
-        record_id: 1,
-      },
-    };
-    const req = await post(submitRecordUrl, submitData);
-    const res = await req.json();
-    const getRecordUrl = process.env.CSR_API_URI + '/api/v1/get_record_for_index_reload/' + res.id;
-    const getRes = await get(getRecordUrl);
-    const newRecord: Record = getRes[0];
+  const submitChapter = async () => {
+    const submitUrl = process.env.CSR_API_URI + '/chapters';
+    await post(submitUrl, chapter);
+    closeModal();
+    router.reload();
   };
 
   return (
@@ -152,85 +93,18 @@ const RecordAddModal: FC = () => {
             </button>
           </div>
           <div className={s.modalName}>
-            <h2>New Record</h2>
+            <h2>New Chapter</h2>
           </div>
-          <h3 className={s.contentsTitle}>Record Name</h3>
+          <h3 className={s.contentsTitle}>Chapter Name</h3>
           <div className={s.modalContentContents}>
-            <input type='text' placeholder='Input' value={recordData.title} onChange={recordHandler('title')} />
+            <input type='text' placeholder='Input' value={chapter.title} onChange={handler('title')} />
           </div>
           <h3 className={s.contentsTitle}>Contents</h3>
-          <SimpleMde value={recordMarkdown} onChange={recordMarkdownHandler} className={s.contentsMde} />
+          <SimpleMde value={chapterMarkdown} onChange={chapterMarkdownHandler} className={s.contentsMde} />
           <h3 className={s.contentsTitle}>Homework</h3>
           <SimpleMde value={homeworkMarkdown} onChange={homeworkMarkdownHandler} className={s.homeworkMde} />
-          <h3 className={s.contentsTitle}>Teacher</h3>
-          <div className={s.modalContentContents}>
-            <select defaultValue={teacherData.user_id} onChange={teacherHandler()}>
-              {users.map((data: User) => {
-                if (data.id == teacherData.user_id) {
-                  return (
-                    <option key={data.id} value={data.id} selected>
-                      {data.name}
-                    </option>
-                  );
-                } else {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.name}
-                    </option>
-                  );
-                }
-              })}
-            </select>
-          </div>
-          <h3 className={s.contentsTitle}>Student</h3>
-          <div className={s.modalContentContents}>
-            <select defaultValue={recordData.user_id} onChange={recordHandler('user_id')}>
-              {users.map((data: User) => {
-                if (data.id == recordData.user_id) {
-                  return (
-                    <option key={data.id} value={data.id} selected>
-                      {data.name}
-                    </option>
-                  );
-                } else {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.name}
-                    </option>
-                  );
-                }
-              })}
-            </select>
-          </div>
-          <h3 className={s.contentsTitle}>Curriculum</h3>
-          <div className={s.modalContentContents}>
-            <select defaultValue={recordData.curriculum_id} onChange={recordHandler('curriculum_id')}>
-              {curriculums.map((data: Curriculum) => {
-                if (data.id == recordData.curriculum_id) {
-                  return (
-                    <option key={data.id} value={data.id} selected>
-                      {data.title}
-                    </option>
-                  );
-                } else {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.title}
-                    </option>
-                  );
-                }
-              })}
-            </select>
-          </div>
           <div className={s.modalSubmitButton}>
-            <Button
-              onClick={() => {
-                submitRecord(recordData, teacherData);
-                closeModal();
-              }}
-            >
-              Submit
-            </Button>
+            <Button onClick={submitChapter}>Submit</Button>
           </div>
         </div>
       </div>
@@ -238,4 +112,4 @@ const RecordAddModal: FC = () => {
   );
 };
 
-export default RecordAddModal;
+export default ChapterAddModal;

@@ -30,9 +30,7 @@ const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({ modalVi
         </DeleteModal>
       )}
       {modalView === 'CHAPTER_ADD_MODAL' && (
-        <AddModal onClose={closeModal}>
-          <ChapterAddModal />
-        </AddModal>
+        <ChapterAddModal />
       )}
       {modalView === 'CHAPTER_DELETE_MODAL' && (
         <DeleteModal onClose={closeModal}>
