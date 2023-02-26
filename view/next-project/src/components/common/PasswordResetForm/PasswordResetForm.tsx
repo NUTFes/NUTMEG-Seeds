@@ -27,7 +27,6 @@ export const PasswordResetForm = () => {
       password: data.password
     };
     const putRes = await put_with_token(putUrl, submitData, currentUser);
-    console.log(await putRes.json());
     if (putRes.status === 200) {
       setSuccess(true);
       setErrorMessage('');

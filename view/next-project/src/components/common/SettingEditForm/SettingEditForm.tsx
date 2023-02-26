@@ -73,7 +73,6 @@ export const SettingEditForm = (props: Props) => {
   const onSubmit = async (data: User) => {
     const putUrl = process.env.CSR_API_URI + '/api/auth?access-token=' + currentUser?.accessToken + '&client=' + currentUser?.client + '&uid=' + currentUser?.uid;
     const putRes = await put(putUrl, data);
-    console.log(await putRes.json())
     if (putRes.status === 200) {
       setSuccess(true);
       setError(false);
