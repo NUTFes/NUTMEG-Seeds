@@ -5,10 +5,14 @@ import { useEffect } from 'react';
 import router from 'next/router';
 import { ManagedUIContext } from '@components/ui/context';
 import Layout from '@components/layout/Layout';
+import { RecoilRoot } from 'recoil';
+import AuthProvider from 'src/context/AuthProvider';
+import { useAuth } from 'src/context/AuthProvider';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { isAuthenticated } = useAuth();
   useEffect(() => {
-    if (localStorage.getItem('user_id') === null) {
+    if (!isAuthenticated) {
       router.push('/');
     }
   }, []);
@@ -29,11 +33,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <link href='https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap' rel='stylesheet'></link>
       </Head>
-      <ManagedUIContext>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ManagedUIContext>
+      <RecoilRoot>
+        <AuthProvider>
+          <ManagedUIContext>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ManagedUIContext>
+        </AuthProvider>
+      </RecoilRoot>
     </>
   );
 }
