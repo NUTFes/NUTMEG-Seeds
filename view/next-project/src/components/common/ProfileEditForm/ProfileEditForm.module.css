@@ -1,0 +1,79 @@
+.profile {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 0.5fr 2fr;
+  gap: 2rem;
+  margin: 2rem 0;
+  align-items: center;
+}
+
+.profile p {
+  font-size: 1.5rem;
+}
+
+.underline {
+  margin-bottom: 1rem;
+}
+
+.input {
+  height: 3rem;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--primary);
+}
+
+.select {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--primary);
+}
+
+.textarea {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--primary);
+  height: 10rem;
+}
+
+.button {
+  background-color: var(--primary);
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.password {
+  margin: 3rem 0;
+}
+
+.button:hover {
+  box-shadow: 0 0 0 0.25rem var(--primary);
+  transition: 0.25s;
+}
+
+.submit {
+  display: flex;
+  justify-content: center;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+}
+
+.status {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+}
