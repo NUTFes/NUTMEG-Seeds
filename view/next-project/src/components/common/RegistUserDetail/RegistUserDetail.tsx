@@ -42,7 +42,7 @@ export const submitUser = async (data: submitData, setErrorMessage: Function) =>
   if (res.status === 201) {
     Router.push('/records');
   } else {
-    setErrorMessage('登録に失敗しました (' + res.status + ')');
+    setErrorMessage('登録に失敗しました');
   }
 };
 
