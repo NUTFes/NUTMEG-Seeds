@@ -1,12 +1,21 @@
 import React, { FC, useState } from 'react';
 import router from 'next/router';
 import s from './HeaderMenu.module.css';
+import { useRecoilState } from 'recoil';
+import { userState } from 'src/store/user';
 
 const HeaderMenu: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useRecoilState(userState);
 
   const logout = () => {
-    localStorage.clear();
+    setUser({
+      userId: '',
+      accessToken: '',
+      client: '',
+      uid: '',
+      tokenType: '',
+    });
     router.push('/');
   };
 
