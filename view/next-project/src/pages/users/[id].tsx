@@ -80,7 +80,6 @@ interface Project {
 }
 
 export async function getServerSideProps({params}: any) {
-  console.log(params)
   const getUrl = process.env.SSR_API_URI + '/api/v1/get_user_for_member_page/' + params.id;
   const getRes = await get(getUrl);
   return {

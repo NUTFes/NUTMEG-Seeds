@@ -110,7 +110,6 @@ const UserRecordAddModal: FC<ModalProps> = (props) => {
     await post(submitTeacherUrl, teacherData);
     const getUserRecordUrl = process.env.CSR_API_URI + '/api/v1/get_user_records_for_reload_view/' + router.query.id;
     const getRes = await get(getUserRecordUrl);
-    console.log(getRes[0].records)
     const newRecord: UserRecord = getRes[0].records[getRes[0].records.length - 1];
     props.setUserRecords([newRecord, ...props.userRecords]);
   };

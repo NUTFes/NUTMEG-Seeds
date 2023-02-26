@@ -34,7 +34,6 @@ const SkillAddModal: VFC<ModalProps> = (props) => {
   const [skillData, setSkillData] = useState<Skill>({name: '', detail: '', category_id: 0});
   // 選択肢の取得
   useEffect(() => {
-    console.log(props.newSkills)
     const getCategoriesUrl = process.env.CSR_API_URI + '/categories'
     const getCategoires = async (url: string) => {
       setCategories(await get(url));
@@ -62,7 +61,6 @@ const SkillAddModal: VFC<ModalProps> = (props) => {
     const getSkillUrl = process.env.CSR_API_URI + '/api/v1/get_skill_for_reload_index/' + res.id;
     const getRes = await get(getSkillUrl);
     const newSkill: Skill = getRes[0]
-    console.log(newSkill)
     props.setNewSkills([...props.newSkills, newSkill])
   };
 
@@ -91,7 +89,6 @@ const SkillAddModal: VFC<ModalProps> = (props) => {
       <Button
         onClick={() => {
           submitSkill(skillData);
-          console.log(skillData)
           props.setIsOpen(false)
         }}
       >
