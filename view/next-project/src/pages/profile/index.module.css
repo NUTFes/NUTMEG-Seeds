@@ -6,17 +6,21 @@
   margin-bottom: 0.5rem;
 }
 
-.setting {
+.profile {
   width: 100%;
   display: grid;
-  grid-template-columns: 0.5fr 2fr 0.5fr;
+  grid-template-columns: 0.5fr 2fr;
   gap: 2rem;
   margin: 2rem 0;;
   align-items: center;
 }
 
-.setting p {
-  font-size: 2rem;
+.profile p {
+  font-size: 1.5rem;
+}
+
+.underline{
+  margin-bottom: 1rem;
 }
 
 .input {
@@ -51,6 +55,10 @@
   cursor: pointer;
   border-radius: 0.5rem;
   font-size: 1.5rem;
+}
+
+.password{
+  margin: 3rem 0;
 }
 
 .button:hover {
