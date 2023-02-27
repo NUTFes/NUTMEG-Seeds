@@ -3,13 +3,14 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import s from './PasswordResetForm.module.css';
 import { useAuth } from 'src/context/AuthProvider';
+import React from 'react';
 
 interface FormData {
   password: string;
   passwordConfirmation: string;
 }
 
-export const PasswordResetForm = () => {
+export const PasswordResetForm: React.FC = () => {
   const { currentUser } = useAuth();
 
   const { register, handleSubmit, watch } = useForm<FormData>({

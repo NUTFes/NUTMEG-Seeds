@@ -11,10 +11,6 @@
   font-size: 1.5rem;
 }
 
-.underline {
-  margin-bottom: 1rem;
-}
-
 .input {
   height: 3rem;
   font-size: 1.5rem;
@@ -47,10 +43,6 @@
   cursor: pointer;
   border-radius: 0.5rem;
   font-size: 1.5rem;
-}
-
-.password {
-  margin: 3rem 0;
 }
 
 .button:hover {
