@@ -1,7 +1,7 @@
 import { put } from '@utils/api_methods';
 import { useForm } from 'react-hook-form';
 import { useState, useEffect, useMemo } from 'react';
-import s from './SettingEditForm.module.css';
+import s from './PersonalSettingForm.module.css';
 import { useAuth } from 'src/context/AuthProvider';
 
 interface User {
@@ -19,7 +19,7 @@ interface Props {
   users: User[];
 }
 
-export const SettingEditForm = (props: Props) => {
+export const PersonalSettingForm = (props: Props) => {
   const { users } = props;
   const { currentUser } = useAuth();
   const [user, setUser] = useState<User>({
@@ -103,7 +103,7 @@ export const SettingEditForm = (props: Props) => {
       </div>
       <div className={s.submit}>
         <button type='submit' className={s.button}>
-          Profile Settings
+          Update personal information
         </button>
       </div>
       <div className={s.status}>
@@ -114,4 +114,4 @@ export const SettingEditForm = (props: Props) => {
   );
 };
 
-export default SettingEditForm;
+export default PersonalSettingForm;
