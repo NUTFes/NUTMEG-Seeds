@@ -1,4 +1,4 @@
-import { put_with_token } from '@utils/api_methods';
+import { putWithToken } from '@utils/api_methods';
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import s from './PasswordResetForm.module.css';
@@ -23,11 +23,23 @@ export const PasswordResetForm: React.FC = () => {
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const onSubmit = async (data: FormData) => {
+    if (data.password !== data.passwordConfirmation) {
+      setSuccess(false);
+      setErrorMessage('パスワードが一致しません');
+      return;
+    }
+
+    if (data.password.length === 0 || data.passwordConfirmation.length === 0) {
+      setSuccess(false);
+      setErrorMessage('パスワードを入力してください');
+      return;
+    }
+
     const putUrl = process.env.CSR_API_URI + '/auth';
     const submitData = {
-      password: data.password
+      password: data.password,
     };
-    const putRes = await put_with_token(putUrl, submitData, currentUser);
+    const putRes = await putWithToken(putUrl, submitData, currentUser);
     if (putRes.status === 200) {
       setSuccess(true);
       setErrorMessage('');
@@ -37,21 +49,9 @@ export const PasswordResetForm: React.FC = () => {
     }
   };
 
-  const messageResetHandler = () => {
+  useEffect(() => {
     setSuccess(false);
     setErrorMessage('');
-  };
-
-  useEffect(() => {
-    messageResetHandler();
-
-    if (watchPassword && watchPasswordConfirmation && watchPassword.length > 0 && watchPasswordConfirmation.length > 0) {
-      if (watchPassword !== watchPasswordConfirmation) {
-        setErrorMessage('パスワードが一致しません');
-      } else {
-        setErrorMessage('');
-      }
-    }
   }, [watchPassword, watchPasswordConfirmation]);
 
   return (
