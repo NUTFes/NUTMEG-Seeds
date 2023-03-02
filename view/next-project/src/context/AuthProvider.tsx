@@ -1,6 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'src/store/user';
+import Router from 'next/router';
 
 interface User {
   accessToken: string
@@ -26,18 +27,20 @@ const AuthContext = React.createContext<AuthContext>({
 
 const AuthProvider = (props: Props) => {
   const userParams = useRecoilValue(userState);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
+
+  const isAuthenticated= useMemo(() => {
+    return !!userParams;
+  }, [userParams]);
+
+  const currentUser = useMemo(() => {
+    return !!userParams ? userParams : undefined;
+  }, [userParams]);
 
   useEffect(() => {
-    if (!!userParams) {
-      setIsAuthenticated(true);
-      setCurrentUser(userParams);
-    }else{
-      setIsAuthenticated(false);
-      setCurrentUser(undefined);
+    if (!isAuthenticated) {
+      Router.push('/');
     }
-  }, [userParams]);
+  }, [isAuthenticated]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, currentUser }}>
