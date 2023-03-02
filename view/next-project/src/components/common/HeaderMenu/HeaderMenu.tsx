@@ -11,13 +11,7 @@ const HeaderMenu: FC = () => {
   const [user, setUser] = useRecoilState(userState);
 
   const logout = () => {
-    setUser({
-      userId: '',
-      accessToken: '',
-      client: '',
-      uid: '',
-      tokenType: '',
-    });
+    setUser(undefined);
     router.push('/');
   };
 

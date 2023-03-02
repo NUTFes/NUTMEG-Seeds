@@ -11,14 +11,8 @@ interface User {
     userId: string
 }
 
-export const userState = atom<User>({
+export const userState = atom<User | undefined>({
     key: 'user',
-    default: {
-        accessToken: '',
-        client: '',
-        uid: '',
-        tokenType: '',
-        userId: '',
-    },
+    default: undefined,
     effects_UNSTABLE: [persistAtom],
 })
