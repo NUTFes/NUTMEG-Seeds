@@ -163,7 +163,7 @@ export const ProfileEditForm = (props: Props) => {
       </div>
       <div className={s.submit}>
         <button type='submit' className={s.button}>
-          Profile Update
+          Update Profile
         </button>
       </div>
       <div className={s.status}>
