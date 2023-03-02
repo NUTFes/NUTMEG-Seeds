@@ -2,7 +2,9 @@ import React, { FC, useState } from 'react';
 import router from 'next/router';
 import s from './HeaderMenu.module.css';
 import { useRecoilState } from 'recoil';
-import { userState } from 'src/store/user';
+import { userState } from '@store/user';
+import { BsFillPersonFill } from 'react-icons/bs';
+import { IoLogOutSharp } from 'react-icons/io5';
 
 const HeaderMenu: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,17 +33,19 @@ const HeaderMenu: FC = () => {
           opacity: isMenuOpen ? 1 : 0,
         }}
       >
-        <div
+        <button
           className={s.menuItem}
           onClick={() => {
             router.push('/profile');
           }}
         >
+          <BsFillPersonFill />
           Profile
-        </div>
-        <div className={s.menuItem} onClick={logout}>
+        </button>
+        <button className={s.menuItem} onClick={logout}>
+          <IoLogOutSharp />
           Logout
-        </div>
+        </button>
       </div>
     </div>
   );
