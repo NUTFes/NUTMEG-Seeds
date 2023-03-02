@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import gfm from 'remark-gfm';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
@@ -12,6 +11,7 @@ import DeleteButton from '@components/common/DeleteButton';
 import Row from '@components/layout/RowLayout';
 import { useUI } from '@components/ui/context';
 import ChapterDetailHeader from '@components/common/ChapterDetailHeader';
+import ChapterEditModal from '@components/common/ChapterEditModal';
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 // 任意のテーマをimport
@@ -32,10 +32,14 @@ interface Curriculum {
 }
 
 interface Chapter {
+  id?: number;
   title: string;
   content: string;
   homework: string;
   curriculum_id: number;
+  order: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface Record {
@@ -49,29 +53,27 @@ interface Record {
   updated_at: string;
 }
 
-interface CurriculumWithChapter {
-  curriculum: Curriculum;
-  chapter: Chapter[];
-}
-
 interface Props {
   curriculum: Curriculum;
   skills: Skill[];
   records: Record[];
-  curriculumsWithChapter: CurriculumWithChapter[];
   chapter: Chapter;
+  curriculums: Curriculum[];
 }
 
 export async function getServerSideProps({ params }: any) {
   const id = params.id;
   const getUrl = `${process.env.SSR_API_URI}/api/v1/get_chapter_for_detail/${id}`;
+  const getCurriculumsUrl = `${process.env.SSR_API_URI}/curriculums`;
   const json = await get(getUrl);
+  const curriculums = await get(getCurriculumsUrl);
   return {
     props: {
       chapter: json.chapter,
       curriculum: json.curriculum,
       skills: json.skills,
       records: json.records,
+      curriculums: curriculums,
     },
   };
 }
@@ -130,7 +132,9 @@ export default function Page(props: Props) {
     text-align: right;
   `;
 
-  const { setModalView, openModal } = useUI();
+  const { openModal, setModalView } = useUI();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [chapter, setChapter] = useState<Chapter>(props.chapter);
 
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
@@ -172,7 +176,7 @@ export default function Page(props: Props) {
   return (
     <MainLayout>
       <ChapterDetailHeader
-        title={props.chapter.title}
+        title={chapter.title}
         createDate={formatDate(props.curriculum.created_at)}
         updateDate={formatDate(props.curriculum.updated_at)}
         skills={props.skills}
@@ -184,8 +188,7 @@ export default function Page(props: Props) {
               <Row gap='3rem' justify='end'>
                 <EditButton
                   onClick={() => {
-                    setModalView('CURRICULUM_EDIT_MODAL');
-                    openModal();
+                    setIsOpen(true);
                   }}
                 />
                 <DeleteButton
@@ -202,7 +205,7 @@ export default function Page(props: Props) {
                 </CurriculumContentsTitle>
                 <CurriculumContents>
                   <div className={s.markdown}>
-                    <ReactMarkdown components={markdownComponents}>{props.chapter.content}</ReactMarkdown>
+                    <ReactMarkdown components={markdownComponents}>{chapter.content}</ReactMarkdown>
                   </div>
                 </CurriculumContents>
                 <CurriculumContentsTitle>
@@ -210,7 +213,7 @@ export default function Page(props: Props) {
                   <hr />
                 </CurriculumContentsTitle>
                 <div className={s.markdown}>
-                  <ReactMarkdown components={markdownComponents}>{props.chapter.homework}</ReactMarkdown>
+                  <ReactMarkdown components={markdownComponents}>{chapter.homework}</ReactMarkdown>
                 </div>
               </CurriculumContentsContainer>
             </FlatCard>
@@ -233,6 +236,17 @@ export default function Page(props: Props) {
           </SplitRightContainer>
         </SplitParentContainer>
       </ParentButtonContainer>
+
+      {/* チャプターの編集モーダル */}
+      {isOpen && (
+        <ChapterEditModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          chapter={chapter}
+          setChapter={setChapter}
+          curriculums={props.curriculums}
+        />
+      )}
     </MainLayout>
   );
 }

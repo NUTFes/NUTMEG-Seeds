@@ -51,10 +51,20 @@
 .contentsMde {
   width: 100%;
 }
+
+.contentsMde span {
+  font-size: 16px;
+  background-color: #fff;
+}
+
 .homeworkMde {
   width: 100%;
 }
 
+.homeworkMde span {
+  font-size: 16px;
+  background-color: #fff;
+}
 .modalContent input {
   font-size: 1.6rem;
   width: 100%;
