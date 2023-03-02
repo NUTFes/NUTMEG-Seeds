@@ -4,23 +4,23 @@ import { del } from '@utils/api_methods';
 import Button from '@components/common/TestButton';
 import { useUI } from '@components/ui/context';
 
-const RecordDeleteModal: FC = () => {
+const ChapterDeleteModal: FC = () => {
   const router = useRouter();
   const query = router.query;
   const { closeModal } = useUI();
 
-  const DeleteRecord = async (query: any) => {
-    const deleteRecordUrl = process.env.CSR_API_URI + '/chapters/' + query.id;
-    await del(deleteRecordUrl);
+  const DeleteChapter = async (query: any) => {
+    const deleteUrl = process.env.CSR_API_URI + '/chapters/' + query.id;
+    await del(deleteUrl);
   };
 
   return (
     <>
-      <h2>Delete Record</h2>
+      <h2>Delete Chapter</h2>
       <h3>Are you sure?</h3>
       <Button
         onClick={() => {
-          DeleteRecord(query);
+          DeleteChapter(query);
           closeModal();
           router.back();
         }}
@@ -31,4 +31,4 @@ const RecordDeleteModal: FC = () => {
   );
 };
 
-export default RecordDeleteModal;
+export default ChapterDeleteModal;
