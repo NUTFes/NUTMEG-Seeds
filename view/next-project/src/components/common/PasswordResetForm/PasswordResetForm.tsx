@@ -69,7 +69,7 @@ export const PasswordResetForm: React.FC = () => {
       </div>
       <div className={s.submit}>
         <button type='submit' className={s.button}>
-          Profile Settings
+          Update password
         </button>
       </div>
       <div className={s.status}>
