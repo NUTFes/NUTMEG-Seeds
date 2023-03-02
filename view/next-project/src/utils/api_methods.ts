@@ -8,7 +8,7 @@ export const get = async (url: string) => {
   return await res.json();
 };
 
-export const get_with_token = async (url: string, currentUser: any) => {
+export const getWithToken = async (url: string, currentUser: any) => {
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -44,7 +44,7 @@ export const put = async (url: string, data: any) => {
   return res
 };
 
-export const put_with_token = async (url: string, data: any, currentUser: any) => {
+export const putWithToken = async (url: string, data: any, currentUser: any) => {
   const res = await fetch(url, {
     method: 'PUT',
     headers: {
