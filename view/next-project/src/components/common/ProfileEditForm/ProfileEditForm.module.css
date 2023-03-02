@@ -16,22 +16,37 @@
   font-size: 1.5rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--secondary-2);
+}
+
+.input:focus {
+  outline: none;
+  border: 2px solid var(--primary);
 }
 
 .select {
   font-size: 1.5rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--secondary-2);
+}
+
+.select:focus {
+  outline: none;
+  border: 2px solid var(--primary);
 }
 
 .textarea {
   font-size: 1.5rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--secondary-2);
   height: 10rem;
+}
+
+.textarea:focus {
+  outline: none;
+  border: 2px solid var(--primary);
 }
 
 .button {
