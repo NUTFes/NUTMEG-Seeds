@@ -30,7 +30,7 @@ const AuthProvider = (props: Props) => {
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
-    if (userParams.userId !== '') {
+    if (!!userParams) {
       setIsAuthenticated(true);
       setCurrentUser(userParams);
     }else{
