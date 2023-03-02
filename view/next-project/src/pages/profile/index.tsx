@@ -4,7 +4,7 @@ import FlatCard from '@components/common/FlatCard';
 import s from './index.module.css';
 import { useRouter } from 'next/router';
 import ProfileEditForm from '@components/common/ProfileEditForm';
-import SettingEditForm from '@components/common/SettingEditForm';
+import PersonalSettingForm from '@components/common/PersonalSettingForm';
 import PasswordResetForm from '@components/common/PasswordResetForm';
 
 interface Grade {
@@ -39,22 +39,6 @@ interface Props {
   users: User[];
 }
 
-interface UserDetail {
-  user_id: number;
-  grade_id: number;
-  department_id: number;
-  bureau_id: number;
-  icon_name: string;
-  github: string;
-  slack: string;
-  biography: string;
-  pc_name: string;
-  pc_os: string;
-  pc_cpu: string;
-  pc_ram: string;
-  pc_storage: string;
-}
-
 export const getServerSideProps = async () => {
   const gradeListUrl = process.env.SSR_API_URI + '/grades';
   const gradeList = await get(gradeListUrl);
@@ -81,16 +65,14 @@ export const getServerSideProps = async () => {
 export default function Profile(props: Props) {
   const { users, gradeList, departmentList, bureauList } = props;
 
-  const router = useRouter();
-
   return (
     <>
       <MainLayout>
         <h1 className={s.title}>Profile</h1>
         <FlatCard>
-          <h2 className={s.sub}>Edit Settings</h2>
+          <h2 className={s.sub}>Edit Personal Setting</h2>
           <hr />
-          <SettingEditForm users={users} />
+          <PersonalSettingForm users={users} />
           <h2 className={s.sub}>Edit Password</h2>
           <hr className={s.underline} />
           <PasswordResetForm />
