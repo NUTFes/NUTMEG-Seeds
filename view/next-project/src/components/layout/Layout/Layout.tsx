@@ -2,7 +2,6 @@ import s from './Layout.module.css';
 import { useUI } from '@components/ui/context';
 import React from 'react';
 
-import AddModal from '@components/common/AddModal';
 import EditModal from '@components/common/EditModal';
 import DeleteModal from '@components/common/DeleteModal';
 import CurriculumAddModal from '@components/common/CurriculumAddModal';
@@ -14,11 +13,7 @@ import ChapterDeleteModal from '@components/common/ChapterDeleteModal';
 const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({ modalView, closeModal }) => {
   return (
     <>
-      {modalView === 'CURRICULUM_ADD_MODAL' && (
-        <AddModal onClose={closeModal}>
-          <CurriculumAddModal />
-        </AddModal>
-      )}
+      {modalView === 'CURRICULUM_ADD_MODAL' && <CurriculumAddModal />}
       {modalView === 'CURRICULUM_EDIT_MODAL' && (
         <EditModal onClose={closeModal}>
           <CurriculumEditModal />
@@ -29,9 +24,7 @@ const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({ modalVi
           <CurriculumDeleteModal />
         </DeleteModal>
       )}
-      {modalView === 'CHAPTER_ADD_MODAL' && (
-        <ChapterAddModal />
-      )}
+      {modalView === 'CHAPTER_ADD_MODAL' && <ChapterAddModal />}
       {modalView === 'CHAPTER_DELETE_MODAL' && (
         <DeleteModal onClose={closeModal}>
           <ChapterDeleteModal />
