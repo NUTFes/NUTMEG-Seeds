@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect, useMemo } from 'react';
 import s from './ProfileEditForm.module.css';
 import { useAuth } from 'src/context/AuthProvider';
+import { snakeToCamel, camelToSnake } from '@utils/namingConversion';
 
 interface Grade {
   id: number;
@@ -19,20 +20,20 @@ interface Bureau {
   name: string;
 }
 
-interface UserDetail {
-  user_id: number;
-  grade_id: number;
-  department_id: number;
-  bureau_id: number;
-  icon_name: string;
+export interface UserDetail {
+  userId: number;
+  gradeId: number;
+  departmentId: number;
+  bureauId: number;
+  iconName: string;
   github: string;
   slack: string;
   biography: string;
-  pc_name: string;
-  pc_os: string;
-  pc_cpu: string;
-  pc_ram: string;
-  pc_storage: string;
+  pcName: string;
+  pcOs: string;
+  pcCpu: string;
+  pcRam: string;
+  pcStorage: string;
 }
 
 interface Props {
@@ -45,45 +46,47 @@ export const ProfileEditForm = (props: Props) => {
   const { currentUser } = useAuth();
 
   const [userDetail, setUserDetail] = useState<UserDetail>({
-    user_id: 0,
-    grade_id: 0,
-    department_id: 0,
-    bureau_id: 0,
-    icon_name: '',
+    userId: 0,
+    gradeId: 0,
+    departmentId: 0,
+    bureauId: 0,
+    iconName: '',
     github: '',
     slack: '',
     biography: '',
-    pc_name: '',
-    pc_os: '',
-    pc_cpu: '',
-    pc_ram: '',
-    pc_storage: '',
+    pcName: '',
+    pcOs: '',
+    pcCpu: '',
+    pcRam: '',
+    pcStorage: '',
   });
 
   useEffect(() => {
     const userDetailUrl = process.env.CSR_API_URI + '/user_details/' + currentUser?.userId;
     const getUserDetail = async () => {
-      const getRes = await get(userDetailUrl);
-      setUserDetail(getRes);
+      await get(userDetailUrl).then((res) => {
+        const camelUserDetail = snakeToCamel(res);
+        setUserDetail(camelUserDetail as UserDetail);
+      });
     };
     getUserDetail();
   }, [currentUser?.userId]);
 
   const defaultValues = useMemo(() => {
     return {
-      user_id: userDetail.user_id,
-      grade_id: userDetail.grade_id,
-      department_id: userDetail.department_id,
-      bureau_id: userDetail.bureau_id,
-      icon_name: userDetail.icon_name,
+      userId: userDetail.userId,
+      gradeId: userDetail.gradeId,
+      departmentId: userDetail.departmentId,
+      bureauId: userDetail.bureauId,
+      iconName: userDetail.iconName,
       github: userDetail.github,
       slack: userDetail.slack,
       biography: userDetail.biography,
-      pc_name: userDetail.pc_name,
-      pc_os: userDetail.pc_os,
-      pc_cpu: userDetail.pc_cpu,
-      pc_ram: userDetail.pc_ram,
-      pc_storage: userDetail.pc_storage,
+      pcName: userDetail.pcName,
+      pcOs: userDetail.pcOs,
+      pcCpu: userDetail.pcCpu,
+      pcRam: userDetail.pcRam,
+      pcStorage: userDetail.pcStorage,
     };
   }, [userDetail]);
 
@@ -99,7 +102,8 @@ export const ProfileEditForm = (props: Props) => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const onSubmit = async (data: UserDetail) => {
-    const putRes = await put(process.env.CSR_API_URI + '/user_details/' + currentUser?.userId, data);
+    const submitData = camelToSnake(data);
+    const putRes = await put(process.env.CSR_API_URI + '/user_details/' + currentUser?.userId, submitData);
     if (putRes.status === 200) {
       setSuccess(true);
       setError(false);
@@ -110,7 +114,7 @@ export const ProfileEditForm = (props: Props) => {
   };
 
   const watchAll =
-    watch('grade_id') + watch('department_id') + watch('bureau_id') + watch('github') + watch('biography');
+    watch('gradeId') + watch('departmentId') + watch('bureauId') + watch('github') + watch('biography');
 
   const messageResetHandler = () => {
     setSuccess(false);
@@ -125,7 +129,7 @@ export const ProfileEditForm = (props: Props) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className={s.profile}>
         <p>学年</p>
-        <select className={s.select} {...register('grade_id')}>
+        <select className={s.select} {...register('gradeId')}>
           {props.gradeList?.map((grade) => (
             <option key={grade.id} value={grade.id}>
               {grade.name}
@@ -135,7 +139,7 @@ export const ProfileEditForm = (props: Props) => {
       </div>
       <div className={s.profile}>
         <p>所属</p>
-        <select className={s.select} {...register('department_id')}>
+        <select className={s.select} {...register('departmentId')}>
           {props.departmentList?.map((department) => (
             <option key={department.id} value={department.id}>
               {department.name}
@@ -145,7 +149,7 @@ export const ProfileEditForm = (props: Props) => {
       </div>
       <div className={s.profile}>
         <p>局</p>
-        <select className={s.select} {...register('bureau_id')}>
+        <select className={s.select} {...register('bureauId')}>
           {props.bureauList?.map((bureau) => (
             <option key={bureau.id} value={bureau.id}>
               {bureau.name}
