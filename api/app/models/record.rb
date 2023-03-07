@@ -7,11 +7,11 @@ class Record < ApplicationRecord
     record = Record.find(record_id)
     {
       "record": record,
-      "curriculum": record.curriculum,
-      "curriculum_title": record.curriculum.title,
+      "curriculum": record.chapter.curriculum,
+      "curriculum_title": record.chapter.curriculum.title,
       "teacher": record.teacher.user.name,
       "user": record.user.name,
-      "skills": record.curriculum.skills.map{
+      "skills": record.chapter.curriculum.skills.map{
         |skill|
         {
           "id": skill.id,
@@ -47,7 +47,7 @@ class Record < ApplicationRecord
   end
 
   def self.with_teacher_and_skill(record_id)
-    @record = Record.eager_load(:teacher, :curriculum, :user).where(records: {id: record_id})
+    @record = Record.eager_load(:teacher, :chapter, :user).where(records: {id: record_id})
       .map{
         |record|
         {
@@ -59,7 +59,12 @@ class Record < ApplicationRecord
           "teacher_name": record.teacher.nil? ? nil: record.teacher.user.name,
           "chapter_id": record.chapter.id,
           "chapter_title": record.chapter.title,
-          "skill": record.chapter.curriculum.skill.name,
+          "skills": record.chapter.curriculum.skills.map{
+            |skill|
+            {
+              "name": skill.name,
+            }
+          },
           "created_at": record.created_at,
           "updated_at": record.updated_at,
         }
