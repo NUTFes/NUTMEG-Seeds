@@ -51,11 +51,12 @@ const ListHeader = (props: Props) => {
     switch (router.pathname) {
       case '/records':
         return (
-          <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
+          <>
+            <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)} />
             {isOpenAddModal && (
               <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} setNewRecords={props.setRecords} />
             )}
-          </Button>
+          </>
         );
       case '/projects':
         return (
