@@ -41,8 +41,9 @@ class RecordsController < ApplicationController
       ーーーーーーーーーーーーーーーー
       Title： #{@record.title}
       Teacher： #{@record.teacher.user.name}
-      Skill： #{@record.curriculum.skills.map{|skill| skill.name}.join(', ')}
-      Curriculum： #{@record.curriculum.title}
+      Skill： #{@record.chapter.curriculum.skills.map{|skill| skill.name}.join(', ')}
+      Curriculum： #{@record.chapter.curriculum.title}
+      Chapter： #{@record.chapter.title}
       Content：
       #{@record.content}
       ーーーーーーーーーーーーーーーー
