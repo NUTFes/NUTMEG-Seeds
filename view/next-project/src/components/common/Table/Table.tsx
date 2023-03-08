@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import s from './Table.module.css';
 import DataTable from 'react-data-table-component';
 import { useRouter } from 'next/router';
@@ -48,20 +48,38 @@ const CUSTOM_STYLES = {
 
 const Table: FC<TableContentProps> = (props) => {
   const router = useRouter();
+  const [filterText, setFilterText] = useState('');
+
+  const filteredItems = props.data.filter(
+    (item: any) => JSON.stringify(item).toLowerCase().indexOf(filterText.toLowerCase()) !== -1,
+  );
 
   return (
-    <DataTable
-      columns={props.columns}
-      data={props.data}
-      pagination
-      highlightOnHover
-      pointerOnHover
-      onRowClicked={(row) => {
-        if (row.curriculum) router.push(`/${props.route}/${row.curriculum.id}`);
-        else router.push(`/${props.route}/${row.id}`);
-      }}
-      customStyles={CUSTOM_STYLES}
-    />
+    <>
+      <div className={s.filter}>
+        <input
+          className={s.input}
+          placeholder='絞り込み'
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+        />
+        <button className={s.button} onClick={() => setFilterText('')}>
+          ×
+        </button>
+      </div>
+      <DataTable
+        columns={props.columns}
+        data={filteredItems}
+        pagination
+        highlightOnHover
+        pointerOnHover
+        onRowClicked={(row) => {
+          if (row.curriculum) router.push(`/${props.route}/${row.curriculum.id}`);
+          else router.push(`/${props.route}/${row.id}`);
+        }}
+        customStyles={CUSTOM_STYLES}
+      />
+    </>
   );
 };
 
