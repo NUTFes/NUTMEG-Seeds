@@ -14,7 +14,7 @@ interface Skill {
 interface FormData {
   title: string;
   content: string;
-  homework: string;
+  graduation_assignment: string;
 }
 
 interface CurriculumskillId {
@@ -40,15 +40,22 @@ const CurriculumContent = React.memo(function CurriculumContent(props: { content
 });
 
 // CurriculumのHomeworkをメモ化
-const CurriculumHomework = React.memo(function CurriculumHomework(props: { homework: string; handler: any }) {
+const CurriculumHomework = React.memo(function CurriculumHomework(props: {
+  graduation_assignment: string;
+  handler: any;
+}) {
   return (
     <div>
       <h3>Homework</h3>
       <div>
-        <textarea placeholder='Input' value={props.homework} onChange={props.handler('homework')} />
+        <textarea
+          placeholder='Input'
+          value={props.graduation_assignment}
+          onChange={props.handler('graduation_assignment')}
+        />
         <div>
           <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-            {props.homework}
+            {props.graduation_assignment}
           </ReactMarkdown>
         </div>
       </div>
@@ -70,7 +77,7 @@ export default function CurriculumEditModal() {
   const [formData, setFormData] = useState<FormData>({
     title: '',
     content: '',
-    homework: '',
+    graduation_assignment: '',
   });
 
   useEffect(() => {
@@ -126,7 +133,7 @@ export default function CurriculumEditModal() {
     const submitData = {
       curriculum: data,
       curriculum_skill: ids,
-    }
+    };
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
     await put(submitCurriculumUrl, submitData);
     router.reload();
@@ -140,7 +147,7 @@ export default function CurriculumEditModal() {
         <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')} />
       </div>
       <CurriculumContent content={formData.content} handler={handler} />
-      <CurriculumHomework homework={formData.homework} handler={handler} />
+      <CurriculumHomework graduation_assignment={formData.graduation_assignment} handler={handler} />
       <div>
         <h3>Skill</h3>
         <select onChange={handleSelect} multiple>
