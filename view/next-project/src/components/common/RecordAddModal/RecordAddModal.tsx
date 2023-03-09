@@ -264,19 +264,11 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                 選択してください
               </option>
               {curriculumChapters.map((data: CurriculumChapters) => {
-                if (data.curriculum.id && data.curriculum.id == recordData.chapter_id) {
-                  return (
-                    <option key={data.curriculum.id} value={data.curriculum.id} selected>
-                      {data.curriculum.title}
-                    </option>
-                  );
-                } else {
-                  return (
-                    <option key={data.curriculum.id} value={data.curriculum.id}>
-                      {data.curriculum.title}
-                    </option>
-                  );
-                }
+                return (
+                  <option key={data.curriculum.id} value={data.curriculum.id}>
+                    {data.curriculum.title}
+                  </option>
+                );
               })}
             </select>
           </div>
