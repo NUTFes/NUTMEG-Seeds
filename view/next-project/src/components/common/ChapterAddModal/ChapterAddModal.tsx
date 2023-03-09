@@ -49,7 +49,7 @@ const ChapterAddModal: FC = () => {
   useEffect(() => {
     (async () => {
       const id = router.query.slug;
-      const getUrl = `${process.env.CSR_API_URI}/api/v1/get_curriculum_chapter_for_view/${id}`;
+      const getUrl = `${process.env.CSR_API_URI}/api/v1/get_curriculum_chapter_records_for_view/${id}`;
       const json = await get(getUrl);
       setChapter({ ...chapter, order: json[0].chapter.length + 1 });
     })();

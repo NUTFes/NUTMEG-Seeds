@@ -47,7 +47,7 @@ Rails.application.routes.draw do
       get "/get_curriculum_for_view/:id" => "curriculums_api#get_curriculum_for_view"
       get "/get_curriculums_for_index" => "curriculums_api#get_curriculums_for_index"
       get "/get_curriculum_for_reload_index/:id" => "curriculums_api#get_curriculum_for_reload_index"
-      get "/get_curriculum_chapter_for_view/:id" => "curriculums_api#get_curriculum_chapter_for_view"
+      get "/get_curriculum_chapter_records_for_view/:id" => "curriculums_api#get_curriculum_chapter_records_for_view"
       get "/get_curriculums_chapter_for_index" => "curriculums_api#get_curriculums_chapter_for_index"
       get "/get_curriculum_chapter_for_reload_index/:id" => "curriculums_api#get_curriculum_chapter_for_reload_index"
 

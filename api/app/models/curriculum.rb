@@ -122,6 +122,7 @@ class Curriculum < ApplicationRecord
               "title": chapter.title,
               "content": chapter.content,
               "homework": chapter.homework,
+              "order": chapter.order,
               "records": chapter.records.map{
                 |record|
                 {

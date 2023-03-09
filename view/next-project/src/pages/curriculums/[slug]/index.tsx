@@ -48,7 +48,7 @@ interface Props {
 
 export async function getServerSideProps({ params }: any) {
   const id = params.slug;
-  const getUrl = `${process.env.SSR_API_URI}/api/v1/get_curriculum_chapter_for_view/${id}`;
+  const getUrl = `${process.env.SSR_API_URI}/api/v1/get_curriculum_chapter_records_for_view/${id}`;
   const json = await get(getUrl);
   return {
     props: {
