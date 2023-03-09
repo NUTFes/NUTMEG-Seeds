@@ -193,7 +193,7 @@ export default function Page(props: Props) {
                 />
                 <DeleteButton
                   onClick={() => {
-                    setModalView('CURRICULUM_DELETE_MODAL');
+                    setModalView('CHAPTER_DELETE_MODAL');
                     openModal();
                   }}
                 />
