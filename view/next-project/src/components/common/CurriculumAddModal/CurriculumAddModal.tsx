@@ -87,7 +87,7 @@ const CurriculumAddModal: FC = () => {
     });
     const postData = { curriculum_skill: curriculumSkillData };
     await post(postCurriculumSkillUrl, postData);
-    
+
     closeModal();
     router.reload();
   };
@@ -108,7 +108,7 @@ const CurriculumAddModal: FC = () => {
           <div className={s.modalContentContents}>
             <input type='text' placeholder='Input' value={curriculum.title} onChange={handler('title')} />
           </div>
-          <h3 className={s.contentsTitle}>Homework</h3>
+          <h3 className={s.contentsTitle}>Graduation Assignment</h3>
           <SimpleMde
             value={graduationAssignmentMarkdown}
             onChange={handleGraduationAssignment}
