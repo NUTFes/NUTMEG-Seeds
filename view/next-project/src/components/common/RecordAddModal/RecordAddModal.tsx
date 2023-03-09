@@ -260,6 +260,9 @@ const RecordAddModal: FC<ModalProps> = (props) => {
           <h3 className={s.contentsTitle}>Curriculum</h3>
           <div className={s.modalContentContents}>
             <select defaultValue={1} onChange={handleCurriculumChapter}>
+              <option value='' selected hidden>
+                選択してください
+              </option>
               {curriculumChapters.map((data: CurriculumChapters) => {
                 if (data.curriculum.id && data.curriculum.id == recordData.chapter_id) {
                   return (
@@ -280,20 +283,15 @@ const RecordAddModal: FC<ModalProps> = (props) => {
           <h3 className={s.contentsTitle}>Chapter</h3>
           <div className={s.modalContentContents}>
             <select defaultValue={1} onChange={recordHandler('chapter_id')}>
+              <option value='' selected hidden>
+                選択してください
+              </option>
               {curriculumChapter?.chapters.map((chapter: Chapter) => {
-                if (chapter.id && chapter.id == recordData.chapter_id) {
-                  return (
-                    <option key={chapter.id} value={chapter.id} selected>
-                      {chapter.title}
-                    </option>
-                  );
-                } else {
-                  return (
-                    <option key={chapter.id} value={chapter.id}>
-                      {chapter.title}
-                    </option>
-                  );
-                }
+                return (
+                  <option key={chapter.id} value={chapter.id}>
+                    {chapter.title}
+                  </option>
+                );
               })}
             </select>
           </div>
