@@ -13,22 +13,19 @@ const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false }
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
-  setNewRecords: Function;
+  setNewRecords: React.Dispatch<React.SetStateAction<any>>;
 }
 
-type Record = {
-  id: number;
+interface Record {
+  id?: number;
   title: string;
-  user_id: string;
-  user_name: string;
-  teacher_id: string;
-  teacher_name: string;
-  curriculum_id: number;
-  curriculum_title: string;
-  skill: string;
-  created_at: string;
-  updated_at: string;
-};
+  content: string;
+  homework: string;
+  user_id: number;
+  chapter_id: number;
+  created_at?: string;
+  updated_at?: string;
+}
 
 interface Curriculum {
   id?: number;
@@ -65,12 +62,9 @@ interface User {
   name: string;
 }
 
-interface UserRecord {
-  title: string;
-  content: string;
-  homework: string;
-  user_id: number | string | undefined;
-  chapter_id: number;
+interface Skill {
+  id: number;
+  name: string;
 }
 
 const RecordAddModal: FC<ModalProps> = (props) => {
@@ -91,11 +85,11 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const homeworkSentence =
     '# 次回までの課題 \n\n\n' + '# 参考資料 \n\n\n' + '# 次回までに勉強しておいた方がいいこと\n\n\n';
 
-  const [recordData, setRecordData] = useState<UserRecord>({
+  const [recordData, setRecordData] = useState<Record>({
     title: '',
     content: contentSentence,
     homework: homeworkSentence,
-    user_id: localStorage.getItem('user_id')?.toString(),
+    user_id: Number(localStorage.getItem('user_id')),
     chapter_id: 1,
   });
 
@@ -124,7 +118,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     getUsers(getUsersUrl);
   }, []);
 
-  const recordHandler =
+  const handleRecord =
     (input: string) =>
     (
       e:
@@ -135,32 +129,31 @@ const RecordAddModal: FC<ModalProps> = (props) => {
       setRecordData({ ...recordData, [input]: e.target.value });
     };
 
-  const teacherHandler = () => (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleTeacher = () => (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTeacherData({ ...teacherData, user_id: e.target.value });
   };
 
   // レコード編集用ハンドラー
-  const recordMarkdownHandler = useCallback((value: string) => {
+  const handleRecordMarkdown = useCallback((value: string) => {
     setRecordMarkdown(value);
   }, []);
   // Homework編集用ハンドラー
-  const homeworkMarkdownHandler = useCallback((value: string) => {
+  const handleHomeworkMarkdown = useCallback((value: string) => {
     setHomeworkMarkdown(value);
   }, []);
 
-  // カリキュラムとチャプターのセレクトボックスの変更を検知
-  const handleCurriculumChapter = useCallback(
+  // カリキュラムのセレクトボックスの変更を検知
+  const handleCurriculum = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setCurriculumChapter(
         curriculumChapters.find((curriculumChapter) => curriculumChapter.curriculum.id === Number(e.target.value)),
       );
-      recordHandler('chapter_id')(e);
     },
     [curriculumChapters, setCurriculumChapter],
   );
 
   // フォームデータの送信とページの表を再レンダリング
-  const submitRecord = async (recordData: any, teacherData: any) => {
+  const submitRecord = async (recordData: Record, teacherData: Teacher) => {
     const submitRecordUrl = process.env.CSR_API_URI + '/records';
     const submitData = {
       record: {
@@ -211,15 +204,15 @@ const RecordAddModal: FC<ModalProps> = (props) => {
           </div>
           <h3 className={s.contentsTitle}>Record Name</h3>
           <div className={s.modalContentContents}>
-            <input type='text' placeholder='Input' value={recordData.title} onChange={recordHandler('title')} />
+            <input type='text' placeholder='Input' value={recordData.title} onChange={handleRecord('title')} />
           </div>
           <h3 className={s.contentsTitle}>Contents</h3>
-          <SimpleMde value={recordMarkdown} onChange={recordMarkdownHandler} className={s.contentsMde} />
+          <SimpleMde value={recordMarkdown} onChange={handleRecordMarkdown} className={s.contentsMde} />
           <h3 className={s.contentsTitle}>Homework</h3>
-          <SimpleMde value={homeworkMarkdown} onChange={homeworkMarkdownHandler} className={s.homeworkMde} />
+          <SimpleMde value={homeworkMarkdown} onChange={handleHomeworkMarkdown} className={s.homeworkMde} />
           <h3 className={s.contentsTitle}>Teacher</h3>
           <div className={s.modalContentContents}>
-            <select defaultValue={teacherData.user_id} onChange={teacherHandler()}>
+            <select defaultValue={teacherData.user_id} onChange={handleTeacher}>
               {users.map((data: User) => {
                 if (data.id == teacherData.user_id) {
                   return (
@@ -239,7 +232,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
           </div>
           <h3 className={s.contentsTitle}>Student</h3>
           <div className={s.modalContentContents}>
-            <select defaultValue={recordData.user_id} onChange={recordHandler('user_id')}>
+            <select defaultValue={recordData.user_id} onChange={handleRecord('user_id')}>
               {users.map((data: User) => {
                 if (data.id == recordData.user_id) {
                   return (
@@ -259,7 +252,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
           </div>
           <h3 className={s.contentsTitle}>Curriculum</h3>
           <div className={s.modalContentContents}>
-            <select defaultValue={1} onChange={handleCurriculumChapter}>
+            <select onChange={handleCurriculum}>
               <option value='' selected hidden>
                 選択してください
               </option>
@@ -274,7 +267,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
           </div>
           <h3 className={s.contentsTitle}>Chapter</h3>
           <div className={s.modalContentContents}>
-            <select defaultValue={1} onChange={recordHandler('chapter_id')}>
+            <select onChange={handleRecord('chapter_id')}>
               <option value='' selected hidden>
                 選択してください
               </option>
