@@ -102,6 +102,33 @@ class Curriculum < ApplicationRecord
       }
   end
 
+  def self.with_chapters(curriculum_id)
+    @record = Curriculum.eager_load(:chapters,).where(curriculums: {id: curriculum_id})
+      .map{
+        |curriculum|
+        {
+          "curriculum": curriculum,
+          "skills": curriculum.skills.map{
+            |skill|
+            {
+              "id": skill.id,
+              "name": skill.name,
+            }
+          },
+          "chapter": curriculum.chapters.map{
+            |chapter|
+            {
+              "id": chapter.id,
+              "title": chapter.title,
+              "content": chapter.content,
+              "homework": chapter.homework,
+              "order": chapter.order,
+            }
+          },
+        }
+      }
+  end
+
   def self.with_chapters_and_records(curriculum_id)
     @record = Curriculum.eager_load(:chapters,).where(curriculums: {id: curriculum_id})
       .map{
