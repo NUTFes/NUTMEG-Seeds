@@ -14,24 +14,14 @@ interface FlatCardProps {
 const FlatCard = (props: FlatCardProps) => {
   return (
     <>
-      {props.onClick ? (
-        <div
-          className={`${s.ClickableFlatCardContainer} ${s['align-' + props.align || 'end']} ${
-            s['justify-' + props.align || 'end']
-          } ${s[props.gap || 'none']} ${s['height-' + props.height || '100']} cursor-pointer `}
-          onClick={props.onClick}
-        >
-          {props.children}
-        </div>
-      ) : (
-        <div
-          className={`${s.FlatCardContainer} ${s['align-' + props.align || 'end']} ${
-            s['justify-' + props.align || 'end']
-          } ${s[props.gap || 'none']} ${s['height-' + props.height || '100']} cursor-pointer `}
-        >
-          {props.children}
-        </div>
-      )}
+      <div
+        className={`${props.onClick ? s.ClickableFlatCardContainer : s.FlatCardContainer} ${s['align-' + props.align || 'end']} ${
+          s['justify-' + props.align || 'end']
+        } ${s[props.gap || 'none']} ${s['height-' + props.height || '100']} cursor-pointer `}
+        onClick={props.onClick}
+      >
+        {props.children}
+      </div>
     </>
   );
 };
