@@ -4,9 +4,7 @@ import { get, put } from '@utils/api_methods';
 import s from './ChangeChapterOrderModal.module.css';
 import Button from '@components/common/TestButton';
 import Close from '@components/icons/Close';
-import { useUI } from '@components/ui/context';
 import ShadowCard from '@components/common/ShadowCard';
-import NavigateNext from '@components/icons/NavigateNext';
 import { switchChapterIcon } from '@utils/switchChapterIcon';
 
 interface Chapter {
