@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import Button from '@components/common/AddButton';
+import AddButton from '@components/common/AddButton';
+import Button from '@components/common/TestButton';
+import Row from '@components/layout/RowLayout';
 import s from './ListHeader.module.css';
 import ProjectAddModal from '@components/common/ProjectAddModal';
 import RecordAddModal from '@components/common/RecordAddModal';
 import SkillAddModal from '@components/common/SkillAddModal';
 import CategoryAddModal from '@components/common/CategoryAddModal';
 import { useUI } from '@components/ui/context';
-import ChapterAddModal from '@components/common/ChapterAddModal';
-
-interface Skill {
-  id: string;
-  name: string;
-}
+import ChangeChapterOrderModal from '@components/common/ChangeChapterOrderModal';
 
 interface Project {
   id: number;
@@ -54,14 +51,22 @@ const ListHeader = (props: Props) => {
     { id: 1, name: '', detail: '', icon_name: '', github: '', remark: '' },
   ]);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
+  const [isOpenChapterOrder, setIsOpenChapterOrder] = useState<boolean>(false);
   const router = useRouter();
+
+  const openChapterOrderModal = () => {
+    setIsOpenChapterOrder(true);
+  };
+  const closeChapterOrderModal = () => {
+    setIsOpenChapterOrder(false);
+  };
 
   const AddModalUI = (isOpenAddModal: boolean) => {
     switch (router.pathname) {
       case '/records':
         return (
           <>
-            <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)} />
+            <AddButton onClick={() => setIsOpenAddModal(!isOpenAddModal)} />
             {isOpenAddModal && (
               <RecordAddModal isOpen={isOpenAddModal} setIsOpen={setIsOpenAddModal} setNewRecords={props.setRecords} />
             )}
@@ -69,7 +74,7 @@ const ListHeader = (props: Props) => {
         );
       case '/projects':
         return (
-          <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
+          <AddButton onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
             {isOpenAddModal && (
               <ProjectAddModal
                 isOpen={isOpenAddModal}
@@ -78,11 +83,11 @@ const ListHeader = (props: Props) => {
                 setProjects={setProjects}
               />
             )}
-          </Button>
+          </AddButton>
         );
       case '/skills':
         return (
-          <Button onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
+          <AddButton onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
             {isOpenAddModal && (
               <SkillAddModal
                 isOpen={isOpenAddModal}
@@ -91,12 +96,12 @@ const ListHeader = (props: Props) => {
                 setNewSkills={props.setNewSkills}
               />
             )}
-          </Button>
+          </AddButton>
         );
       // curriculumとchapterのみモーダルの再レンダリング対策しているためこのような記述にしている
       case '/curriculums':
         return (
-          <Button
+          <AddButton
             onClick={() => {
               setModalView('CURRICULUM_ADD_MODAL');
               openModal();
@@ -105,12 +110,18 @@ const ListHeader = (props: Props) => {
         );
       case '/curriculums/[slug]':
         return (
-          <Button
-            onClick={() => {
-              setModalView('CHAPTER_ADD_MODAL');
-              openModal();
-            }}
-          />
+          <>
+            <Row gap='3rem' justify='end'>
+              <Button onClick={openChapterOrderModal}>change order</Button>
+              <AddButton
+                onClick={() => {
+                  setModalView('CHAPTER_ADD_MODAL');
+                  openModal();
+                }}
+              />
+            </Row>
+            {isOpenChapterOrder && <ChangeChapterOrderModal closeModal={closeChapterOrderModal} />}
+          </>
         );
       case '/categories':
         return (
