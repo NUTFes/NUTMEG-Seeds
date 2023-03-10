@@ -102,7 +102,7 @@ class Curriculum < ApplicationRecord
       }
   end
 
-  def self.with_chapters(curriculum_id)
+  def self.with_chapters_and_skills(curriculum_id)
     @record = Curriculum.eager_load(:chapters,).where(curriculums: {id: curriculum_id})
       .map{
         |curriculum|
