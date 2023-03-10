@@ -80,12 +80,12 @@ const ChangeChapterOrderModal: FC<Props> = (props) => {
             <h2>Change Chapter Order</h2>
           </div>
           {sortedChapters?.map((chapter: Chapter, index: number) => (
-            <div className={s.chapters}>
+            <div className={s.chapters} key={chapter.id}>
               <div className={s.orderArea}>
                 <input value={chapter.order} onChange={handler(chapter.id, 'order')} />
               </div>
-              <div className={s.chapter} key={chapter.id}>
-                <ShadowCard key={chapter.toString()}>
+              <div className={s.chapter}>
+                <ShadowCard>
                   <div className={s.chapterContainer}>
                     <div className={s.chapterIcon}>{switchChapterIcon(sortedChapters.length, index)}</div>
                     <div className={s.chapterInfo}>
