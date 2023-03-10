@@ -64,9 +64,7 @@ export default function Chapters(props: Props) {
   return (
     <MainLayout>
       <CurriculumDetailHeader
-        title={props.curriculum.title}
-        createDate={formatDate(props.curriculum.created_at)}
-        updateDate={formatDate(props.curriculum.updated_at)}
+        curriculum={props.curriculum}
         skills={props.skills}
       />
       <ListHeader title='Chapters' />
