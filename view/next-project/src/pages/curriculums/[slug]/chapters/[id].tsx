@@ -12,6 +12,7 @@ import Row from '@components/layout/RowLayout';
 import { useUI } from '@components/ui/context';
 import ChapterDetailHeader from '@components/common/ChapterDetailHeader';
 import ChapterEditModal from '@components/common/ChapterEditModal';
+import { useRouter } from 'next/router';
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 // 任意のテーマをimport
@@ -135,6 +136,7 @@ export default function Page(props: Props) {
   const { openModal, setModalView } = useUI();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [chapter, setChapter] = useState<Chapter>(props.chapter);
+  const router = useRouter();
 
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
@@ -225,7 +227,12 @@ export default function Page(props: Props) {
             <RecordContainer>
               {props.records.map((record) => (
                 <RecordContents key={record.title.toString()}>
-                  <FlatCard height='auto'>
+                  <FlatCard
+                    height='auto'
+                    onClick={() => {
+                      router.push(`/records/${record.id}`);
+                    }}
+                    >
                     <RecordMember>{record.user}</RecordMember>
                     <RecordContents>{record.title}</RecordContents>
                     <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>
