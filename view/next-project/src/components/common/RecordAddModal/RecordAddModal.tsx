@@ -13,7 +13,7 @@ const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false }
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
-  setNewRecords: React.Dispatch<React.SetStateAction<any>>;
+  setNewRecords: (newRecords: Record[]) => void;
 }
 
 interface Record {

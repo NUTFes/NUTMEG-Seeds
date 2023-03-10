@@ -13,7 +13,7 @@ interface ModalProps {
   isOpen: boolean;
   setIsOpen: Function;
   chapter: Chapter;
-  setChapter: Dispatch<SetStateAction<Chapter>>;
+  setChapter: (chapter: Chapter) => void;
   curriculums: Curriculum[];
 }
 
