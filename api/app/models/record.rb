@@ -9,6 +9,7 @@ class Record < ApplicationRecord
       "record": record,
       "curriculum": record.chapter.curriculum,
       "curriculum_title": record.chapter.curriculum.title,
+      "chapter": record.chapter,
       "teacher": record.teacher.user.name,
       "user": record.user.name,
       "skills": record.chapter.curriculum.skills.map{
