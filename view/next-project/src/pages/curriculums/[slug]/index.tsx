@@ -77,11 +77,8 @@ export default function Chapters(props: Props) {
       <div className={s.parentButton}>
         <div className={s.chapters}>
           {sortedChapters.map((chapter: Chapter, index: number) => (
-            <div className={s.chapter}>
-              <ShadowCard
-                key={chapter.toString()}
-                onClick={() => Router.push(`/curriculums/${props.curriculum.id}/chapters/${chapter.id}`)}
-              >
+            <div className={s.chapter} key={chapter.toString()}>
+              <ShadowCard height='100' onClick={() => Router.push(`/curriculums/${props.curriculum.id}/chapters/${chapter.id}`)}>
                 <div className={s.chapterContainer}>
                   <div className={s.chapterIcon}>{switchChapterIcon(sortedChapters.length, index)}</div>
                   <div className={s.chapterInfo}>
