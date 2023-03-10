@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Router from 'next/router';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
@@ -25,10 +25,13 @@ interface Skill {
 }
 
 interface Chapter {
-  id: number;
+  id?: number;
   title: string;
   content: string;
   homework: string;
+  order: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface Record {
@@ -61,23 +64,26 @@ export async function getServerSideProps({ params }: any) {
 }
 
 export default function Chapters(props: Props) {
+  // チャプターをorder順に並び替えるためのソート関数
+  const sort = (array: Chapter[]) => {
+    return array.sort((a, b) => a.order - b.order);
+  };
+  const sortedChapters: Chapter[] = sort(props.chapters);
+
   return (
     <MainLayout>
-      <CurriculumDetailHeader
-        curriculum={props.curriculum}
-        skills={props.skills}
-      />
+      <CurriculumDetailHeader curriculum={props.curriculum} skills={props.skills} />
       <ListHeader title='Chapters' />
       <div className={s.parentButton}>
         <div className={s.chapters}>
-          {props.chapters.map((chapter: Chapter, index: number) => (
+          {sortedChapters.map((chapter: Chapter, index: number) => (
             <div className={s.chapter}>
               <ShadowCard
                 key={chapter.toString()}
                 onClick={() => Router.push(`/curriculums/${props.curriculum.id}/chapters/${chapter.id}`)}
               >
                 <div className={s.chapterContainer}>
-                  <div className={s.chapterIcon}>{switchChapterIcon(props.chapters.length, index)}</div>
+                  <div className={s.chapterIcon}>{switchChapterIcon(sortedChapters.length, index)}</div>
                   <div className={s.chapterInfo}>
                     <span className={s.chapterTitle}>{chapter.title}</span>
                     <span className={s.chapterContent}>{chapter.content}</span>
