@@ -39,7 +39,7 @@ services:
 
   # 定期実行用コンテナ
   cron:
-    image: nutmeg-seeds_seeds_api:latest
+    image: nutmeg-seeds-seeds_api:latest
     command: >
       sh -c "whenever --update-cron &&
       cron -f -l 2"

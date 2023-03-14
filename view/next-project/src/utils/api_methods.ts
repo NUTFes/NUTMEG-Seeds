@@ -8,14 +8,14 @@ export const get = async (url: string) => {
   return await res.json();
 };
 
-export const get_with_token = async (url: string) => {
+export const getWithToken = async (url: string, currentUser: any) => {
   const res = await fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'access-token': localStorage.getItem('access-token') || 'none',
-      client: localStorage.getItem('client') || 'none',
-      uid: localStorage.getItem('uid') || 'none',
+      'access-token': currentUser?.accessToken || 'none',
+      client: currentUser?.client || 'none',
+      uid: currentUser?.uid || 'none',
     },
   });
   return await res.json();
@@ -29,7 +29,7 @@ export const post = async (url: string, data: any) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  });
+  })
   return res;
 };
 
@@ -38,6 +38,20 @@ export const put = async (url: string, data: any) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return res
+};
+
+export const putWithToken = async (url: string, data: any, currentUser: any) => {
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'access-token': currentUser?.accessToken || 'none',
+      client: currentUser?.client || 'none',
+      uid: currentUser?.uid || 'none',
     },
     body: JSON.stringify(data),
   });

@@ -2,16 +2,12 @@ import '@assets/main.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useEffect } from 'react';
-import router from 'next/router';
 import { ManagedUIContext } from '@components/ui/context';
 import Layout from '@components/layout/Layout';
+import { RecoilRoot } from 'recoil';
+import AuthProvider from 'src/context/AuthProvider';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    if (localStorage.getItem('user_id') === null) {
-      router.push('/');
-    }
-  }, []);
 
   useEffect(() => {
     document.body.classList?.remove('loading');
@@ -29,11 +25,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <link href='https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap' rel='stylesheet'></link>
       </Head>
-      <ManagedUIContext>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ManagedUIContext>
+      <RecoilRoot>
+        <AuthProvider>
+          <ManagedUIContext>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ManagedUIContext>
+        </AuthProvider>
+      </RecoilRoot>
     </>
   );
 }

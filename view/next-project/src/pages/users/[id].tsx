@@ -2,18 +2,14 @@ import React, {useState} from 'react';
 import {get} from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
-import SlackIcon from '@components/icons/SlackIcon';
 import GithubIcon from '@components/icons/GithubIcon';
 import BackButton from '@components/common/BackButton';
 import AddButton from '@components/common/AddButton';
-import EditButton from '@components/common/EditButton';
 import IconButton from '@components/common/IconButton';
 import CardHeader from '@components/common/CardHeader';
 import SkillAddModal from '@components/common/UserSkillAddModal';
 import ProjectAddModal from '@components/common/UserProjectAddModal';
 import RecordAddModal from '@components/common/UserRecordAddModal';
-import EditModal from '@components/common/UserEditModal';
-import DeleteUserModal from '@components/common/UserDeleteModal';
 import Column from '@components/common/Column';
 import Row from '@components/layout/RowLayout';
 
@@ -84,7 +80,6 @@ interface Project {
 }
 
 export async function getServerSideProps({params}: any) {
-  console.log(params)
   const getUrl = process.env.SSR_API_URI + '/api/v1/get_user_for_member_page/' + params.id;
   const getRes = await get(getUrl);
   return {
@@ -108,8 +103,6 @@ export default function Users(props: Props) {
   const [isOpenSkillAddModal, setIsOpenSkillAddModal] = useState(false);
   const [isOpenProjectAddModal, setIsOpenProjectAddModal] = useState(false);
   const [isOpenRecordAddModal, setIsOpenRecordAddModal] = useState(false);
-  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  const [isOpenDeleteUserModal, setIsOpenDeleteUserModal] = useState(false);
 
   const openSkillAddModal = (isOpenSkillAddModal: boolean) => {
     if (isOpenSkillAddModal) {
@@ -142,24 +135,6 @@ export default function Users(props: Props) {
       );
     }
   };
-  const openEditModal = (isOpenEditModal: boolean, detail: UserDetail) => {
-    if (isOpenEditModal) {
-      return (
-        <>
-          <EditModal isOpen={isOpenEditModal} setIsOpen={setIsOpenEditModal} userDetaiInfo={detail}/>
-        </>
-      );
-    }
-  };
-  const openDeleteUserModal = (isOpenDeleteUserModal: boolean) => {
-    if (isOpenDeleteUserModal) {
-      return (
-        <>
-          <DeleteUserModal isOpen={isOpenDeleteUserModal} setIsOpen={setIsOpenDeleteUserModal}/>
-        </>
-      );
-    }
-  };
 
   return (
     <MainLayout>
@@ -174,11 +149,6 @@ export default function Users(props: Props) {
               <IconButton onClick={() => window.open(detail.github, '_blank')}>
                 <GithubIcon height={30} width={30}/>
               </IconButton>
-              <IconButton onClick={() => window.open(detail.slack, '_blank')}>
-                <SlackIcon height={45} width={45}/>
-              </IconButton>
-              <EditButton onClick={() => setIsOpenEditModal(!isOpenEditModal)}/>
-              {openEditModal(isOpenEditModal, detail)}
             </CardHeader>
             <table>
               <tr>

@@ -31,7 +31,6 @@ export async function postCurriculum() {
   const postUrl = 'http://localhost:3000/curriculums';
   const postData = { title: 'Rust勉強', content: '未定', homework: '未定', skill_id: 1 };
   const getRes = await get(postUrl);
-  console.log(getRes.slice(-1)[0].id);
   const postReq = await post(postUrl, postData);
 }
 
@@ -45,7 +44,6 @@ export async function putCurriculum() {
     homework: 'ソート',
     skill_id: 1,
   };
-  console.log(getRes.slice(-1)[0].id);
   const putReq = await put(putUrl, putData);
 }
 
@@ -53,7 +51,6 @@ export async function deleteCurriculum() {
   const Url = 'http://localhost:3000/curriculums';
   const getRes = await get(Url);
   const delUrl = Url + '/' + getRes.slice(-1)[0].id;
-  console.log(getRes.slice(-1)[0].id);
   const delReq = await del(delUrl);
 }
 
