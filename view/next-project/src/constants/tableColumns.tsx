@@ -20,8 +20,9 @@ export const SKILL_COLUMNS = [
 
 export const RECORD_COLUMNS = [
   {
-    name: 'Student',
-    selector: (row: any) => row.user_name,
+    name: 'Student / Teacher',
+    // "row.user_name / row.teacher_name" にする
+    selector: (row: any) => `${row.user_name} / ${row.teacher_name}`,
     sortable: true,
   },
   {
@@ -39,6 +40,16 @@ export const RECORD_COLUMNS = [
       });
       return skills.map((skill: any) => skill.name).join(', ');
     },
+    sortable: true,
+  },
+  {
+    name: 'Curriculum / Chapter',
+    cell: (row: any) => (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+        <p style={{fontSize: '1.25rem'}}>{row.curriculum_title}</p>
+        <p style={{fontSize: '1.25rem'}}>{row.chapter_title}</p>
+      </div>
+    ),
     sortable: true,
   },
   {
