@@ -1,12 +1,11 @@
 import React from 'react';
-import Router from 'next/router';
 import { get } from '@utils/api_methods';
-import { formatDate } from '@utils/format_date';
 import { useState } from 'react';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import Table from '@components/common/Table';
 import ListHeader from '@components/common/ListHeader';
+import { SKILL_COLUMNS } from 'src/constants/tableColumns';
 
 type Skill = {
   id: number;
@@ -32,21 +31,13 @@ export const getServerSideProps = async() => {
 
 const Skills: React.VFC<Props> = (props) => {
   const [skills, setSkills] = useState<Skill[]>(props.skills)
-  const headers = ['Name', 'Category', 'Date'];
+
   return(
     <>
       <MainLayout>
         <ListHeader title='Skills' newSkills={skills} setNewSkills={setSkills}/>
         <FlatCard>
-          <Table headers={headers}>
-            {skills.map((skill) => (
-              <tr key={skill.id} onClick={() => Router.push('/skills/' + skill.id)}>
-                <td>{skill.name}</td>
-                <td>{skill.category_name}</td>
-                <td>{formatDate(skill.created_at)}</td>
-              </tr>
-            ))}
-          </Table>
+          <Table route='skills' columns={SKILL_COLUMNS} data={skills} />
         </FlatCard>
       </MainLayout>
     </>
