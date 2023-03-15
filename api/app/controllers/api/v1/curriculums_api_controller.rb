@@ -21,7 +21,7 @@ class Api::V1::CurriculumsApiController < ApplicationController
   end
 
   def get_curriculum_chapter_for_view
-    @curriculum = Curriculum.with_chapters(params[:id])
+    @curriculum = Curriculum.curriculum_with_chapters(params[:id])
     render json: @curriculum
   end
 
