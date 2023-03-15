@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Router from 'next/router';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
@@ -7,7 +7,6 @@ import s from './Chapters.module.css';
 import { switchChapterIcon } from '@utils/switchChapterIcon';
 import NavigateNext from '@components/icons/NavigateNext';
 import CurriculumDetailHeader from '@components/common/CurriculumDetailHeader';
-import { formatDate } from '@utils/format_date';
 import ListHeader from '@components/common/ListHeader';
 
 interface Curriculum {
