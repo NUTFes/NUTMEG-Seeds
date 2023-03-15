@@ -1,11 +1,10 @@
-import Router from 'next/router';
 import { get } from '@utils/api_methods';
-import { formatDate } from '@utils/format_date';
 import { useState } from 'react';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
 import Table from '@components/common/Table';
 import ListHeader from '@components/common/ListHeader';
+import { RECORD_COLUMNS } from 'src/constants/tableColumns';
 
 type Record = {
   id: number;
@@ -37,27 +36,13 @@ export const getServerSideProps = async () => {
 
 export default function RecordList(props: Props) {
   const [records, setRecords] = useState<Record[]>(props.records)
-  const headers = ['Student', 'Title', 'Skill', 'Date'];
 
   return (
     <>
       <MainLayout>
         <ListHeader title='Records' setRecords={setRecords}/>
         <FlatCard>
-          <Table headers={headers}>
-            {records.map((record) => (
-              <tr key={record.id} onClick={() => Router.push('/records/' + record.id)}>
-                <td>{record.user_name}</td>
-                <td>{record.title}</td>
-                <td>
-                  {record.skills.map((skill) => {
-                    return(<><span>{skill.name}</span><br/></>);
-                  })}
-                </td>
-                <td>{formatDate(record.created_at)}</td>
-              </tr>
-            ))}
-          </Table>
+          <Table columns={RECORD_COLUMNS} data={records} route='records' />
         </FlatCard>
       </MainLayout>
     </>

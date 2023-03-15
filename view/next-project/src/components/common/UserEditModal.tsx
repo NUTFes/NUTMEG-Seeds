@@ -102,10 +102,8 @@ const UserEditModal: FC<ModalProps> = (props: ModalProps) => {
     };
 
   const submitUserDetail = async (data: any) => {
-    console.log(data)
     const submitUserDetailUrl = process.env.CSR_API_URI + '/user_details/' + data.id;
     const res = await put(submitUserDetailUrl, data);
-    console.log(res)
   };
 
   return (
