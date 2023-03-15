@@ -4,9 +4,7 @@ import { get, put } from '@utils/api_methods';
 import s from './ChangeChapterOrderModal.module.css';
 import Button from '@components/common/TestButton';
 import Close from '@components/icons/Close';
-import { useUI } from '@components/ui/context';
 import ShadowCard from '@components/common/ShadowCard';
-import NavigateNext from '@components/icons/NavigateNext';
 import { switchChapterIcon } from '@utils/switchChapterIcon';
 
 interface Chapter {
@@ -80,12 +78,12 @@ const ChangeChapterOrderModal: FC<Props> = (props) => {
             <h2>Change Chapter Order</h2>
           </div>
           {sortedChapters?.map((chapter: Chapter, index: number) => (
-            <div className={s.chapters}>
+            <div className={s.chapters} key={index}>
               <div className={s.orderArea}>
                 <input value={chapter.order} onChange={handler(chapter.id, 'order')} />
               </div>
-              <div className={s.chapter} key={chapter.id}>
-                <ShadowCard key={chapter.toString()}>
+              <div className={s.chapter}>
+                <ShadowCard>
                   <div className={s.chapterContainer}>
                     <div className={s.chapterIcon}>{switchChapterIcon(sortedChapters.length, index)}</div>
                     <div className={s.chapterInfo}>
