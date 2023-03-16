@@ -112,34 +112,18 @@
   height: 10rem;
 }
 
-.chapterContainer {
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.status {
+  font-size: 1.5rem;
+  margin: 1rem 0;
   display: flex;
-  place-content: center;
-  place-items: center;
-  height: 100%;
-}
-
-.chapterIcon {
-  width: 15%;
-  display: grid;
-  place-content: center;
-}
-
-.chapterInfo {
-  width: 75%;
-}
-
-.chapterTitle {
-  font-size: 2rem;
-  font-weight: 600;
-  display: block;
-}
-
-.chapterContent {
-  font-size: 1.4rem;
-  font-weight: 400;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  justify-content: center;
 }
