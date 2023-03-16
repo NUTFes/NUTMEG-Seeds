@@ -13,15 +13,22 @@
 
 .chapterInfo {
   width: 75%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  align-items: center;
 }
 
 .chapterTitle {
+  flex-wrap: wrap;
+  width: 100%;
   font-size: 2rem;
   font-weight: 600;
   display: block;
 }
 
 .chapterContent {
+  width: 100%;
   font-size: 1.4rem;
   font-weight: 400;
   display: -webkit-box;
