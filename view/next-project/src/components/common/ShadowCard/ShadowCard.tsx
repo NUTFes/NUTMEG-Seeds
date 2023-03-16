@@ -2,10 +2,10 @@ import React from 'react';
 import s from './ShadowCard.module.css';
 
 interface ShadowCardProps {
-  align?: string;
-  justify?: string;
-  width?: string;
-  height?: string;
+  align?: 'start' | 'center' | 'end';
+  justify?: 'start' | 'center' | 'end';
+  width?: '100' | '200' | '300';
+  height?: '100' | '200' | '300';
   gap?: string;
   children?: React.ReactNode;
   onClick?: () => void;
