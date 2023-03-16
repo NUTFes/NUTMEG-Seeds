@@ -4,14 +4,14 @@
 }
 
 .chapters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px 10px;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  gap: 2rem;
 }
 
 .chapter {
-  width: 32%;
+  width: 100%;
   cursor: pointer;
 }
 
