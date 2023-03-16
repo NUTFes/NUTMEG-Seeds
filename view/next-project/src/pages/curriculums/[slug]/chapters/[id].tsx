@@ -16,6 +16,7 @@ import ChapterEditModal from '@components/common/ChapterEditModal';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 // 任意のテーマをimport
 import { materialDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { useRouter } from 'next/router';
 
 interface Skill {
   id: number;
@@ -132,6 +133,8 @@ export default function Page(props: Props) {
     text-align: right;
   `;
 
+  const router = useRouter();
+
   const { openModal, setModalView } = useUI();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [chapter, setChapter] = useState<Chapter>(props.chapter);
@@ -225,7 +228,12 @@ export default function Page(props: Props) {
             <RecordContainer>
               {props.records.map((record) => (
                 <RecordContents key={record.title.toString()}>
-                  <FlatCard height='auto'>
+                  <FlatCard
+                    height='auto'
+                    onClick={() => {
+                      router.push(`/records/${record.id}`);
+                    }}
+                  >
                     <RecordMember>{record.user}</RecordMember>
                     <RecordContents>{record.title}</RecordContents>
                     <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>
