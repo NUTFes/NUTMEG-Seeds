@@ -6,9 +6,10 @@ import { ReactNode } from 'react';
 
 interface Column {
   name: ReactNode;
-  selector: (row: any) => string;
-  sortable: boolean;
+  selector?: (row: any) => string;
+  sortable?: boolean;
   style?: any;
+  cell?: (row: any) => ReactNode;
 }
 
 interface TableContentProps {
