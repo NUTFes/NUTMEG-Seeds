@@ -6,7 +6,8 @@ type ButtonContentsProps = {
   width?: string;
   height?: string;
   text?: string;
-  onClick: (event: any) => void;
+  onClick?: (event: any) => void;
+  type?: 'button' | 'submit';
   children: React.ReactNode;
 };
 
@@ -31,13 +32,11 @@ function TestButton(props: ButtonContentsProps): JSX.Element {
   `;
 
   return (
-    <>
-      <ButtonContainer onClick={props.onClick}>
-        {props.children}
-        {props.text}
-        <RightArrow height={16} width={16} color='var(--accent-0)' />
-      </ButtonContainer>
-    </>
+    <ButtonContainer onClick={props.onClick} type={props.type}>
+      {props.children}
+      {props.text}
+      <RightArrow height={16} width={16} color='var(--accent-0)' />
+    </ButtonContainer>
   );
 }
 

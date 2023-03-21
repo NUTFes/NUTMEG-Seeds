@@ -1,0 +1,38 @@
+.chapterContainer {
+  display: flex;
+  place-content: center;
+  place-items: center;
+  height: 100%;
+}
+
+.chapterIcon {
+  width: 15%;
+  display: grid;
+  place-content: center;
+}
+
+.chapterInfo {
+  width: 75%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  align-items: center;
+}
+
+.chapterTitle {
+  flex-wrap: wrap;
+  width: 100%;
+  font-size: 2rem;
+  font-weight: 600;
+  display: block;
+}
+
+.chapterContent {
+  width: 100%;
+  font-size: 1.4rem;
+  font-weight: 400;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}

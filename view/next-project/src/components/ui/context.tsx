@@ -22,7 +22,12 @@ type Action =
       view: MODAL_VIEWS;
     };
 
-type MODAL_VIEWS = 'CURRICULUM_ADD_MODAL' | 'CURRICULUM_EDIT_MODAL' | 'CURRICULUM_DELETE_MODAL';
+type MODAL_VIEWS =
+  | 'CURRICULUM_ADD_MODAL'
+  | 'CURRICULUM_EDIT_MODAL'
+  | 'CURRICULUM_DELETE_MODAL'
+  | 'CHAPTER_ADD_MODAL'
+  | 'CHAPTER_DELETE_MODAL';
 
 export const UIContext = React.createContext<State | any>(initialState);
 

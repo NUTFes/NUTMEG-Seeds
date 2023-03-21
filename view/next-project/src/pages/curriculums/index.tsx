@@ -62,13 +62,11 @@ export async function getServerSideProps() {
 
 export default function CurriculumList(props: Props) {
   return (
-    <>
-      <MainLayout>
-        <ListHeader title='Curriculum' />
-        <FlatCard width='100%'>
-          <Table columns={CURRICULUM_COLUMNS} data={props.curriculumsWithSkill} route='curriculums' />
-        </FlatCard>
-      </MainLayout>
-    </>
+    <MainLayout>
+      <ListHeader title='Curriculum' />
+      <FlatCard width='100%'>
+        <Table columns={CURRICULUM_COLUMNS} data={props.curriculumsWithSkill} route='curriculums' />
+      </FlatCard>
+    </MainLayout>
   );
 }
