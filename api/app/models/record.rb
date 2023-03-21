@@ -35,6 +35,8 @@ class Record < ApplicationRecord
           "teacher_name": record.teacher.nil? ? nil: record.teacher.user.name,
           "chapter_id": record.chapter.nil? ? nil: record.chapter.id,
           "chapter_title": record.chapter.nil? ? nil: record.chapter.title,
+          "curriculum_id": record.chapter.nil? ? nil: record.chapter.curriculum.id,
+          "curriculum_title": record.chapter.nil? ? nil: record.chapter.curriculum.title,
           "skills": record.chapter.curriculum.nil? ? nil: record.chapter.curriculum.skills.map{
             |skill|
             {
