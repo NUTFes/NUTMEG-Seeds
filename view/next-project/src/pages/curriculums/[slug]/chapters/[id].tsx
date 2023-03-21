@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import gfm from 'remark-gfm';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
-import DetailHeader from '@components/common/DetailHeader';
 import styled from 'styled-components';
+import s from './Chapter.module.css';
 import BackButton from '@components/common/BackButton';
-import EditButton from "@components/common/EditButton";
-import DeleteButton from "@components/common/DeleteButton";
-import Row from "@components/layout/RowLayout";
-import { useUI } from "@components/ui/context";
+import EditButton from '@components/common/EditButton';
+import DeleteButton from '@components/common/DeleteButton';
+import Row from '@components/layout/RowLayout';
+import { useUI } from '@components/ui/context';
+import ChapterDetailHeader from '@components/common/ChapterDetailHeader';
+import ChapterEditModal from '@components/common/ChapterEditModal';
+
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+// 任意のテーマをimport
+import { materialDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { useRouter } from 'next/router';
 
 interface Skill {
   id: number;
@@ -20,10 +26,21 @@ interface Skill {
 interface Curriculum {
   id: number;
   title: string;
-  content: string;
-  homework: string;
+  skill_ids: number[];
+  graduation_assignment: string;
   created_at: string;
   updated_at: string;
+}
+
+interface Chapter {
+  id?: number;
+  title: string;
+  content: string;
+  homework: string;
+  curriculum_id: number;
+  order: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface Record {
@@ -41,14 +58,24 @@ interface Props {
   curriculum: Curriculum;
   skills: Skill[];
   records: Record[];
+  chapter: Chapter;
+  curriculums: Curriculum[];
 }
 
 export async function getServerSideProps({ params }: any) {
   const id = params.id;
-  const getUrl = process.env.SSR_API_URI + '/api/v1/get_curriculum_for_view/' + id;
+  const getUrl = `${process.env.SSR_API_URI}/api/v1/get_chapter_for_detail/${id}`;
+  const getCurriculumsUrl = `${process.env.SSR_API_URI}/curriculums`;
   const json = await get(getUrl);
+  const curriculums = await get(getCurriculumsUrl);
   return {
-    props: json[0],
+    props: {
+      chapter: json.chapter,
+      curriculum: json.curriculum,
+      skills: json.skills,
+      records: json.records,
+      curriculums: curriculums,
+    },
   };
 }
 
@@ -106,7 +133,11 @@ export default function Page(props: Props) {
     text-align: right;
   `;
 
-  const { setModalView, openModal } = useUI();
+  const router = useRouter();
+
+  const { openModal, setModalView } = useUI();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [chapter, setChapter] = useState<Chapter>(props.chapter);
 
   const formatDate = (date: string) => {
     let datetime = date.replace('T', ' ');
@@ -114,23 +145,58 @@ export default function Page(props: Props) {
     return datetime2;
   };
 
+  // コードブロックのレンダリング
+  const markdownComponents = {
+    pre: (pre: any) => {
+      // 中身がcodeでなければ普通に表示させる
+      if (pre.children[0].type !== 'code') {
+        return <pre>{pre.children}</pre>;
+      }
+
+      const code = pre.children[0];
+      // 正規表現で"language-言語名:ファイル名"をマッチする
+      const matchResult = code.props.className ? code.props.className.match(/language-(\w+)(:(.+))?/) : '';
+      const language = matchResult?.[1] || '';
+      const filename = matchResult?.[3] || undefined;
+
+      return (
+        <SyntaxHighlighter
+          language={language}
+          style={materialDark}
+          // // ファイル名がある場合、表示用の余白を作る
+          // customStyle={filename && { paddingTop: '2.5rem' }}
+          showLineNumbers
+          className={s.syntaxHighlighter}
+          // // CSSの擬似要素を使ってファイル名を表示させるため
+          // fileName={fileName}
+        >
+          {code.props.children[0]}
+        </SyntaxHighlighter>
+      );
+    },
+  };
+
   return (
     <MainLayout>
+      <ChapterDetailHeader
+        title={chapter.title}
+        createDate={formatDate(props.curriculum.created_at)}
+        updateDate={formatDate(props.curriculum.updated_at)}
+        skills={props.skills}
+      />
       <ParentButtonContainer>
-        <DetailHeader curriculum={props.curriculum} skills={props.skills}/>
         <SplitParentContainer>
           <SplitLeftContainer>
             <FlatCard width='100%' height='auto'>
               <Row gap='3rem' justify='end'>
                 <EditButton
                   onClick={() => {
-                    setModalView('CURRICULUM_EDIT_MODAL');
-                    openModal();
+                    setIsOpen(true);
                   }}
                 />
                 <DeleteButton
                   onClick={() => {
-                    setModalView('CURRICULUM_DELETE_MODAL');
+                    setModalView('CHAPTER_DELETE_MODAL');
                     openModal();
                   }}
                 />
@@ -141,15 +207,17 @@ export default function Page(props: Props) {
                   <hr />
                 </CurriculumContentsTitle>
                 <CurriculumContents>
-                  <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-                    {props.curriculum.content}
-                  </ReactMarkdown>
+                  <div className={s.markdown}>
+                    <ReactMarkdown components={markdownComponents}>{chapter.content}</ReactMarkdown>
+                  </div>
                 </CurriculumContents>
                 <CurriculumContentsTitle>
                   Homework
                   <hr />
                 </CurriculumContentsTitle>
-                <CurriculumContents>{props.curriculum.homework}</CurriculumContents>
+                <div className={s.markdown}>
+                  <ReactMarkdown components={markdownComponents}>{chapter.homework}</ReactMarkdown>
+                </div>
               </CurriculumContentsContainer>
             </FlatCard>
             <ChildButtonContainer>
@@ -160,7 +228,12 @@ export default function Page(props: Props) {
             <RecordContainer>
               {props.records.map((record) => (
                 <RecordContents key={record.title.toString()}>
-                  <FlatCard height='auto'>
+                  <FlatCard
+                    height='auto'
+                    onClick={() => {
+                      router.push(`/records/${record.id}`);
+                    }}
+                  >
                     <RecordMember>{record.user}</RecordMember>
                     <RecordContents>{record.title}</RecordContents>
                     <RecordDate>最終更新日: {formatDate(record.updated_at)}</RecordDate>
@@ -171,6 +244,17 @@ export default function Page(props: Props) {
           </SplitRightContainer>
         </SplitParentContainer>
       </ParentButtonContainer>
+
+      {/* チャプターの編集モーダル */}
+      {isOpen && (
+        <ChapterEditModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          chapter={chapter}
+          setChapter={setChapter}
+          curriculums={props.curriculums}
+        />
+      )}
     </MainLayout>
   );
 }

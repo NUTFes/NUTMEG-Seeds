@@ -25,6 +25,17 @@ interface Curriculum {
   updated_at: string;
 }
 
+interface Chapter {
+  id?: number;
+  title: string;
+  content: string;
+  homework: string;
+  curriculum_id: number;
+  order: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 interface Record {
   id: number;
   title: string;
@@ -43,6 +54,7 @@ interface Skill {
 
 interface Props {
   curriculum: Curriculum;
+  chapter: Chapter;
   record: Record;
   teacher: string;
   user: string;
@@ -125,6 +137,7 @@ export default function Page(props: Props) {
           createDate={formatDate(props.record.created_at)}
           updateDate={formatDate(props.record.updated_at)}
           curriculumTitle={props.curriculum.title}
+          chapterTitle={props.chapter.title}
           skill={props.skills}
           user={props.user}
           teacher={props.teacher}

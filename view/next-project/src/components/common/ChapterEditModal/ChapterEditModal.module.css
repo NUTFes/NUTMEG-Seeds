@@ -1,0 +1,148 @@
+.modalContainer {
+  top: 0;
+  left: 0;
+  position: fixed;
+  padding: 100px;
+  height: 100%;
+  width: 100%;
+  z-index: 11;
+  background-color: rgba(51, 51, 51, 0.3);
+  overflow: auto;
+}
+
+.modalInnerContainer {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  width: 100%;
+  z-index: 15;
+  display: flex;
+  flex-flow: column;
+  padding: 50px 50px;
+  color: var(--accent-7);
+  border-radius: var(--card-radius);
+  background: radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+  backdrop-filter: blur(10px);
+  gap: 30px;
+}
+
+.contentsTitle {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-flow: row;
+  flex-wrap: nowrap;
+}
+.modalContentContents {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-flow: row;
+  flex-wrap: nowrap;
+}
+
+.contentsMde {
+  width: 100%;
+}
+
+.contentsMde span {
+  font-size: 16px;
+  background-color: #fff;
+}
+
+.homeworkMde {
+  width: 100%;
+}
+
+.homeworkMde span {
+  font-size: 16px;
+  background-color: #fff;
+}
+.modalContent input {
+  font-size: 1.6rem;
+  width: 100%;
+  letter-spacing: 1px;
+  color: var(--accent-6);
+  background: none;
+  border: 1px solid var(--accent-4);
+  padding: 10px;
+}
+
+.modalContent input:focus {
+  border: 1px solid var(--button-secondary);
+  z-index: 10;
+  outline: 0;
+}
+
+.modalContent textarea {
+  font-size: 1.6rem;
+  width: 50%;
+  height: 50rem;
+  color: var(--accent-6);
+  background: none;
+  border: 1px solid var(--accent-4);
+  padding: 10px;
+}
+
+.modalContent textarea:focus {
+  border: 1px solid var(--button-secondary);
+  z-index: 10;
+  outline: 0;
+}
+
+.modalContent select {
+  font-size: 1.6rem;
+  width: 100%;
+  letter-spacing: 1px;
+  color: var(--accent-6);
+  background: none;
+  border: 1px solid var(--accent-4);
+  padding: 10px;
+}
+
+.modalContent select:focus {
+  border: 1px solid var(--button-secondary);
+  z-index: 10;
+  outline: 0;
+}
+
+.modalName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContentClose {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+
+.modalContentCloseIcon {
+  background: none;
+  border: none;
+  margin: -20px;
+  border-radius: var(--button-radius);
+  text-align: center;
+  font-size: 2.8rem;
+  color: var(--button-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalSubmitButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.textButton:active {
+}

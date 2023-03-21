@@ -47,9 +47,14 @@ Rails.application.routes.draw do
       get "/get_curriculum_for_view/:id" => "curriculums_api#get_curriculum_for_view"
       get "/get_curriculums_for_index" => "curriculums_api#get_curriculums_for_index"
       get "/get_curriculum_for_reload_index/:id" => "curriculums_api#get_curriculum_for_reload_index"
-      get "/get_curriculum_chapter_for_view/:id" => "curriculums_api#get_curriculum_chapter_for_view"
+      get "/get_curriculum_chapter_records_for_view/:id" => "curriculums_api#get_curriculum_chapter_records_for_view"
       get "/get_curriculums_chapter_for_index" => "curriculums_api#get_curriculums_chapter_for_index"
+      get "/get_curriculum_chapter_for_view/:id" => "curriculums_api#get_curriculum_chapter_for_view"
       get "/get_curriculum_chapter_for_reload_index/:id" => "curriculums_api#get_curriculum_chapter_for_reload_index"
+
+      # chapter
+      get "/get_chapters_for_index" => "chapters_api#get_chapters_for_index"
+      get "/get_chapter_for_detail/:id" => "chapters_api#get_chapter_for_detail"
 
       # project
       get "/get_project_for_view/:id" => "projects_api#get_project_for_view"
