@@ -20,7 +20,7 @@ interface User {
   userId: string
 }
 
-export const submitUser = async (data: submitData, setUser: SetterOrUpdater<User>, setErrorMessage: Function) => {
+export const submitUser = async (data: submitData, setUser: SetterOrUpdater<User | undefined>, setErrorMessage: Function) => {
   const submitUrl = process.env.CSR_API_URI + '/api/auth/sign_in?email=' + data.email + '&password=' + data.password;
   const req: any = await post(submitUrl, '');
   const res: any = await req.json();

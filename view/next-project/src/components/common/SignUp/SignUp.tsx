@@ -22,7 +22,7 @@ interface User {
   userId: string;
 }
 
-export const submitUser = async (data: submitData, setUser: SetterOrUpdater<User>, setErrorMessage: Function) => {
+export const submitUser = async (data: submitData, setUser: SetterOrUpdater<User | undefined>, setErrorMessage: Function) => {
   const submitUrl =
     process.env.CSR_API_URI +
     '/api/auth/?name=' +
