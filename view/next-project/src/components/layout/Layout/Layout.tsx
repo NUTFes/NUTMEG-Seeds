@@ -14,11 +14,6 @@ const ModalView: React.FC<{ modalView: string; closeModal(): any }> = ({ modalVi
   return (
     <>
       {modalView === 'CURRICULUM_ADD_MODAL' && <CurriculumAddModal />}
-      {modalView === 'CURRICULUM_EDIT_MODAL' && (
-        <EditModal onClose={closeModal}>
-          <CurriculumEditModal />
-        </EditModal>
-      )}
       {modalView === 'CURRICULUM_DELETE_MODAL' && (
         <DeleteModal onClose={closeModal}>
           <CurriculumDeleteModal />
