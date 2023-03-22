@@ -101,7 +101,7 @@ const CurriculumEditModal: FC<Props> = (props) => {
       curriculum: curriculum,
       curriculum_skill: curriculumSkillIds,
     };
-    const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
+    const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.slug;
     await put(submitCurriculumUrl, submitData);
     router.reload();
   };
