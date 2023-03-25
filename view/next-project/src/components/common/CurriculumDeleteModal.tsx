@@ -10,7 +10,7 @@ export default function CurriculumDeleteModal() {
   const { closeModal } = useUI();
 
   const DeleteCurriculum = async (query: any) => {
-    const deleteCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.id;
+    const deleteCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.slug;
     await del(deleteCurriculumUrl);
     router.back();
   };
