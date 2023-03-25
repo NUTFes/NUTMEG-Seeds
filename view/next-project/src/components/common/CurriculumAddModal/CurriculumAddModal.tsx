@@ -76,7 +76,7 @@ const CurriculumAddModal: FC = () => {
     const submitUrl = process.env.CSR_API_URI + '/curriculums';
     const postCurriculumData = {
       title: curriculum.title,
-      graduation_assignment: curriculum.graduationAssignment,
+      graduation_assignment: graduationAssignmentMarkdown,
     };
     const postReq = await post(submitUrl, postCurriculumData);
     const postRes = await postReq.json();
