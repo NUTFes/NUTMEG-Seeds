@@ -97,8 +97,12 @@ const CurriculumEditModal: FC<Props> = (props) => {
   };
 
   const submit = async () => {
+    const curriculumData = {
+      title: curriculum.title,
+      graduation_assignment: graduationAssignmentMarkdown,
+    };
     const submitData = {
-      curriculum: curriculum,
+      curriculum: curriculumData,
       curriculum_skill: curriculumSkillIds,
     };
     const submitCurriculumUrl = process.env.CSR_API_URI + '/curriculums/' + query.slug;

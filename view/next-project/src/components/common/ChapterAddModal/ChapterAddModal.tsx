@@ -78,7 +78,14 @@ const ChapterAddModal: FC = () => {
   // フォームデータの送信とページの表を再レンダリング
   const submitChapter = async () => {
     const submitUrl = process.env.CSR_API_URI + '/chapters';
-    await post(submitUrl, chapter);
+    const submitData: Chapter = {
+      title: chapter.title,
+      content: chapterMarkdown,
+      homework: homeworkMarkdown,
+      curriculum_id: chapter.curriculum_id,
+      order: chapter.order,
+    };
+    await post(submitUrl, submitData);
     closeModal();
     router.reload();
   };

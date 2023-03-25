@@ -74,7 +74,11 @@ const CurriculumAddModal: FC = () => {
   const submit = async () => {
     // カリキュラムの作成
     const submitUrl = process.env.CSR_API_URI + '/curriculums';
-    const postReq = await post(submitUrl, curriculum);
+    const postCurriculumData = {
+      title: curriculum.title,
+      graduation_assignment: graduationAssignmentMarkdown,
+    };
+    const postReq = await post(submitUrl, postCurriculumData);
     const postRes = await postReq.json();
 
     // CuriiculumSkillの作成
