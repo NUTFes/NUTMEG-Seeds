@@ -74,7 +74,8 @@ const ListHeader = (props: Props) => {
         );
       case '/projects':
         return (
-          <AddButton onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
+          <>
+            <AddButton onClick={() => setIsOpenAddModal(!isOpenAddModal)} />
             {isOpenAddModal && (
               <ProjectAddModal
                 isOpen={isOpenAddModal}
@@ -83,11 +84,12 @@ const ListHeader = (props: Props) => {
                 setProjects={setProjects}
               />
             )}
-          </AddButton>
+          </>
         );
       case '/skills':
         return (
-          <AddButton onClick={() => setIsOpenAddModal(!isOpenAddModal)}>
+          <>
+            <AddButton onClick={() => setIsOpenAddModal(!isOpenAddModal)} />
             {isOpenAddModal && (
               <SkillAddModal
                 isOpen={isOpenAddModal}
@@ -96,7 +98,7 @@ const ListHeader = (props: Props) => {
                 setNewSkills={props.setNewSkills}
               />
             )}
-          </AddButton>
+          </>
         );
       // curriculumとchapterのみモーダルの再レンダリング対策しているためこのような記述にしている
       case '/curriculums':
@@ -126,12 +128,15 @@ const ListHeader = (props: Props) => {
       case '/categories':
         return (
           <>
-            <CategoryAddModal
-              isOpen={isOpenAddModal}
-              setIsOpen={setIsOpenAddModal}
-              setNewCategories={props.setNewCategories}
-              newCategories={props.newCategories}
-            />
+            <AddButton onClick={() => setIsOpenAddModal(!isOpenAddModal)} />
+            {isOpenAddModal && (
+              <CategoryAddModal
+                isOpen={isOpenAddModal}
+                setIsOpen={setIsOpenAddModal}
+                setNewCategories={props.setNewCategories}
+                newCategories={props.newCategories}
+              />
+            )}
           </>
         );
     }
