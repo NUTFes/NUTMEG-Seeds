@@ -1,0 +1,5 @@
+.BackgroundAnimationContainer{
+  background-size: contain;
+  position: relative;
+  width: 100%;
+}

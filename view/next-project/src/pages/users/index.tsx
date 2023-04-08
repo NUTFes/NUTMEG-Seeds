@@ -9,7 +9,7 @@ import AccountCircle from '@components/icons/AccountCircle';
 import Button from '@components/common/TransButton';
 import { join } from 'path/posix';
 import GlassFolderCard from '@components/common/GlassFolderCard';
-
+import UserBackgroundAnimation from '@components/common/UsersBackgroundAnimation/UsersBackgroundAnimation'
 
 type Users = {
   id: number;
@@ -176,6 +176,7 @@ export default function UserList(props: Props) {
 
   return (
     <MainLayout>
+      <UserBackgroundAnimation />
       <UserListContainer>
         {props.users.map((user) => (
           <div key={user.id} onMouseLeave={() => leaveHover(user.id)}>
