@@ -9,6 +9,7 @@
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json,css}'"
   },
   "dependencies": {
+    "@types/react-syntax-highlighter": "^15.5.5",
     "@types/styled-components": "^5.1.15",
     "babel-plugin-styled-components": "^2.0.2",
     "dompurify": "^2.4.0",
@@ -18,14 +19,22 @@
     "marked": "^4.1.1",
     "next": "12.0.3",
     "react": "17.0.2",
+    "react-data-table-component": "^7.5.3",
     "react-dom": "^17.0.2",
+    "react-hook-form": "^7.43.1",
+    "react-icons": "^4.7.1",
     "react-markdown": "^8.0.2",
+    "react-particles": "^2.8.0",
     "react-simplemde-editor": "^5.2.0",
+    "react-syntax-highlighter": "^15.5.0",
+    "react-tsparticles": "^2.7.1",
+    "recoil": "^0.7.6",
+    "recoil-persist": "^4.2.0",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",
     "styled-components": "^5.3.3",
-    "react-syntax-highlighter": "^15.5.0",
-    "@types/react-syntax-highlighter": "^15.5.5"
+    "tsparticles": "^2.8.0",
+    "tsparticles-preset-fireworks": "^2.8.0"
   },
   "devDependencies": {
     "@types/dompurify": "^2.3.4",

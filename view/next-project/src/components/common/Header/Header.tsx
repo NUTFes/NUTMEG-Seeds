@@ -1,17 +1,10 @@
 import React, { FC, useEffect } from 'react';
 import Link from 'next/link';
 import s from './Header.module.css';
-import IconButton from '@components/common/IconButton';
+import HeaderMenu from '@components/common/HeaderMenu';
 import HeaderLogo from '@components/icons/HeaderLogo';
-import Logout from '@components/icons/Logout'
-import router from 'next/router';
 
 const Header: FC = () => {
-  const logout = () => {
-    localStorage.clear()
-    router.push('/')
-  }
-
   return (
     <section className={s.headerContainer}>
       <header>
@@ -46,9 +39,14 @@ const Header: FC = () => {
                   <a>Skills</a>
                 </Link>
               </li>
+              <li>
+                <Link href='/categories'>
+                  <a>Categories</a>
+                </Link>
+              </li>
             </ul>
           </nav>
-          <IconButton onClick={logout}><Logout width={20} height={20} color={'var(--accent-0)'}/></IconButton>
+          <HeaderMenu />
         </div>
       </header>
     </section>

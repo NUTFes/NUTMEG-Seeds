@@ -14,8 +14,33 @@ interface ModalProps {
   setIsOpen: Function;
 }
 
+interface Curriculum {
+  id?: number;
+  title: string;
+  skill_ids: number[];
+  graduation_assignment: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface Chapter {
+  id?: number;
+  title: string;
+  content: string;
+  homework: string;
+  curriculum_id: number;
+  order: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface CurriculumChapters {
+  curriculum: Curriculum;
+  chapters: Chapter[];
+}
+
 interface Teacher {
-  id: string;
+  id?: string;
   user_id: string;
   record_id: string;
 }
@@ -25,14 +50,15 @@ interface User {
   name: string;
 }
 
-interface Curriculum {
-  id: number | string;
-  title: string;
-}
-
 interface Record {
-  id: string;
+  id?: number;
   title: string;
+  content: string;
+  homework: string;
+  user_id: number;
+  chapter_id: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface RecordCurriculumTeacher {
@@ -48,7 +74,8 @@ const RecordEditModal: FC<ModalProps> = (props) => {
   const router = useRouter();
   const query = router.query;
 
-  const [curriculums, setCurriculums] = useState<Curriculum[]>([{ id: '', title: '' }]);
+  const [curriculumChapters, setCurriculumChapters] = useState<CurriculumChapters[]>([]);
+  const [curriculumChapter, setCurriculumChapter] = useState<CurriculumChapters>();
   const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
   const [teacherData, setTeacherData] = useState<Teacher>({ id: '', user_id: '', record_id: '' });
   const [record, setRecord] = useState<RecordCurriculumTeacher>({
@@ -59,22 +86,24 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     user: '',
     skill: '',
   });
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Record>({
     title: '',
     content: '',
     homework: '',
-    user_id: '',
-    curriculum_id: '',
+    user_id: 0,
+    chapter_id: 0,
   });
   const [recordMarkdown, setRecordMarkdown] = useState<string>('');
   const [homeworkMarkdown, setHomeworkMarkdown] = useState<string>('');
 
   useEffect(() => {
-    const getCurriculumsUrl = process.env.CSR_API_URI + '/curriculums';
-    const getCurriculums = async (url: string) => {
-      setCurriculums(await get(url));
+    const getCurriculumChaptersUrl = process.env.CSR_API_URI + '/api/v1/get_curriculums_chapter_for_index';
+    const getCurriculumChapters = async (url: string) => {
+      const data = await get(url);
+      setCurriculumChapters(data);
+      setCurriculumChapter(data[0]);
     };
-    getCurriculums(getCurriculumsUrl);
+    getCurriculumChapters(getCurriculumChaptersUrl);
 
     const getUsersUrl = process.env.CSR_API_URI + '/api/v1/users';
     const getUsers = async (url: string) => {
@@ -130,21 +159,32 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     setTeacherData({ id: '1', user_id: e.target.value, record_id: query.id.toString() });
   };
 
-  const submitRecord = async (data: any, query: any) => {
+  // カリキュラムのセレクトボックスの変更を検知
+  const handleCurriculum = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurriculumChapter(
+      curriculumChapters.find((curriculumChapter) => curriculumChapter.curriculum.id === Number(e.target.value)),
+    );
+  };
+
+  const submitRecord = async (data: Record, query: any) => {
     const submitRecordUrl = process.env.CSR_API_URI + '/records/' + query.id;
     const submitData = {
       title: data.title,
       content: recordMarkdown,
       homework: homeworkMarkdown,
       user_id: data.user_id,
-      curriculum_id: data.curriculum_id,
+      chapter_id: data.chapter_id,
     };
     await put(submitRecordUrl, submitData);
   };
 
-  const submitTeacher = async (data: any) => {
+  const submitTeacher = async (data: Teacher) => {
     const submitTeacherUrl = process.env.CSR_API_URI + '/teachers/' + teacherData.id;
-    await put(submitTeacherUrl, data);
+    const submitData: Teacher = {
+      user_id: data.user_id,
+      record_id: data.record_id,
+    };
+    await put(submitTeacherUrl, submitData);
     router.reload();
   };
 
@@ -195,18 +235,30 @@ const RecordEditModal: FC<ModalProps> = (props) => {
           </div>
           <h3 className={s.contentsTitle}>Curriculum</h3>
           <div className={s.modalContentContents}>
-            <select defaultValue={formData.curriculum_id} onChange={handler('curriculum_id')}>
-              {curriculums.map((data: Curriculum) => {
-                if (data.id == formData.curriculum_id) {
+            <select onChange={handleCurriculum}>
+              {curriculumChapters.map((data: CurriculumChapters) => {
+                return (
+                  <option key={data.curriculum.id} value={data.curriculum.id}>
+                    {data.curriculum.title}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <h3 className={s.contentsTitle}>Chapter</h3>
+          <div className={s.modalContentContents}>
+            <select onChange={handler('chapter_id')}>
+              {curriculumChapter?.chapters.map((chapter: Chapter) => {
+                if (chapter.id && chapter.id == formData.chapter_id) {
                   return (
-                    <option key={data.id} value={data.id} selected>
-                      {data.title}
+                    <option key={chapter.id} value={chapter.id} selected>
+                      {chapter.title}
                     </option>
                   );
                 } else {
                   return (
-                    <option key={data.id} value={data.id}>
-                      {data.title}
+                    <option key={chapter.id} value={chapter.id}>
+                      {chapter.title}
                     </option>
                   );
                 }

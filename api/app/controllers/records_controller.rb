@@ -41,8 +41,9 @@ class RecordsController < ApplicationController
       ーーーーーーーーーーーーーーーー
       Title： #{@record.title}
       Teacher： #{@record.teacher.user.name}
-      Skill： #{@record.curriculum.skill.name}
-      Curriculum： #{@record.curriculum.title}
+      Skill： #{@record.chapter.curriculum.skills.map{|skill| skill.name}.join(', ')}
+      Curriculum： #{@record.chapter.curriculum.title}
+      Chapter： #{@record.chapter.title}
       Content：
       #{@record.content}
       ーーーーーーーーーーーーーーーー
@@ -76,7 +77,7 @@ class RecordsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def record_params
-    params.require(:record).permit(:title, :content, :homework, :user_id, :curriculum_id)
+    params.require(:record).permit(:title, :content, :homework, :user_id, :chapter_id)
   end
   def teacher_params
     params.require(:teacher).permit(:user_id, :record_id)

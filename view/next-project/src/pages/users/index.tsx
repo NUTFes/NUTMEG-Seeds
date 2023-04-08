@@ -33,7 +33,6 @@ export async function getServerSideProps() {
 
 export default function UserList(props: Props) {
   // 初期状態で詳細を非表示にするための処理
-  console.log(props);
   let initialState: any = new Object();
   for (const user of props.users) {
     initialState[user.id] = false;

@@ -1,0 +1,55 @@
+.parentButton {
+  position: relative;
+  width: 100%;
+}
+
+.chapters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  justify-items: center;
+  gap: 2rem;
+}
+
+.chapter {
+  width: 100%;
+  cursor: pointer;
+}
+
+.chapterContainer {
+  display: flex;
+  place-content: center;
+  place-items: center;
+  height: 10rem;
+}
+
+.chapterIcon {
+  width: 15%;
+  display: grid;
+  place-content: center;
+}
+
+.chapterInfo {
+  width: 75%;
+}
+
+.navigateNextIcon {
+  width: 10%;
+}
+
+.chapterTitle {
+  font-size: 1.75rem;
+  font-weight: 600;
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.chapterContent {
+  font-size: 1.4rem;
+  font-weight: 400;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}

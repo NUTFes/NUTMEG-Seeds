@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import Router from 'next/router';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import ListHeader from '@components/common/ListHeader';
 import FlatCard from '@components/common/FlatCard';
 import Table from '@components/common/Table';
+import { CURRICULUM_COLUMNS } from 'src/constants/tableColumns';
 
 interface Curriculum {
   id: number;
@@ -62,48 +61,12 @@ export async function getServerSideProps() {
 }
 
 export default function CurriculumList(props: Props) {
-  const headers = ['Title', 'Skill', 'Date'];
-  const chapterHead = ['Title', 'chapter', 'Date']
-
-  const formatDate = (date: string) => {
-    let datetime = date.replace('T', ' ');
-    const datetime2 = datetime.substring(0, datetime.length - 5);
-    return datetime2;
-  };
-
   return (
-    <>
-      <MainLayout>
-        <ListHeader title='Curriculum' />
-        <FlatCard width='100%'>
-          <Table headers={headers}>
-            {props.curriculumsWithSkill.map((data: CurriculumWithSkill) => (
-              <tr key={data.toString()} onClick={() => Router.push('/curriculums/' + data.curriculum.id)}>
-                <td>{data.curriculum.title}</td>
-                <td>
-                  {data.skills.map((skill: Skill) => {
-                    return(<><span>{skill.name}</span><br/></>);
-                  })}
-                </td>
-                <td>{formatDate(data.curriculum.created_at)}</td>
-              </tr>
-            ))}
-          </Table>
-          <Table headers={chapterHead}>
-            {props.curriculumsWithChapter.map((data: CurriculumWithChapter) => (
-              <tr key={data.toString()} onClick={() => Router.push('/curriculums/' + data.curriculum.id)}>
-                <td>{data.curriculum.title}</td>
-                <td>
-                  {data.chapters.map((chapter: Chapter) => {
-                    return (<><span>{chapter.title}{chapter.homework}{chapter.content}</span><br /></>);
-                  })}
-                </td>
-                <td>{formatDate(data.curriculum.created_at)}</td>
-              </tr>
-            ))}
-          </Table>
-        </FlatCard>
-      </MainLayout>
-    </>
+    <MainLayout>
+      <ListHeader title='Curriculum' />
+      <FlatCard width='100%'>
+        <Table columns={CURRICULUM_COLUMNS} data={props.curriculumsWithSkill} route='curriculums' />
+      </FlatCard>
+    </MainLayout>
   );
 }

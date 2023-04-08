@@ -8,17 +8,23 @@ interface FlatCardProps {
   height?: string;
   gap?: string;
   children?: React.ReactNode;
+  onClick?: () => void;
 }
 
 const FlatCard = (props: FlatCardProps) => {
   return (
-    <div
-      className={`${s.FlatCardContainer} ${s['align-' + props.align || 'end']} ${
-        s['justify-' + props.align || 'end']
-      } ${s[props.gap || 'none']} ${s['height-' + props.height || '100']} `}
-    >
-      {props.children}
-    </div>
+    <>
+      <div
+        className={`${props.onClick ? s.ClickableFlatCardContainer : s.FlatCardContainer} ${
+          s['align-' + props.align || 'end']
+        } ${s['justify-' + props.align || 'end']} ${s[props.gap || 'none']} ${
+          s['height-' + props.height || '100']
+        } cursor-pointer `}
+        onClick={props.onClick}
+      >
+        {props.children}
+      </div>
+    </>
   );
 };
 
