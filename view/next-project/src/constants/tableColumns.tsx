@@ -12,6 +12,11 @@ export const SKILL_COLUMNS = [
     sortable: true,
   },
   {
+    name: 'Type',
+    selector: (row: any) => row.type_name,
+    sortable: true,
+  },
+  {
     name: 'Date',
     selector: (row: any) => formatDate(row.created_at),
     sortable: true,
@@ -46,8 +51,8 @@ export const RECORD_COLUMNS = [
     name: 'Curriculum / Chapter',
     cell: (row: any) => (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-        <p style={{fontSize: '1.25rem'}}>{row.curriculum_title}</p>
-        <p style={{fontSize: '1.25rem'}}>{row.chapter_title}</p>
+        <p style={{ fontSize: '1.25rem' }}>{row.curriculum_title}</p>
+        <p style={{ fontSize: '1.25rem' }}>{row.chapter_title}</p>
       </div>
     ),
     sortable: true,
