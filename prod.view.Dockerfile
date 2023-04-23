@@ -18,5 +18,5 @@ COPY --from=builder /app/next-project/node_modules ./node_modules
 COPY --from=builder /app/next-project/package.json ./package.json
 
 USER nonroot
-EXPOSE 3000
+EXPOSE 8080
 CMD ["node_modules/.bin/next", "start"]
