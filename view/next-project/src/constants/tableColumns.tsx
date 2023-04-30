@@ -13,7 +13,7 @@ export const SKILL_COLUMNS = [
   },
   {
     name: 'Type',
-    selector: (row: any) => row.type_name,
+    selector: (row: any) => row.type_name || '',
     sortable: true,
   },
   {
