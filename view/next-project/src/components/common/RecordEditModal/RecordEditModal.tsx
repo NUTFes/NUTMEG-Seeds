@@ -175,6 +175,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
       user_id: data.user_id,
       chapter_id: data.chapter_id,
     };
+    console.log(submitData);
     await put(submitRecordUrl, submitData);
   };
 
