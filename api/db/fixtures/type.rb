@@ -3,4 +3,5 @@ Type.seed( :id,
   {id: 2, name: 'frontend'},
   {id: 3, name: 'infra'},
   {id: 4, name: 'design'},
+  {id: 5, name: 'other'},
 )
