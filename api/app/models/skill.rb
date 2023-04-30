@@ -17,8 +17,8 @@ class Skill < ApplicationRecord
           name: skill.name,
           category_id: skill.category.id,
           category_name: skill.category.name,
-          type_id: skill.type.id,
-          type_name: skill.type.name,
+          type_id: skill.type.nil? ? nil: skill.type.id,
+          type_name: skill.type.nil? ? nil: skill.type.name,
           created_at: skill.created_at,
         }
     }
@@ -32,8 +32,8 @@ class Skill < ApplicationRecord
           name: skill.name,
           category_id: skill.category.id,
           category_name: skill.category.name,
-          type_id: skill.type.id,
-          type_name: skill.type.name,
+          type_id: skill.type.nil? ? nil: skill.type.id,
+          type_name: skill.type.nil? ? nil: skill.type.name,
           created_at: skill.created_at,
         }
     }
@@ -44,6 +44,7 @@ class Skill < ApplicationRecord
       "name": skill.name,
       "detail": skill.detail,
       "category_name": skill.category.name,
+      "type_name": skill.type.nil? ? nil: skill.type.name,
     }
   end
 
