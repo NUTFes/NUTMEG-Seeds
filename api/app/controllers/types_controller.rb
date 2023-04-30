@@ -15,7 +15,7 @@ class TypesController < ApplicationController
 
     # POST /types
   def create
-    @type = Skill.new(type_params)
+    @type = Type.new(type_params)
 
     if @type.save
       render json: @type, status: :created, location: @type
