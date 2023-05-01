@@ -7,12 +7,12 @@ class Record < ApplicationRecord
     record = Record.find(record_id)
     {
       "record": record,
-      "curriculum": record.chapter.curriculum,
-      "curriculum_title": record.chapter.curriculum.title,
-      "chapter": record.chapter,
+      "curriculum": record.chapter.nil? || record.chapter.curriculum.nil? ? nil: record.chapter.curriculum,
+      "curriculum_title": record.chapter.nil? || record.chapter.curriculum.nil? ? nil: record.chapter.curriculum.title,
+      "chapter": record.chapter.nil? ? nil: record.chapter,
       "teacher": record.teacher.user.name,
       "user": record.user.name,
-      "skills": record.chapter.curriculum.skills.map{
+      "skills": record.chapter.nil? || record.chapter.curriculum.nil? ? nil: record.chapter.curriculum.skills.map{
         |skill|
         {
           "id": skill.id,
@@ -37,7 +37,7 @@ class Record < ApplicationRecord
           "chapter_title": record.chapter.nil? ? nil: record.chapter.title,
           "curriculum_id": record.chapter.nil? ? nil: record.chapter.curriculum.id,
           "curriculum_title": record.chapter.nil? ? nil: record.chapter.curriculum.title,
-          "skills": record.chapter.curriculum.nil? ? nil: record.chapter.curriculum.skills.map{
+          "skills": record.chapter.nil? || record.chapter.curriculum.nil? ? nil: record.chapter.curriculum.skills.map{
             |skill|
             {
               "name": skill.name,
@@ -60,9 +60,9 @@ class Record < ApplicationRecord
           "user_name": record.user.name,
           "teacher_id": record.teacher.nil? ? nil: record.teacher.user.id,
           "teacher_name": record.teacher.nil? ? nil: record.teacher.user.name,
-          "chapter_id": record.chapter.id,
-          "chapter_title": record.chapter.title,
-          "skills": record.chapter.curriculum.skills.map{
+          "chapter_id": record.chapter.nil? ? nil: record.chapter.id,
+          "chapter_title": record.chapter.nil? ? nil: record.chapter.title,
+          "skills": record.chapter.nil? || record.chapter.curriculum.nil? ? nil: record.chapter.curriculum.skills.map{
             |skill|
             {
               "name": skill.name,

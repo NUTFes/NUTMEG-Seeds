@@ -1,5 +1,5 @@
 Record.seed( :id,
-  { id: 1, title: 'TypeScriptで二分木を反転', content: 'test_content', homework: 'test_homework', user_id: 1, chapter_id: 1 },
+  { id: 1, title: 'TypeScriptで二分木を反転', content: 'test_content', homework: 'test_homework', user_id: 1},
   { id: 2, title: 'GoでFizzBuzz', content: 'test_content', homework: 'test_homework', user_id: 2, chapter_id: 2 },
   { id: 3, title: 'Reactのルーティングについての記事を読んだ', content: 'test_content', homework: 'test_homework', user_id: 3, chapter_id: 3 },
   { id: 4, title: 'TypeScriptのインターフェースを書いた', content: 'test_content', homework: 'test_homework', user_id: 4, chapter_id: 4 },

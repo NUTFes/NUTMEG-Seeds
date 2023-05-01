@@ -136,9 +136,9 @@ export default function Page(props: Props) {
           recordTitle={props.record.title}
           createDate={formatDate(props.record.created_at)}
           updateDate={formatDate(props.record.updated_at)}
-          curriculumTitle={props.curriculum.title}
-          chapterTitle={props.chapter.title}
-          skill={props.skills}
+          curriculumTitle={props.curriculum?.title}
+          chapterTitle={props.chapter?.title}
+          skill={props?.skills}
           user={props.user}
           teacher={props.teacher}
         />
