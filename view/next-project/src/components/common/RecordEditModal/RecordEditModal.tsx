@@ -237,6 +237,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
           <h3 className={s.contentsTitle}>Curriculum</h3>
           <div className={s.modalContentContents}>
             <select onChange={handleCurriculum}>
+              {formData.chapter_id === null && <option value={formData.chapter_id}>no curriculum</option>}
               {curriculumChapters.map((data: CurriculumChapters) => {
                 return (
                   <option key={data.curriculum.id} value={data.curriculum.id}>
@@ -249,8 +250,9 @@ const RecordEditModal: FC<ModalProps> = (props) => {
           <h3 className={s.contentsTitle}>Chapter</h3>
           <div className={s.modalContentContents}>
             <select onChange={handler('chapter_id')}>
+              {formData.chapter_id === null && <option value={formData.chapter_id}>no chapter</option>}
               {curriculumChapter?.chapters.map((chapter: Chapter) => {
-                if (chapter.id && chapter.id == formData.chapter_id) {
+                if (formData.chapter_id !== null && chapter.id === formData.chapter_id) {
                   return (
                     <option key={chapter.id} value={chapter.id} selected>
                       {chapter.title}
