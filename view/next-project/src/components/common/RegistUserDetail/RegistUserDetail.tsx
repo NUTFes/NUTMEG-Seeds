@@ -19,6 +19,7 @@ interface submitData {
   pc_cpu: string;
   pc_ram: string;
   pc_storage: string;
+  type_id: number;
 }
 
 interface Grade {
@@ -32,6 +33,11 @@ interface Department {
 }
 
 interface Bureau {
+  id: string;
+  name: string;
+}
+
+interface Type {
   id: string;
   name: string;
 }
@@ -60,12 +66,14 @@ const RegistUserDetail: FC = () => {
     pc_os: '',
     pc_cpu: '',
     pc_ram: '',
-    pc_storage: ''
+    pc_storage: '',
+    type_id: 1,
   });
   const [gradeList, setGradeList] = useState<Grade[]>([]);
   const [departmentList, setDepartmentList] = useState<Department[]>([]);
   const [bureauList, setBureauList] = useState<Bureau[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [typeList, setTypeList] = useState<Type[]>([]);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -86,6 +94,13 @@ const RegistUserDetail: FC = () => {
       setBureauList(await get(url));
     };
     getBureauList(getBureauListUrl);
+
+    const getTypeListUrl = process.env.CSR_API_URI + '/types';
+    const getTypeList = async (url: string) => {
+      setTypeList(await get(url));
+    };
+    getTypeList(getTypeListUrl);
+
     setFormData({ ...formData, ['user_id']: currentUser?.userId });
   }, []);
 
@@ -133,6 +148,17 @@ const RegistUserDetail: FC = () => {
             {bureauList.map((bureau: Bureau) => (
               <option key={bureau.id} value={bureau.id}>
                 {bureau.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <h3>Type</h3>
+          <select defaultValue={formData.type_id} onChange={handler('type_id')}>
+            <option value=''>select</option>
+            {typeList.map((type: Type) => (
+              <option key={type.id} value={type.id}>
+                {type.name}
               </option>
             ))}
           </select>
