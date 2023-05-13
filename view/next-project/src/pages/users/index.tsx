@@ -169,7 +169,7 @@ export default function UserList(props: Props) {
   `;
   const MemberHeaderContainer =styled.div`
     height: 300px;
-    position: absolute;
+    position: fixed;
     z-index: 1;
     width: fit-content;
     margin-top: 0px;
