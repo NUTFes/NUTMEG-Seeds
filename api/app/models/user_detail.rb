@@ -3,6 +3,7 @@ class UserDetail < ApplicationRecord
   belongs_to :grade
   belongs_to :department
   belongs_to :bureau
+  belongs_to :type
 
   def to_info_h
     return {
@@ -20,6 +21,7 @@ class UserDetail < ApplicationRecord
       "pc_cpu": self.pc_cpu,
       "pc_ram": self.pc_ram,
       "pc_storage": self.pc_storage,
+      "type": self.type,
     }
   end
 end

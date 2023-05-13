@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import gfm from 'remark-gfm';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
@@ -17,6 +15,7 @@ interface Props {
   name: string;
   detail: string;
   category_name: string;
+  type_name: string;
 }
 
 export async function getServerSideProps({ params }: any) {
@@ -104,11 +103,12 @@ export default function Page(props: Props) {
               Category
               <hr />
             </SkillContentsTitle>
-            <SkillContents>
-              <ReactMarkdown remarkPlugins={[gfm]} unwrapDisallowed={false}>
-                {skillDetail.category_name}
-              </ReactMarkdown>
-            </SkillContents>
+            <SkillContents>{skillDetail.category_name}</SkillContents>
+            <SkillContentsTitle>
+              Type
+              <hr />
+            </SkillContentsTitle>
+            <SkillContents>{skillDetail.type_name}</SkillContents>
           </SkillContentsContainer>
         </FlatCard>
         <ChildButtonContainer>

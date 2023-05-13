@@ -24,15 +24,22 @@ interface Category {
   name: string;
 }
 
+interface Type {
+  id: number;
+  name: string;
+}
+
 const SkillEditModal: FC<ModalProps> = (props) => {
   const router = useRouter();
   const query = router.query;
 
   const [categories, setCategories] = useState<Category[]>([{ id: 0, name: '' }]);
+  const [types, setTypes] = useState<Type[]>([{ id: 0, name: '' }]);
   const [formData, setFormData] = useState({
     name: '',
     detail: '',
     category_id: 0,
+    type_id: 0,
   });
 
   useEffect(() => {
@@ -41,6 +48,12 @@ const SkillEditModal: FC<ModalProps> = (props) => {
       setCategories(await get(url));
     };
     getCategoires(getCategoriesUrl);
+
+    const getTypesUrl = process.env.CSR_API_URI + '/types';
+    const getTypes = async (url: string) => {
+      setTypes(await get(url));
+    };
+    getTypes(getTypesUrl);
 
     if (router.isReady) {
       const getFormDataUrl = process.env.CSR_API_URI + '/skills/' + query.id;
@@ -88,6 +101,26 @@ const SkillEditModal: FC<ModalProps> = (props) => {
         <select defaultValue={formData.category_id} onChange={handler('category_id')}>
           {categories.map((data: Category) => {
             if (data.id == formData.category_id) {
+              return (
+                <option key={data.id} value={data.id} selected>
+                  {data.name}
+                </option>
+              );
+            } else {
+              return (
+                <option key={data.id} value={data.id}>
+                  {data.name}
+                </option>
+              );
+            }
+          })}
+        </select>
+      </div>
+      <div>
+        <h3>Type</h3>
+        <select defaultValue={formData.type_id} onChange={handler('type_id')}>
+          {types.map((data: Type) => {
+            if (data.id == formData.type_id) {
               return (
                 <option key={data.id} value={data.id} selected>
                   {data.name}

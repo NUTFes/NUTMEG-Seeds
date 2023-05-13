@@ -22,6 +22,7 @@ type Skill = {
   name: string;
   detail: string;
   category_id: number;
+  type_id: number;
 }
 
 type Category = {
@@ -29,9 +30,15 @@ type Category = {
   name: string;
 }
 
+type Type = {
+  id: number;
+  name: string;
+}
+
 const SkillAddModal: VFC<ModalProps> = (props) => {
   const [categories, setCategories] = useState<Category[]>([{id: 0, name: ''}])
-  const [skillData, setSkillData] = useState<Skill>({name: '', detail: '', category_id: 0});
+  const [types, setTypes] = useState<Type[]>([{id: 0, name: ''}])
+  const [skillData, setSkillData] = useState<Skill>({name: '', detail: '', category_id: 0, type_id: 0});
   // 選択肢の取得
   useEffect(() => {
     const getCategoriesUrl = process.env.CSR_API_URI + '/categories'
@@ -39,6 +46,12 @@ const SkillAddModal: VFC<ModalProps> = (props) => {
       setCategories(await get(url));
     };
     getCategoires(getCategoriesUrl);
+
+    const getTypesUrl = process.env.CSR_API_URI + '/types'
+    const getTypes = async (url: string) => {
+      setTypes(await get(url));
+    }
+    getTypes(getTypesUrl);
   }, []);
 
   const recordHandler =
@@ -80,6 +93,17 @@ const SkillAddModal: VFC<ModalProps> = (props) => {
         <select onChange={recordHandler('category_id')}>
           <option value=''>Select</option>
           {categories.map((data: Category) => (
+            <option key={data.id} value={data.id}>
+              {data.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <h3>Type</h3>
+        <select onChange={recordHandler('type_id')}>
+          <option value=''>Select</option>
+          {types.map((data: Type) => (
             <option key={data.id} value={data.id}>
               {data.name}
             </option>

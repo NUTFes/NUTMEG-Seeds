@@ -1,5 +1,6 @@
 class Skill < ApplicationRecord
   belongs_to :category
+  belongs_to :type
   has_many :curriculum_skills, dependent: :destroy
   has_many :curriculums, through: :curriculum_skills
   has_many :project_skills, dependent: :destroy
@@ -8,7 +9,7 @@ class Skill < ApplicationRecord
   has_many :users, through: :user_skills
 
   def self.with_categories
-    @record = Skill.eager_load(:category)
+    @record = Skill.eager_load(:category, :type)
       .map{
         |skill|
         {
@@ -16,12 +17,14 @@ class Skill < ApplicationRecord
           name: skill.name,
           category_id: skill.category.id,
           category_name: skill.category.name,
+          type_id: skill.type.nil? ? nil: skill.type.id,
+          type_name: skill.type.nil? ? nil: skill.type.name,
           created_at: skill.created_at,
         }
     }
   end
   def self.with_category(skill_id)
-    @record = Skill.eager_load(:category).where(skills: {id: skill_id})
+    @record = Skill.eager_load(:category, :type).where(skills: {id: skill_id})
       .map{
         |skill|
         {
@@ -29,6 +32,8 @@ class Skill < ApplicationRecord
           name: skill.name,
           category_id: skill.category.id,
           category_name: skill.category.name,
+          type_id: skill.type.nil? ? nil: skill.type.id,
+          type_name: skill.type.nil? ? nil: skill.type.name,
           created_at: skill.created_at,
         }
     }
@@ -39,6 +44,8 @@ class Skill < ApplicationRecord
       "name": skill.name,
       "detail": skill.detail,
       "category_name": skill.category.name,
+      "type_name": skill.type.nil? ? nil: skill.type.name,
     }
   end
+
 end
