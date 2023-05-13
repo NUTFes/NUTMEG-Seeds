@@ -11,34 +11,87 @@ import { join } from 'path/posix';
 import GlassFolderCard from '@components/common/GlassFolderCard';
 import UserBackgroundAnimation from '@components/common/UsersBackgroundAnimation/UsersBackgroundAnimation'
 
-type Users = {
-  id: number;
-  email: string;
-  name: string;
-};
+interface Props {
+  userDetails: UserDetails[];
+}
 
-type Props = {
-  users: Users[];
-};
+interface UserDetails {
+  user: User;
+  detail: UserDetail;
+  projects: Project[];
+  records: Record[];
+  skills: Skill[];
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+interface Grade {
+  id: string;
+  name: string;
+}
+
+interface Department {
+  id: string;
+  name: string;
+}
+
+interface Bureau {
+  id: string;
+  name: string;
+}
+
+interface UserDetail {
+  grade: Grade;
+  department: Department;
+  bureau: Bureau;
+  icon_name: string;
+  github: string;
+  slack: string;
+  biography: string;
+  pc_name: string;
+  pc_os: string;
+  pc_cpu: string;
+  pc_ram: string;
+  pc_storage: string;
+}
+
+interface Record {
+  id: string;
+  title: string;
+  teacher: Teacher;
+}
+
+interface Teacher {
+  name: string;
+}
+
+interface Skill {
+  id: number;
+  name: string;
+  category: string;
+}
+
+interface Project {
+  id: number;
+  project: string;
+  role: string;
+}
 
 export async function getServerSideProps() {
-  const getUrl = process.env.SSR_API_URI + '/api/v1/users';
+  const getUrl = process.env.SSR_API_URI + '/api/v1/get_users_for_member_page';
   const json = await get(getUrl);
   return {
-    props: {
-      users: json,
-    },
+    props:{
+      userDetails: json,
+    }
   };
 }
 
 export default function UserList(props: Props) {
-  // 初期状態で詳細を非表示にするための処理
-  let initialState: any = new Object();
-  for (const user of props.users) {
-    initialState[user.id] = false;
-  }
-  // マウスホバーしているかをuseStateで管理
-  let [isHover, setIsHover] = useState(initialState);
 
   const accountCircleColor = '#3333ff';
 
@@ -101,7 +154,7 @@ export default function UserList(props: Props) {
 
   const router = useRouter();
 
-  const userContent = (user: Users) => {
+  const userContent = (userDetail: any) => {
     return (
       <UserContainer>
       <Card>
@@ -114,23 +167,23 @@ export default function UserList(props: Props) {
             </AccountCircleContainer>
             
             <UserInfo>
-              <UserNameContainer>{user.name}</UserNameContainer>
-              <TypeNameContainer>{user.name}</TypeNameContainer>
+              <UserNameContainer>{userDetail.user.name? userDetail.user.name : ''}</UserNameContainer>
+              <TypeNameContainer>{userDetail.type? userDetail.type : ''}</TypeNameContainer>
             </UserInfo>
           </UserInfoContainer>
         </Card>
       </UserContainer>
     );
   };
-  console.log(props.users)
+  console.log(props)
 
   return (
     <MainLayout>
       <UserBackgroundAnimation />
       <UserListContainer>
-        {props.users.map((user) => (
-          <div key={user.id}>
-            {userContent(user)}
+        {props.userDetails.map((userDetail) => (
+          <div key={userDetail.user.id}>
+            {userContent(userDetail)}
           </div>
         ))}
       </UserListContainer>
