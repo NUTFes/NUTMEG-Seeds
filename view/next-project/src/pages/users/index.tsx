@@ -102,7 +102,7 @@ export default function UserList(props: Props) {
   `;
   const UserContainer = styled.div`
     display: flex;
-    margin-top: 300px;
+    margin-top: 200px;
     padding: 20px;
   `;  
   const Card = styled.div`
@@ -168,26 +168,49 @@ export default function UserList(props: Props) {
     display: flex;
   `;
   const MemberHeaderContainer =styled.div`
-    height: 300px;
+    height: 150px;
     position: fixed;
     z-index: 1;
     width: fit-content;
-    margin-top: 0px;
+    margin-top: -90px;
     margin-left: 0px;
   `
   const MemberPageTitle = styled.div`
     position: absolute;
-    top: 12%;
-    left: 50.5%;
+    top: 11%;
+    left: 50%;
     transform: translate(-50%, -50%); 
     width: 200px;
-    height: 55px;
+    height: 50px;
     font-weight: 700;
-    font-size: 40px;
+    font-size: 25px;
     z-index: 10;
     color: #FFFFFF;
+    text-align: center;
   `
- 
+  const MemberFooterContainer =styled.div`
+    height: 200px;
+    position: fixed;
+    z-index: 1;
+    width: fit-content;
+    bottom: 0px;
+    margin-left: 0px;
+  `
+ const TopSearchButton =styled.div`
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    z-index: 10;
+ `
+ const BottomSearchButton =styled.div`
+    position: absolute;
+    bottom: 3%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    z-index: 10;
+ `
+
   const router = useRouter();
 
   const userContent = (userDetail: any) => {
@@ -215,20 +238,28 @@ export default function UserList(props: Props) {
   console.log(props)
 
   return (
-    <MainLayout>
-      <MemberPageTitle>Members</MemberPageTitle>
-      <MemberSearchButton onClick={() => console.log('button click')} title={'Search'} />
-      <MemberHeaderContainer>
-        <img src='MemberHeader.svg' />
-      </MemberHeaderContainer>
-      <UserBackgroundAnimation />
-      <UserListContainer>
-        {props.userDetails.map((userDetail) => (
-          <div key={userDetail.user.id}>
-            {userContent(userDetail)}
-          </div>
-        ))}
-      </UserListContainer>
+      <MainLayout>
+        <MemberPageTitle>Members</MemberPageTitle>
+        <TopSearchButton>
+          <MemberSearchButton onClick={() => console.log('button click')} title={'Search'} />
+        </TopSearchButton>
+          <MemberHeaderContainer>
+            <img src='MemberHeader.svg' />
+          </MemberHeaderContainer>
+              <UserBackgroundAnimation />
+              <UserListContainer>
+                {props.userDetails.map((userDetail) => (
+                  <div key={userDetail.user.id}>
+                    {userContent(userDetail)}
+                  </div>
+                ))}
+              </UserListContainer>
+          <MemberFooterContainer>
+            <img src='MemberFooter.svg' />
+          </MemberFooterContainer>
+        <BottomSearchButton>
+          <MemberSearchButton onClick={() => console.log('button click')} title={'Search'} />
+        </BottomSearchButton>
     </MainLayout>
   );
 }
