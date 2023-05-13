@@ -10,6 +10,7 @@ import Button from '@components/common/TransButton';
 import { join } from 'path/posix';
 import GlassFolderCard from '@components/common/GlassFolderCard';
 import UserBackgroundAnimation from '@components/common/UsersBackgroundAnimation/UsersBackgroundAnimation'
+import MemberSearchButton from "@components/common/MemberSearchButton";
 
 interface Props {
   userDetails: UserDetails[];
@@ -174,7 +175,19 @@ export default function UserList(props: Props) {
     margin-top: 0px;
     margin-left: 0px;
   `
-
+  const MemberPageTitle = styled.div`
+    position: absolute;
+    top: 12%;
+    left: 50.5%;
+    transform: translate(-50%, -50%); 
+    width: 200px;
+    height: 55px;
+    font-weight: 700;
+    font-size: 40px;
+    z-index: 10;
+    color: #FFFFFF;
+  `
+ 
   const router = useRouter();
 
   const userContent = (userDetail: any) => {
@@ -203,6 +216,8 @@ export default function UserList(props: Props) {
 
   return (
     <MainLayout>
+      <MemberPageTitle>Members</MemberPageTitle>
+      <MemberSearchButton onClick={() => console.log('button click')} title={'Search'} />
       <MemberHeaderContainer>
         <img src='MemberHeader.svg' />
       </MemberHeaderContainer>
