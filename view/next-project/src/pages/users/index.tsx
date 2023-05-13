@@ -93,7 +93,7 @@ export async function getServerSideProps() {
 
 export default function UserList(props: Props) {
 
-  const accountCircleColor = '#3333ff';
+  const accountCircleColor = '#636363';
 
   const UserListContainer = styled.div`
     display: flex;
@@ -128,7 +128,7 @@ export default function UserList(props: Props) {
     padding: 5px;
   `;
   const TypeNameContainer = styled.div`
-    font-size: 1rem;
+    font-size: 1.5rem;
     padding: 5px;
   `;
   const FocusUserNameContainer = styled.div`
@@ -140,12 +140,27 @@ export default function UserList(props: Props) {
     height: 100px;
     position: absolute;
     z-index: 1;
-    backdrop-filter: blur(4px);
     width: fit-content;
-    margin-top: -30px;
+    margin-top: -37px;
     margin-left: -20px;
   `;
-
+  const PictureFilter =styled.div`
+    width: 300px;
+    height: 120px;
+    position: absolute;
+    top: 22px;
+    z-index: -1;
+    backdrop-filter: blur(4px);
+  `;
+    const PictureTabFilter =styled.div`
+    width: 100px;
+    height: 20px;
+    position: absolute;
+    top: 2px;
+    z-index: -1;
+    backdrop-filter: blur(4px);
+    clip-path: polygon(0% 100%, 17.5% 0%, 82.5% 0%, 100% 100%);
+  `;
   const UserInfoContainer = styled.div`
     position: absolute;
     z-index: 2;
@@ -160,6 +175,7 @@ export default function UserList(props: Props) {
       <Card>
           <PictureContainer>
             <img src='UserButton.svg' />
+            <PictureTabFilter/><PictureFilter/>
           </PictureContainer>
           <UserInfoContainer>
             <AccountCircleContainer>
