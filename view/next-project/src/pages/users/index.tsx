@@ -100,15 +100,15 @@ export default function UserList(props: Props) {
   `;
   const Card = styled.div`
     position: relative;
-    width: 300px;
-    height: 100px;
+    width: 270px;
+    height: 80px;
   `;
   const AccountCircleContainer = styled.div`
     border: solid 4px;
     border-color: ${accountCircleColor};
     border-radius: 9999px;
-    width: 88px;
-    height: 88px;
+    width: 68px;
+    height: 68px;
   `;
   const UserInfo = styled.div`
     display: column
@@ -126,8 +126,8 @@ export default function UserList(props: Props) {
     padding: 5px;
   `;
   const PictureContainer = styled.div`
-    width: 300px;
-    height: 100px;
+    width: 270px;
+    height: 135px;
     position: absolute;
     z-index: 1;
     width: fit-content;
@@ -135,8 +135,8 @@ export default function UserList(props: Props) {
     margin-left: -20px;
   `;
   const PictureFilter = styled.div`
-    width: 300px;
-    height: 120px;
+    width: 270px;
+    height: 135px;
     position: absolute;
     top: 22px;
     z-index: -1;
@@ -213,7 +213,7 @@ export default function UserList(props: Props) {
           </PictureContainer>
           <UserInfoContainer>
             <AccountCircleContainer>
-              <AccountCircle height={80} width={80} color={'var(--accent-6)'} />
+              <AccountCircle height={60} width={60} color={'var(--accent-6)'} />
             </AccountCircleContainer>
 
             <UserInfo>
