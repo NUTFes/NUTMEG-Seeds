@@ -101,7 +101,7 @@ export default function UserList(props: Props) {
   `;
   const UserContainer = styled.div`
     display: flex;
-    margin-top: 80px;
+    margin-top: 300px;
     padding: 20px;
   `;  
   const Card = styled.div`
@@ -166,6 +166,14 @@ export default function UserList(props: Props) {
     z-index: 2;
     display: flex;
   `;
+  const MemberHeaderContainer =styled.div`
+    height: 300px;
+    position: absolute;
+    z-index: 1;
+    width: fit-content;
+    margin-top: 0px;
+    margin-left: 0px;
+  `
 
   const router = useRouter();
 
@@ -195,6 +203,9 @@ export default function UserList(props: Props) {
 
   return (
     <MainLayout>
+      <MemberHeaderContainer>
+        <img src='MemberHeader.svg' />
+      </MemberHeaderContainer>
       <UserBackgroundAnimation />
       <UserListContainer>
         {props.userDetails.map((userDetail) => (
