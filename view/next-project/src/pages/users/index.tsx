@@ -40,25 +40,28 @@ export default function UserList(props: Props) {
   // マウスホバーしているかをuseStateで管理
   let [isHover, setIsHover] = useState(initialState);
 
+  const accountCircleColor = '#3333ff';
+
   const UserListContainer = styled.div`
     display: flex;
-    gap: 60px 60px;
-    flex-wrap: wrap;
     justify-content: center;
   `;
   const UserContainer = styled.div`
     display: flex;
+    margin-top: 80px;
+    padding: 20px;
+  `;  
+  const Card = styled.div`
+    position:relative;
+    width: 300px;
+    height: 100px;
   `;
-  const AccountColorCircle = styled.div`
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    border: 3px solid #818181; //色の設定は個人で
-    box-sizing: border-box;
-
-    position: absolute;
-    top: 10%;
-    left: 16.5%;
+  const AccountCircleContainer =styled.div`
+    border: solid 4px;
+    border-color: ${accountCircleColor};
+    border-radius: 9999px;
+    width: 88px;
+    height: 88px;
   `;
   const UserInfo = styled.div`
     display: column
@@ -79,98 +82,45 @@ export default function UserList(props: Props) {
     font-size: 2rem;
     font-weight: 500;
   `;
-  const UserDetail = styled.div`
-    font-size: 1.4rem;
-    padding: 10px 0;
-  `;
-  const AccountPosition = styled.div`
-    padding: 20px 0;
-  `;
-  const GlassFolderTabLine = styled.div`
-    // width: 140px;
-    // height: 14px;
-    // background: #505050;
-    // clip-path: polygon(0% 100%, 10% 0%, 90% 0%, 100% 100%);
-    // border-top: solid 1px #505050;
-    //  border-top: solid 1px #505050;
-    // position: absolute;
-    // z-index: 50;
-  `;
-  const GlassFolderTab = styled.div`
-    position: relative;
-    width: 150px;
-    height: 21px;
-    background: #505050;
-    clip-path: polygon(0% 100%, 10% 0%, 90% 0%, 100% 100%);
-  `;
-  const GlassFolderTabInner = styled.div`
-    display: block;
+  const PictureContainer = styled.div`
+    width: 300px;
+    height: 100px;
     position: absolute;
-    top: 1px; bottom: 0px;
-    left: 1px; right: 1px;
-    content: '';
-    background: #FFDDBD;
-    clip-path: polygon(0% 100%, 10% 0%, 90% 0%, 100% 100%);
+    z-index: 1;
+    backdrop-filter: blur(4px);
+    width: fit-content;
+    margin-top: -30px;
+    margin-left: -20px;
   `;
-  const FolderLine = styled.div`
-    position: absolute;
-    top: -7px;
-    left: -7px;
-    width: 100%;
-    height: 100%;
-    border: 3px solid #000;
-    content: '';
-  `
 
-  // プロジェクトのカードにマウスホバーした時の処理
-  const onHover = (id: number) => {
-    // マウスホバーしたプロジェクトのisHoverをTrueにする
-    setIsHover({ ...isHover, [id]: true });
-  };
-  // プロジェクトのカードからマウスホバーが外れた時の処理
-  const leaveHover = (id: number) => {
-    setIsHover({ ...isHover, [id]: false });
-  };
+  const UserInfoContainer = styled.div`
+    position: absolute;
+    z-index: 2;
+    display: flex;
+  `;
 
   const router = useRouter();
 
-  // マウスホバー時のプロジェクト
-  const userContent = (isHover: any, user: Users) => {
-    if (isHover[user.id]) {
-      return (
-        <GlassCard width='275px' height='250px' align={'center'} justify={'center'} background='white' gap='30px'>
-          <FocusUserNameContainer>{user.name}</FocusUserNameContainer>
-          <div>
-            <Button height='30px' text='More' onClick={() => router.push('/users/' + user.id)} />
-          </div>
-        </GlassCard>
-      );
-    } else {
-      return (
-      <div>
-        <div>
-            <GlassFolderTabLine></GlassFolderTabLine>
-            <GlassFolderTab><GlassFolderTabInner/></GlassFolderTab>
-        </div>
-        <GlassFolderCard width='300px' height='120px' align={'center'}>
-            
-          <UserContainer>
-            <div onMouseEnter={() => onHover(user.id)}>
-              <div >
-                <AccountCircle height={80} width={80} color={'var(--accent-6)'} />
-                <AccountColorCircle></AccountColorCircle>
-              </div>
-            </div>
+  const userContent = (user: Users) => {
+    return (
+      <UserContainer>
+      <Card>
+          <PictureContainer>
+            <img src='UserButton.svg' />
+          </PictureContainer>
+          <UserInfoContainer>
+            <AccountCircleContainer>
+              <AccountCircle height={80} width={80} color={'var(--accent-6)'} />
+            </AccountCircleContainer>
             
             <UserInfo>
               <UserNameContainer>{user.name}</UserNameContainer>
               <TypeNameContainer>{user.name}</TypeNameContainer>
             </UserInfo>
-          </UserContainer>
-        </GlassFolderCard>
-        </div>
-      );
-    }
+          </UserInfoContainer>
+        </Card>
+      </UserContainer>
+    );
   };
   console.log(props.users)
 
@@ -179,8 +129,8 @@ export default function UserList(props: Props) {
       <UserBackgroundAnimation />
       <UserListContainer>
         {props.users.map((user) => (
-          <div key={user.id} onMouseLeave={() => leaveHover(user.id)}>
-            {userContent(isHover, user)}
+          <div key={user.id}>
+            {userContent(user)}
           </div>
         ))}
       </UserListContainer>
