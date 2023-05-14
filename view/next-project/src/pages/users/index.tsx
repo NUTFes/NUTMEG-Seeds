@@ -235,7 +235,6 @@ export default function UserList(props: Props) {
       </UserContainer>
     );
   };
-  console.log(props)
 
   return (
       <MainLayout>
