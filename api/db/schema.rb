@@ -12,20 +12,23 @@
 
 ActiveRecord::Schema.define(version: 2023_02_21_091509) do
 
-  create_table "bureaus", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "bureaus", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "detail"
   end
 
-  create_table "chapters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "chapters", force: :cascade do |t|
     t.string "title"
     t.text "content"
     t.text "homework"
@@ -35,14 +38,14 @@ ActiveRecord::Schema.define(version: 2023_02_21_091509) do
     t.integer "order"
   end
 
-  create_table "curriculum_skills", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "curriculum_skills", force: :cascade do |t|
     t.integer "curriculum_id"
     t.integer "skill_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "curriculums", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "curriculums", force: :cascade do |t|
     t.string "title"
     t.integer "skill_ids"
     t.datetime "created_at", precision: 6, null: false
@@ -50,26 +53,26 @@ ActiveRecord::Schema.define(version: 2023_02_21_091509) do
     t.text "graduation_assignment"
   end
 
-  create_table "departments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "departments", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "grades", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "grades", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "project_skills", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "project_skills", force: :cascade do |t|
     t.integer "project_id"
     t.integer "skill_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "project_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "project_users", force: :cascade do |t|
     t.integer "project_id"
     t.integer "user_id"
     t.integer "role_id"
@@ -77,7 +80,7 @@ ActiveRecord::Schema.define(version: 2023_02_21_091509) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "projects", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "projects", force: :cascade do |t|
     t.string "name"
     t.string "detail"
     t.string "icon_name"
@@ -87,7 +90,7 @@ ActiveRecord::Schema.define(version: 2023_02_21_091509) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "records", force: :cascade do |t|
     t.string "title"
     t.text "content"
     t.text "homework"
@@ -97,13 +100,13 @@ ActiveRecord::Schema.define(version: 2023_02_21_091509) do
     t.integer "chapter_id"
   end
 
-  create_table "roles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "skills", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "skills", force: :cascade do |t|
     t.string "name"
     t.string "detail"
     t.integer "category_id"
@@ -112,20 +115,20 @@ ActiveRecord::Schema.define(version: 2023_02_21_091509) do
     t.integer "type_id"
   end
 
-  create_table "teachers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "teachers", force: :cascade do |t|
     t.integer "user_id"
     t.integer "record_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "user_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "user_details", force: :cascade do |t|
     t.integer "user_id"
     t.integer "grade_id"
     t.integer "department_id"
@@ -144,14 +147,14 @@ ActiveRecord::Schema.define(version: 2023_02_21_091509) do
     t.integer "type_id"
   end
 
-  create_table "user_skills", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "user_skills", force: :cascade do |t|
     t.integer "user_id"
     t.integer "skill_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
     t.string "encrypted_password", default: "", null: false
