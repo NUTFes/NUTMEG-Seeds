@@ -1,0 +1,3 @@
+table:
+  name: teachers
+  schema: public
