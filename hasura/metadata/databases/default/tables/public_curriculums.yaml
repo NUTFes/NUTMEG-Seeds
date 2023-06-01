@@ -1,3 +1,22 @@
 table:
   name: curriculums
   schema: public
+object_relationships:
+  - name: skill
+    using:
+      foreign_key_constraint_on: skill_ids
+array_relationships:
+  - name: chapters
+    using:
+      foreign_key_constraint_on:
+        column: curriculum_id
+        table:
+          name: chapters
+          schema: public
+  - name: curriculum_skills
+    using:
+      foreign_key_constraint_on:
+        column: curriculum_id
+        table:
+          name: curriculum_skills
+          schema: public

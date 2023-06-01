@@ -34,7 +34,7 @@ services:
     container_name: "seeds_hasura"
     ports:
       - "8082:8080"
-    restart: always
+    # restart: always
     volumes:
       - ./hasura:/hasura
     environment:

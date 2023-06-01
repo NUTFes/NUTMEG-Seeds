@@ -1,3 +1,10 @@
 table:
   name: project_skills
   schema: public
+object_relationships:
+  - name: project
+    using:
+      foreign_key_constraint_on: project_id
+  - name: skill
+    using:
+      foreign_key_constraint_on: skill_id

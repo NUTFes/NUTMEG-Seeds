@@ -1,3 +1,39 @@
 table:
   name: skills
   schema: public
+object_relationships:
+  - name: category
+    using:
+      foreign_key_constraint_on: category_id
+  - name: type
+    using:
+      foreign_key_constraint_on: type_id
+array_relationships:
+  - name: curriculum_skills
+    using:
+      foreign_key_constraint_on:
+        column: skill_id
+        table:
+          name: curriculum_skills
+          schema: public
+  - name: curriculums
+    using:
+      foreign_key_constraint_on:
+        column: skill_ids
+        table:
+          name: curriculums
+          schema: public
+  - name: project_skills
+    using:
+      foreign_key_constraint_on:
+        column: skill_id
+        table:
+          name: project_skills
+          schema: public
+  - name: user_skills
+    using:
+      foreign_key_constraint_on:
+        column: skill_id
+        table:
+          name: user_skills
+          schema: public
