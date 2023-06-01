@@ -59,3 +59,30 @@
   padding: 2px 0 2px 0.7em;
   color: #505c64;
 }
+
+.markdown table {
+  margin: 1.2rem auto;
+  width: auto;
+  border-collapse: collapse;
+  font-size: 0.95em;
+  line-height: 1.5;
+  word-break: normal;
+  display: block;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.markdown td,
+.markdown th {
+  padding: 0.5rem;
+  border: 1px solid #cfdce6;
+}
+
+.markdown th {
+  font-weight: 700;
+  background-color: #edf2f7;
+}
+
+.markdown td {
+  background: #fff;
+}
