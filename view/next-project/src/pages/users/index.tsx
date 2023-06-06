@@ -170,14 +170,7 @@ export default function UserList(props: Props) {
     z-index: 2;
     display: flex;
   `;
-  const MemberHeaderContainer = styled.div`
-    height: 150px;
-    position: fixed;
-    z-index: 8;
-    width: fit-content;
-    margin-top: -90px;
-    margin-left: 0px;
-  `;
+  
   const MemberPageTitle = styled.div`
     position: fixed;
     top: 11%;
@@ -191,14 +184,7 @@ export default function UserList(props: Props) {
     color: #ffffff;
     text-align: center;
   `;
-  const MemberFooterContainer = styled.div`
-    height: 200px;
-    position: fixed;
-    z-index: 8;
-    width: fit-content;
-    bottom: 0px;
-    margin-left: 0px;
-  `;
+  
   const TopSearchButton = styled.div`
     position: fixed;
     top: 15%;
@@ -248,9 +234,6 @@ export default function UserList(props: Props) {
       <TopSearchButton>
         <MemberSearchButton title={'Search'} />
       </TopSearchButton>
-      <MemberHeaderContainer>
-        <img src='MemberHeader.svg' />
-      </MemberHeaderContainer>
       <UserMargin />
       <UserBackgroundAnimation />
       <UserCardListContainer>
@@ -265,9 +248,6 @@ export default function UserList(props: Props) {
       <BottomSearchButton>
         <MemberSearchButton title={'Search'} />
       </BottomSearchButton>
-      <MemberFooterContainer>
-        <img src='MemberFooter.svg' />
-      </MemberFooterContainer>
     </UsersLayout>
   );
 }
