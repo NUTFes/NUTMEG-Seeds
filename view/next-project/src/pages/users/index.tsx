@@ -1,16 +1,10 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { get } from '@utils/api_methods';
-import MainLayout from '@components/layout/UsersLayout';
-import GlassCard from '@components/common/GlassCard';
+import UsersLayout from '@components/layout/UsersLayout';
 import styled from 'styled-components';
-import HeaderLogo from '@components/icons/HeaderLogo';
 import AccountCircle from '@components/icons/AccountCircle';
-import Button from '@components/common/TransButton';
-import { join } from 'path/posix';
-import GlassFolderCard from '@components/common/GlassFolderCard';
-import UserBackgroundAnimation from '@components/common/UsersBackgroundAnimation/UsersBackgroundAnimation'
-import MemberSearchButton from "@components/common/MemberSearchButton";
+import UserBackgroundAnimation from '@components/common/UsersBackgroundAnimation/UsersBackgroundAnimation';
+import MemberSearchButton from '@components/common/MemberSearchButton';
 
 interface Props {
   userDetails: UserDetails[];
@@ -86,36 +80,48 @@ export async function getServerSideProps() {
   const getUrl = process.env.SSR_API_URI + '/api/v1/get_users_for_member_page';
   const json = await get(getUrl);
   return {
-    props:{
+    props: {
       userDetails: json,
-    }
+    },
   };
 }
 
 export default function UserList(props: Props) {
-
   const accountCircleColor = '#636363';
 
   const UserListContainer = styled.div`
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
   `;
+  const UserMargin = styled.div`
+    height: 150px;  
+  `
   const UserContainer = styled.div`
     display: flex;
-    margin-top: 200px;
+    flex-wrap: wrap;
+    margin-top: 50px;
     padding: 20px;
-  `;  
-  const Card = styled.div`
-    position:relative;
-    width: 300px;
-    height: 100px;
+    // width: 100vw;
   `;
-  const AccountCircleContainer =styled.div`
+  const UserCardListContainer = styled.div`
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    over-flow: normal;
+  `
+  const Card = styled.div`
+    position: relative;
+    width: 270px;
+    height: 80px;
+    display: inline-block;
+  `;
+  const AccountCircleContainer = styled.div`
     border: solid 4px;
     border-color: ${accountCircleColor};
     border-radius: 9999px;
-    width: 88px;
-    height: 88px;
+    width: 68px;
+    height: 68px;
   `;
   const UserInfo = styled.div`
     display: column
@@ -125,35 +131,31 @@ export default function UserList(props: Props) {
   `;
   const UserNameContainer = styled.div`
     font-size: 2rem;
-    text-decoration:underline;
+    text-decoration: underline;
     padding: 5px;
   `;
   const TypeNameContainer = styled.div`
     font-size: 1.5rem;
     padding: 5px;
   `;
-  const FocusUserNameContainer = styled.div`
-    font-size: 2rem;
-    font-weight: 500;
-  `;
   const PictureContainer = styled.div`
-    width: 300px;
-    height: 100px;
+    width: 270px;
+    height: 135px;
     position: absolute;
     z-index: 1;
     width: fit-content;
     margin-top: -37px;
     margin-left: -20px;
   `;
-  const PictureFilter =styled.div`
-    width: 300px;
-    height: 120px;
+  const PictureFilter = styled.div`
+    width: 270px;
+    height: 110px;
     position: absolute;
     top: 22px;
     z-index: -1;
     backdrop-filter: blur(4px);
   `;
-    const PictureTabFilter =styled.div`
+  const PictureTabFilter = styled.div`
     width: 100px;
     height: 20px;
     position: absolute;
@@ -167,98 +169,106 @@ export default function UserList(props: Props) {
     z-index: 2;
     display: flex;
   `;
-  const MemberHeaderContainer =styled.div`
+  const MemberHeaderContainer = styled.div`
     height: 150px;
     position: fixed;
     z-index: 1;
     width: fit-content;
     margin-top: -90px;
     margin-left: 0px;
-  `
+  `;
   const MemberPageTitle = styled.div`
     position: absolute;
     top: 11%;
     left: 50%;
-    transform: translate(-50%, -50%); 
+    transform: translate(-50%, -50%);
     width: 200px;
     height: 50px;
     font-weight: 700;
     font-size: 25px;
     z-index: 10;
-    color: #FFFFFF;
+    color: #ffffff;
     text-align: center;
-  `
-  const MemberFooterContainer =styled.div`
+  `;
+  const MemberFooterContainer = styled.div`
     height: 200px;
     position: fixed;
     z-index: 1;
     width: fit-content;
     bottom: 0px;
     margin-left: 0px;
-  `
- const TopSearchButton =styled.div`
+  `;
+  const TopSearchButton = styled.div`
     position: absolute;
     top: 15%;
     left: 50%;
-    transform: translate(-50%, -50%); 
+    transform: translate(-50%, -50%);
     z-index: 10;
- `
- const BottomSearchButton =styled.div`
+  `;
+  const BottomSearchButton = styled.div`
     position: absolute;
     bottom: 3%;
     left: 50%;
-    transform: translate(-50%, -50%); 
+    transform: translate(-50%, -50%);
     z-index: 10;
- `
+  `;
 
   const router = useRouter();
 
   const userContent = (userDetail: any) => {
     return (
-      <UserContainer>
-      <Card>
-          <PictureContainer>
-            <img src='UserButton.svg' />
-            <PictureTabFilter/><PictureFilter/>
-          </PictureContainer>
-          <UserInfoContainer>
-            <AccountCircleContainer>
-              <AccountCircle height={80} width={80} color={'var(--accent-6)'} />
-            </AccountCircleContainer>
-            
-            <UserInfo>
-              <UserNameContainer>{userDetail.user.name? userDetail.user.name : ''}</UserNameContainer>
-              <TypeNameContainer>{userDetail.type? userDetail.type : ''}</TypeNameContainer>
-            </UserInfo>
-          </UserInfoContainer>
-        </Card>
-      </UserContainer>
+      
+        <UserContainer>
+          <UserCardListContainer>
+            <Card>
+              <PictureContainer>
+                <img src='UserButton.svg' />
+                <PictureTabFilter />
+                <PictureFilter />
+              </PictureContainer>
+              <UserInfoContainer>
+                <AccountCircleContainer>
+                  <AccountCircle height={60} width={60} color={'var(--accent-6)'} />
+                </AccountCircleContainer>
+
+                <UserInfo>
+                  <UserNameContainer>{userDetail.user.name ? userDetail.user.name : ''}</UserNameContainer>
+                  <TypeNameContainer>{userDetail.type ? userDetail.type : ''}</TypeNameContainer>
+                </UserInfo>
+              </UserInfoContainer>
+            </Card>
+          </UserCardListContainer>
+        </UserContainer>
+      
     );
   };
 
   return (
-      <MainLayout>
-        <MemberPageTitle>Members</MemberPageTitle>
-        <TopSearchButton>
-          <MemberSearchButton onClick={() => console.log('button click')} title={'Search'} />
-        </TopSearchButton>
-          <MemberHeaderContainer>
-            <img src='MemberHeader.svg' />
-          </MemberHeaderContainer>
-              <UserBackgroundAnimation />
+    <UsersLayout>
+      <MemberPageTitle>Members</MemberPageTitle>
+      <TopSearchButton>
+        <MemberSearchButton title={'Search'} />
+      </TopSearchButton>
+      <MemberHeaderContainer>
+        <img src='MemberHeader.svg' />
+      </MemberHeaderContainer>
+      <UserMargin/>
+      <UserBackgroundAnimation />
+            <UserCardListContainer>
               <UserListContainer>
                 {props.userDetails.map((userDetail) => (
-                  <div key={userDetail.user.id}>
+                  <div key={userDetail.user.id} onClick={() => router.push(`users/${userDetail.user.id}`)}>
                     {userContent(userDetail)}
                   </div>
                 ))}
               </UserListContainer>
-          <MemberFooterContainer>
-            <img src='MemberFooter.svg' />
-          </MemberFooterContainer>
-        <BottomSearchButton>
-          <MemberSearchButton onClick={() => console.log('button click')} title={'Search'} />
-        </BottomSearchButton>
-    </MainLayout>
+            </UserCardListContainer>
+      <MemberFooterContainer>
+        <img src='MemberFooter.svg' />
+      </MemberFooterContainer>
+      <BottomSearchButton>
+        <MemberSearchButton title={'Search'} />
+      </BottomSearchButton>
+    </UsersLayout>
   );
 }
