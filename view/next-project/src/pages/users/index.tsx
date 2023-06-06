@@ -93,10 +93,11 @@ export default function UserList(props: Props) {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    margin-bottom: 200px;
   `;
   const UserMargin = styled.div`
-    height: 150px;  
-  `
+    height: 150px;
+  `;
   const UserContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
@@ -109,7 +110,7 @@ export default function UserList(props: Props) {
     width: 100%;
     flex-wrap: wrap;
     over-flow: normal;
-  `
+  `;
   const Card = styled.div`
     position: relative;
     width: 270px;
@@ -172,13 +173,13 @@ export default function UserList(props: Props) {
   const MemberHeaderContainer = styled.div`
     height: 150px;
     position: fixed;
-    z-index: 1;
+    z-index: 8;
     width: fit-content;
     margin-top: -90px;
     margin-left: 0px;
   `;
   const MemberPageTitle = styled.div`
-    position: absolute;
+    position: fixed;
     top: 11%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -186,60 +187,58 @@ export default function UserList(props: Props) {
     height: 50px;
     font-weight: 700;
     font-size: 25px;
-    z-index: 10;
+    z-index: 9;
     color: #ffffff;
     text-align: center;
   `;
   const MemberFooterContainer = styled.div`
     height: 200px;
     position: fixed;
-    z-index: 1;
+    z-index: 8;
     width: fit-content;
     bottom: 0px;
     margin-left: 0px;
   `;
   const TopSearchButton = styled.div`
-    position: absolute;
+    position: fixed;
     top: 15%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 10;
+    z-index: 9;
   `;
   const BottomSearchButton = styled.div`
-    position: absolute;
-    bottom: 3%;
+    position: fixed;
+    bottom: 2%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 10;
+    z-index: 9;
   `;
 
   const router = useRouter();
 
   const userContent = (userDetail: any) => {
     return (
-      
-        <UserContainer>
-          <UserCardListContainer>
-            <Card>
-              <PictureContainer>
-                <img src='UserButton.svg' />
-                <PictureTabFilter />
-                <PictureFilter />
-              </PictureContainer>
-              <UserInfoContainer>
-                <AccountCircleContainer>
-                  <AccountCircle height={60} width={60} color={'var(--accent-6)'} />
-                </AccountCircleContainer>
+      <UserContainer>
+        <UserCardListContainer>
+          <Card>
+            <PictureContainer>
+              <img src='UserButton.svg' />
+              <PictureTabFilter />
+              <PictureFilter />
+            </PictureContainer>
+            <UserInfoContainer>
+              <AccountCircleContainer>
+                <AccountCircle height={60} width={60} color={'var(--accent-6)'} />
+              </AccountCircleContainer>
 
-                <UserInfo>
-                  <UserNameContainer>{userDetail.user.name ? userDetail.user.name : ''}</UserNameContainer>
-                  <TypeNameContainer>{userDetail.type ? userDetail.type : ''}</TypeNameContainer>
-                </UserInfo>
-              </UserInfoContainer>
-            </Card>
-          </UserCardListContainer>
-        </UserContainer>
-      
+              <UserInfo>
+                <UserNameContainer>{userDetail.user.name ? userDetail.user.name : ''}</UserNameContainer>
+                <TypeNameContainer>{userDetail.type ? userDetail.type : ''}</TypeNameContainer>
+              </UserInfo>
+            </UserInfoContainer>
+          </Card>
+        </UserCardListContainer>
+      </UserContainer>
     );
   };
 
@@ -252,23 +251,23 @@ export default function UserList(props: Props) {
       <MemberHeaderContainer>
         <img src='MemberHeader.svg' />
       </MemberHeaderContainer>
-      <UserMargin/>
+      <UserMargin />
       <UserBackgroundAnimation />
-            <UserCardListContainer>
-              <UserListContainer>
-                {props.userDetails.map((userDetail) => (
-                  <div key={userDetail.user.id} onClick={() => router.push(`users/${userDetail.user.id}`)}>
-                    {userContent(userDetail)}
-                  </div>
-                ))}
-              </UserListContainer>
-            </UserCardListContainer>
-      <MemberFooterContainer>
-        <img src='MemberFooter.svg' />
-      </MemberFooterContainer>
+      <UserCardListContainer>
+        <UserListContainer>
+          {props.userDetails.map((userDetail) => (
+            <div key={userDetail.user.id} onClick={() => router.push(`users/${userDetail.user.id}`)}>
+              {userContent(userDetail)}
+            </div>
+          ))}
+        </UserListContainer>
+      </UserCardListContainer>
       <BottomSearchButton>
         <MemberSearchButton title={'Search'} />
       </BottomSearchButton>
+      <MemberFooterContainer>
+        <img src='MemberFooter.svg' />
+      </MemberFooterContainer>
     </UsersLayout>
   );
 }
