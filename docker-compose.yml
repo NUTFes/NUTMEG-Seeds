@@ -1,9 +1,20 @@
 version: "3"
 services:
   seeds_db:
+    image: mysql:8.0
+    container_name: "seeds_db"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  seeds_hasura_db:
     image: postgres:12
     volumes:
-      - mysql-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: myapp_development
       POSTGRES_USER: seeds
@@ -24,8 +35,9 @@ services:
     volumes:
       - ./api:/myapp
     depends_on:
-      seeds_db:
-        condition: service_started
+      - seeds_db
+    stdin_open: true
+    tty: true
 
   hasura:
     build:
@@ -41,11 +53,11 @@ services:
       HASURA_GRAPHQL_MIGRATIONS_DIR: /hasura/migrations
       HASURA_GRAPHQL_METADATA_DIR: /hasura/metadata
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_DATABASE_URL: postgres://seeds:password@seeds_db:5432/myapp_development
+      HASURA_GRAPHQL_DATABASE_URL: postgres://seeds:password@seeds_hasura_db:5432/myapp_development
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
     depends_on:
-      seeds_db:
+      seeds_hasura_db:
         condition: service_healthy
 
   seeds_view:
@@ -56,12 +68,24 @@ services:
     command: sh -c "npm install && npm run dev"
     volumes:
       - ./view:/app
+    stdin_open: true
+    tty: true
     environment:
       - SEEDS_API_URI=http://localhost:3000
+
+  # 定期実行用コンテナ
+  cron:
+    image: nutmeg-seeds-seeds_api:latest
+    command: >
+      sh -c "whenever --update-cron &&
+      cron -f -l 2"
+    restart: always
+    volumes:
+      - ./api:/usr/src/app
     depends_on:
-      seeds_api:
-        condition: service_started
+      - seeds_api
 
 volumes:
   mysql-data:
     driver: local
+  db-data:
