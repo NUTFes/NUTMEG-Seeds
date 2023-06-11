@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { get } from '@utils/api_methods';
 import MainLayout from '@components/layout/MainLayout';
 import FlatCard from '@components/common/FlatCard';
@@ -11,10 +10,7 @@ import EditButton from '@components/common/EditButton';
 import DeleteButton from '@components/common/DeleteButton';
 import RecordEditModal from '@components/common/RecordEditModal';
 import RecordDeleteModal from '@components/common/RecordDeleteModal';
-
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// 任意のテーマをimport
-import { materialDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import Markdown from '@components/common/Markdown';
 
 interface Curriculum {
   id: number;
@@ -98,37 +94,6 @@ export default function Page(props: Props) {
     }
   };
 
-  // コードブロックのレンダリング
-  const markdownComponents = {
-    pre: (pre: any) => {
-      // 中身がcodeでなければ普通に表示させる
-      if (pre.children[0].type !== 'code') {
-        return <pre>{pre.children}</pre>;
-      }
-
-      const code = pre.children[0];
-      // 正規表現で"language-言語名:ファイル名"をマッチする
-      const matchResult = code.props.className ? code.props.className.match(/language-(\w+)(:(.+))?/) : '';
-      const language = matchResult?.[1] || '';
-      const filename = matchResult?.[3] || undefined;
-
-      return (
-        <SyntaxHighlighter
-          language={language}
-          style={materialDark}
-          // // ファイル名がある場合、表示用の余白を作る
-          // customStyle={filename && { paddingTop: '2.5rem' }}
-          showLineNumbers
-          className={s.syntaxHighlighter}
-          // // CSSの擬似要素を使ってファイル名を表示させるため
-          // fileName={fileName}
-        >
-          {code.props.children[0]}
-        </SyntaxHighlighter>
-      );
-    },
-  };
-
   return (
     <MainLayout>
       <div className={s.parentButton}>
@@ -151,14 +116,12 @@ export default function Page(props: Props) {
           </Row>
           <div className={s.recordContentsContainer}>
             <div className={s.contentsTitle}>Contents</div>
-            <div className={s.markdown}>
-              <ReactMarkdown components={markdownComponents}>{props.record.content}</ReactMarkdown>
-            </div>
+            <Markdown>{props.record.content}</Markdown>
           </div>
           <div className={s.homeworkContentsContainer}>
             <div className={s.contentsTitle}>Homework</div>
             <div className={s.homeworkContents}>
-              <ReactMarkdown components={markdownComponents}>{props.record.homework}</ReactMarkdown>
+              <Markdown>{props.record.homework}</Markdown>
             </div>
           </div>
         </FlatCard>
