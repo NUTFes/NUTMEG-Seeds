@@ -51,6 +51,8 @@ test:
 #
 production:
   <<: *default
-  database: myapp_production
-  username: myapp
-  password: <%= ENV['MYAPP_DATABASE_PASSWORD'] %>
+  database: seeds
+  username: <%= ENV['NUTMEG_MYSQL_USERNAME'] %>
+  password: <%= ENV['NUTMEG_MYSQL_PASSWORD'] %>
+  host: <%= ENV['NUTMEG_MYSQL_HOST'] %>
+  socket: /var/run/mysqld/mysqld.sock

@@ -1,0 +1,45 @@
+.formContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  gap: 30px;
+}
+
+.formContainer div {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-flow: column;
+  gap: 10px;
+}
+
+.formContainer input, 
+.formContainer select, 
+.formContainer textarea {
+  width: 300px;
+  font-size: 12px;
+  background: none;
+  padding: 1rem 1rem;
+  border: 1px solid var(--accent-0);
+  border-image: linear-gradient(to right, var(--text-base) 0%, var(--primary) 100%);
+  border-image-slice: 1;
+  letter-spacing: 2px;
+  transition: all 0.2s 0s ease;
+}
+
+.formContainer input:focus,
+.formContainer select:focus,
+.formContainer textarea:focus {
+  border: 1px solid var(--primary);
+  z-index: 10;
+  outline: 0;
+}
+
+.formExample {
+  color: white;
+}
+
+.error {
+  color: red;
+}

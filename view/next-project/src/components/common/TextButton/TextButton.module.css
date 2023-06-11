@@ -1,0 +1,17 @@
+.textButton {
+  background: none;
+  border: none;
+  width: 150px;
+  height: 40px;
+  margin-bottom: 20px;
+  border-radius: var(--button-radius);
+  text-align: center;
+  font-size: 2.8rem;
+  color: var(--button-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.textButton:active {
+}

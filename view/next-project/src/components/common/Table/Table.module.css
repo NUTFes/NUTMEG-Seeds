@@ -1,0 +1,33 @@
+.filter {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: end;
+    margin-bottom: 1rem;
+}
+
+.input {
+    height: 3rem;
+    border: 1px solid var(--primary);
+    border-radius: 0.5rem;
+    padding: 0 1rem;
+}
+
+.input:focus {
+    border: 2px solid var(--primary);
+    outline: none;
+}
+
+.button {
+    border: 1px solid var(--primary);
+    border-radius: 0.5rem;
+    padding: 0 1rem;
+    background-color: var(--accent-0);
+}
+
+.button:hover {
+    background-color: var(--primary);
+    color: var(--accent-0);
+    transition: 0.2s;
+}

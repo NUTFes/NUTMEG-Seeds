@@ -1,0 +1,17 @@
+.HeaderContainer {
+  width: 100%;
+}
+
+.TitleContainer {
+  font-size: 3.2rem;
+  font-weight: bold;
+  color: var(--text-secondary);
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: row;
+  padding-bottom: 10px;
+}

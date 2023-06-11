@@ -1,0 +1,42 @@
+.formContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  gap: 30px;
+}
+
+.formContainer div {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-flow: column;
+  gap: 10px;
+}
+
+.formContainer input {
+  width: 300px;
+  height: 40px;
+  font-size: 12px;
+  background: none;
+  padding: 0px 20px;
+  border: 1px solid var(--accent-0);
+  border-image: linear-gradient(to right, var(--text-base) 0%, var(--primary) 100%);
+  border-image-slice: 1;
+  letter-spacing: 2px;
+  transition: all 0.2s 0s ease;
+}
+
+.formContainer input:focus {
+  border: 1px solid var(--primary);
+  z-index: 10;
+  outline: 0;
+}
+
+.formExample {
+  color: white;
+}
+
+.error {
+  color: red;
+}

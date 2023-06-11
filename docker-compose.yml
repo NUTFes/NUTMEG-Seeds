@@ -1,22 +1,22 @@
-version: '3'
+version: "3"
 services:
   seeds_db:
     image: mysql:8.0
-    container_name: 'SEEDS_DB'
+    container_name: "seeds_db"
     environment:
       MYSQL_ROOT_PASSWORD: password
     ports:
-      - '3306:3306'
+      - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
     volumes:
       - mysql-data:/var/lib/mysql
 
   seeds_api:
     build: ./api
-    container_name: 'SEEDS_API'
+    container_name: "seeds_api"
     ports:
       - "3000:3000"
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: /bin/sh -c "rm -f tmp/pids/server.pid && rails server -b 0.0.0.0"
     volumes:
       - ./api:/myapp
     depends_on:
@@ -24,16 +24,30 @@ services:
     stdin_open: true
     tty: true
 
-  seeds_view: 
+  seeds_view:
     build: ./view
-    container_name: 'SEEDS_VIEW'
-    ports: 
-      - "8000:3000"
-    command: npm run dev
+    container_name: "seeds_view"
+    ports:
+      - "8080:8080"
+    command: sh -c "npm install && npm run dev"
     volumes:
       - ./view:/app
     stdin_open: true
     tty: true
+    environment:
+      - SEEDS_API_URI=http://localhost:3000
+
+  # 定期実行用コンテナ
+  cron:
+    image: nutmeg-seeds-seeds_api:latest
+    command: >
+      sh -c "whenever --update-cron &&
+      cron -f -l 2"
+    restart: always
+    volumes:
+      - ./api:/usr/src/app
+    depends_on:
+      - seeds_api
 
 volumes:
   mysql-data:

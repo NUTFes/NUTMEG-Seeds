@@ -1,0 +1,67 @@
+.ColumnContainer {
+  width: 50%;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  flex-flow: column;
+  gap: 2rem;
+}
+
+.ColumnContainer img {
+  width: 50%;
+  margin: 3rem;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.25);
+}
+
+.ColumnContainer table {
+  font-size: 1.4rem;
+  color: var(--accent-5);
+  width: 100%;
+  border: none;
+  table-layout: fixed;
+}
+
+.ColumnContainer th {
+  z-index: -10;
+  width: 60%;
+  font-weight: 400;
+  text-align: start;
+  vertical-align: middle;
+  padding: 0.5rem 2rem;
+  overflow: scroll;
+  white-space: nowrap;
+}
+
+.ColumnContainer td {
+  width: 40%;
+  font-weight: 400;
+  text-align: end;
+  vertical-align: middle;
+  padding: 0.8rem 2rem;
+  overflow: scroll;
+  white-space: nowrap;
+}
+
+.align-start {
+  align-items: start;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-end {
+  align-items: end;
+}
+
+.justify-start {
+  justify-content: start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: end;
+}

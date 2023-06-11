@@ -1,0 +1,49 @@
+.headerContainer {
+  box-shadow: 0 0 15px 2px rgba(255, 172, 93, 0.5);
+  color: var(--accent-0);
+  background-color: rgba(255, 172, 93, 0.5);
+  backdrop-filter: blur(10px);
+  position: fixed;
+  top: 0;
+  height: 60px;
+  width: 100%;
+  padding: 0px 50px;
+  z-index: 50;
+}
+
+.headerContainer header {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.headerLinks {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  height: 100%;
+  width: 100%;
+  gap: 3rem;
+}
+
+.headerLinks ul {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.headerLinks a {
+  color: var(--accent-0);
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.headerLinks a:hover {
+  background: linear-gradient(45deg, var(--button-secondary) 0%, var(--button-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
