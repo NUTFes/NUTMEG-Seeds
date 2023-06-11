@@ -8,15 +8,34 @@ interface LayoutProps {
 }
 
 const UsersLayout: FC<LayoutProps> = (props) => {
+  const MemberHeaderContainer = styled.div`
+    height: 150px;
+    position: fixed;
+    z-index: 8;
+    width: fit-content;
+    margin-top: -90px;
+    margin-left: 0px;
+  `;
+  const MemberFooterContainer = styled.div`
+    height: 200px;
+    position: fixed;
+    z-index: 8;
+    width: fit-content;
+    bottom: 0px;
+    margin-left: 0px;
+  `;
   return (
     <>
       <Header />
+      <MemberHeaderContainer>
+        <img src='MemberHeader.svg' />
+      </MemberHeaderContainer>
       <section>
         <main className={s.UserLayoutContainer}>{props.children}</main>
-          <div>
-            
-          </div>
       </section>
+      <MemberFooterContainer>
+        <img src='MemberFooter.svg' />
+      </MemberFooterContainer>
     </>
   );
 };

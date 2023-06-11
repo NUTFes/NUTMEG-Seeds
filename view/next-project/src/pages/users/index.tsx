@@ -1,64 +1,129 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { get } from '@utils/api_methods';
-import MainLayout from '@components/layout/UsersLayout';
-import GlassCard from '@components/common/GlassCard';
+import UsersLayout from '@components/layout/UsersLayout';
 import styled from 'styled-components';
-import HeaderLogo from '@components/icons/HeaderLogo';
 import AccountCircle from '@components/icons/AccountCircle';
-import Button from '@components/common/TransButton';
-import { join } from 'path/posix';
-import GlassFolderCard from '@components/common/GlassFolderCard';
-import UserBackgroundAnimation from '@components/common/UsersBackgroundAnimation/UsersBackgroundAnimation'
+import UserBackgroundAnimation from '@components/common/UsersBackgroundAnimation/UsersBackgroundAnimation';
+import MemberSearchButton from '@components/common/MemberSearchButton';
 
-type Users = {
+interface Props {
+  userDetails: UserDetails[];
+}
+
+interface UserDetails {
+  user: User;
+  detail: UserDetail;
+  projects: Project[];
+  records: Record[];
+  skills: Skill[];
+}
+
+interface User {
   id: number;
-  email: string;
   name: string;
-};
+  email: string;
+}
 
-type Props = {
-  users: Users[];
-};
+interface Grade {
+  id: string;
+  name: string;
+}
+
+interface Department {
+  id: string;
+  name: string;
+}
+
+interface Bureau {
+  id: string;
+  name: string;
+}
+
+interface UserDetail {
+  grade: Grade;
+  department: Department;
+  bureau: Bureau;
+  icon_name: string;
+  github: string;
+  slack: string;
+  biography: string;
+  pc_name: string;
+  pc_os: string;
+  pc_cpu: string;
+  pc_ram: string;
+  pc_storage: string;
+}
+
+interface Record {
+  id: string;
+  title: string;
+  teacher: Teacher;
+}
+
+interface Teacher {
+  name: string;
+}
+
+interface Skill {
+  id: number;
+  name: string;
+  category: string;
+}
+
+interface Project {
+  id: number;
+  project: string;
+  role: string;
+}
 
 export async function getServerSideProps() {
-  const getUrl = process.env.SSR_API_URI + '/api/v1/users';
+  const getUrl = process.env.SSR_API_URI + '/api/v1/get_users_for_member_page';
   const json = await get(getUrl);
   return {
     props: {
-      users: json,
+      userDetails: json,
     },
   };
 }
 
 export default function UserList(props: Props) {
-  // 初期状態で詳細を非表示にするための処理
-  let initialState: any = new Object();
-  for (const user of props.users) {
-    initialState[user.id] = false;
-  }
-  // マウスホバーしているかをuseStateで管理
-  let [isHover, setIsHover] = useState(initialState);
+  const accountCircleColor = '#636363';
 
   const UserListContainer = styled.div`
     display: flex;
-    gap: 60px 60px;
     flex-wrap: wrap;
     justify-content: center;
+    margin-bottom: 200px;
+    width: 100%;
+  `;
+  const UserMargin = styled.div`
+    height: 150px;
   `;
   const UserContainer = styled.div`
     display: flex;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    padding: 20px;
+    // width: 100vw;
   `;
-  const AccountColorCircle = styled.div`
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    border: 3px solid #818181; //色の設定は個人で
-    box-sizing: border-box;
-
-    position: absolute;
-    top: 10%;
-    left: 16.5%;
+  const UserCardListContainer = styled.div`
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    over-flow: normal;
+  `;
+  const Card = styled.div`
+    position: relative;
+    width: 270px;
+    height: 80px;
+    display: inline-block;
+  `;
+  const AccountCircleContainer = styled.div`
+    border: solid 4px;
+    border-color: ${accountCircleColor};
+    border-radius: 9999px;
+    width: 68px;
+    height: 68px;
   `;
   const UserInfo = styled.div`
     display: column
@@ -68,122 +133,122 @@ export default function UserList(props: Props) {
   `;
   const UserNameContainer = styled.div`
     font-size: 2rem;
-    text-decoration:underline;
+    text-decoration: underline;
     padding: 5px;
   `;
   const TypeNameContainer = styled.div`
-    font-size: 1rem;
+    font-size: 1.5rem;
     padding: 5px;
   `;
-  const FocusUserNameContainer = styled.div`
-    font-size: 2rem;
-    font-weight: 500;
-  `;
-  const UserDetail = styled.div`
-    font-size: 1.4rem;
-    padding: 10px 0;
-  `;
-  const AccountPosition = styled.div`
-    padding: 20px 0;
-  `;
-  const GlassFolderTabLine = styled.div`
-    // width: 140px;
-    // height: 14px;
-    // background: #505050;
-    // clip-path: polygon(0% 100%, 10% 0%, 90% 0%, 100% 100%);
-    // border-top: solid 1px #505050;
-    //  border-top: solid 1px #505050;
-    // position: absolute;
-    // z-index: 50;
-  `;
-  const GlassFolderTab = styled.div`
-    position: relative;
-    width: 150px;
-    height: 21px;
-    background: #505050;
-    clip-path: polygon(0% 100%, 10% 0%, 90% 0%, 100% 100%);
-  `;
-  const GlassFolderTabInner = styled.div`
-    display: block;
+  const PictureContainer = styled.div`
+    width: 270px;
+    height: 135px;
     position: absolute;
-    top: 1px; bottom: 0px;
-    left: 1px; right: 1px;
-    content: '';
-    background: #FFDDBD;
-    clip-path: polygon(0% 100%, 10% 0%, 90% 0%, 100% 100%);
+    z-index: 1;
+    width: fit-content;
+    margin-top: -37px;
+    margin-left: -20px;
   `;
-  const FolderLine = styled.div`
+  const PictureFilter = styled.div`
+    width: 270px;
+    height: 110px;
     position: absolute;
-    top: -7px;
-    left: -7px;
-    width: 100%;
-    height: 100%;
-    border: 3px solid #000;
-    content: '';
-  `
+    top: 22px;
+    z-index: -1;
+    backdrop-filter: blur(4px);
+  `;
+  const PictureTabFilter = styled.div`
+    width: 100px;
+    height: 20px;
+    position: absolute;
+    top: 2px;
+    z-index: -1;
+    backdrop-filter: blur(4px);
+    clip-path: polygon(0% 100%, 17.5% 0%, 82.5% 0%, 100% 100%);
+  `;
+  const UserInfoContainer = styled.div`
+    position: absolute;
+    z-index: 2;
+    display: flex;
+  `;
 
-  // プロジェクトのカードにマウスホバーした時の処理
-  const onHover = (id: number) => {
-    // マウスホバーしたプロジェクトのisHoverをTrueにする
-    setIsHover({ ...isHover, [id]: true });
-  };
-  // プロジェクトのカードからマウスホバーが外れた時の処理
-  const leaveHover = (id: number) => {
-    setIsHover({ ...isHover, [id]: false });
-  };
+  const MemberPageTitle = styled.div`
+    position: fixed;
+    top: 11%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 50px;
+    font-weight: 700;
+    font-size: 25px;
+    z-index: 9;
+    color: #ffffff;
+    text-align: center;
+  `;
+
+  const TopSearchButton = styled.div`
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9;
+  `;
+  const BottomSearchButton = styled.div`
+    position: fixed;
+    bottom: 2%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9;
+  `;
 
   const router = useRouter();
 
-  // マウスホバー時のプロジェクト
-  const userContent = (isHover: any, user: Users) => {
-    if (isHover[user.id]) {
-      return (
-        <GlassCard width='275px' height='250px' align={'center'} justify={'center'} background='white' gap='30px'>
-          <FocusUserNameContainer>{user.name}</FocusUserNameContainer>
-          <div>
-            <Button height='30px' text='More' onClick={() => router.push('/users/' + user.id)} />
-          </div>
-        </GlassCard>
-      );
-    } else {
-      return (
-      <div>
-        <div>
-            <GlassFolderTabLine></GlassFolderTabLine>
-            <GlassFolderTab><GlassFolderTabInner/></GlassFolderTab>
-        </div>
-        <GlassFolderCard width='300px' height='120px' align={'center'}>
-            
-          <UserContainer>
-            <div onMouseEnter={() => onHover(user.id)}>
-              <div >
-                <AccountCircle height={80} width={80} color={'var(--accent-6)'} />
-                <AccountColorCircle></AccountColorCircle>
-              </div>
-            </div>
-            
-            <UserInfo>
-              <UserNameContainer>{user.name}</UserNameContainer>
-              <TypeNameContainer>{user.name}</TypeNameContainer>
-            </UserInfo>
-          </UserContainer>
-        </GlassFolderCard>
-        </div>
-      );
-    }
+  const userContent = (userDetail: any) => {
+    return (
+      <UserContainer>
+        <UserCardListContainer>
+          <Card>
+            <PictureContainer>
+              <img src='UserButton.svg' />
+              <PictureTabFilter />
+              <PictureFilter />
+            </PictureContainer>
+            <UserInfoContainer>
+              <AccountCircleContainer>
+                <AccountCircle height={60} width={60} color={'var(--accent-6)'} />
+              </AccountCircleContainer>
+
+              <UserInfo>
+                <UserNameContainer>{userDetail.user.name ? userDetail.user.name : ''}</UserNameContainer>
+                <TypeNameContainer>{userDetail.type ? userDetail.type : ''}</TypeNameContainer>
+              </UserInfo>
+            </UserInfoContainer>
+          </Card>
+        </UserCardListContainer>
+      </UserContainer>
+    );
   };
-  console.log(props.users)
 
   return (
-    <MainLayout>
+    <UsersLayout>
+      <MemberPageTitle>Members</MemberPageTitle>
+      <TopSearchButton>
+        <MemberSearchButton title={'Search'} />
+      </TopSearchButton>
+      <UserMargin />
       <UserBackgroundAnimation />
-      <UserListContainer>
-        {props.users.map((user) => (
-          <div key={user.id} onMouseLeave={() => leaveHover(user.id)}>
-            {userContent(isHover, user)}
-          </div>
-        ))}
-      </UserListContainer>
-    </MainLayout>
+      <UserCardListContainer>
+        <UserListContainer>
+          {props.userDetails.map((userDetail) => (
+            <div key={userDetail.user.id} onClick={() => router.push(`users/${userDetail.user.id}`)}>
+              {userContent(userDetail)}
+            </div>
+          ))}
+        </UserListContainer>
+      </UserCardListContainer>
+      <BottomSearchButton>
+        <MemberSearchButton title={'Search'} />
+      </BottomSearchButton>
+    </UsersLayout>
   );
 }

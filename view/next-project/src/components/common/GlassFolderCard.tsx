@@ -13,16 +13,6 @@ type CardContentsProps = {
 };
 
 function GlassFolderCard(props: CardContentsProps): JSX.Element {
-  const GlassFolderTab = styled.div`
-    width: 150px; /* 幅 */
-    height: 100px;
-    border-bottom: 100px 
-    border-left: 25px 
-    border-right: 25px 
-    box-sizing: border-box;
-    background: 'radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4))'} 
-    border-top: solid 1px #505050;
-  `;
   const GlassCardContainer = styled.div`
     width: ${props.width};
     height: ${props.height};
@@ -39,15 +29,9 @@ function GlassFolderCard(props: CardContentsProps): JSX.Element {
     gap: ${props.gap || '0px'};
     font-size: 16px;
     flex: none;
-    
   `;
-  
 
-  return (
-    <>
-      <GlassCardContainer>{props.children}</GlassCardContainer>
-    </>
-  );
+  return <GlassCardContainer>{props.children}</GlassCardContainer>;
 }
 
 export default GlassFolderCard;

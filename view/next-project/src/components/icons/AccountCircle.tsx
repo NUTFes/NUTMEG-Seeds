@@ -1,4 +1,3 @@
-import { relative } from 'path';
 import styled from 'styled-components';
 
 type Props = {
