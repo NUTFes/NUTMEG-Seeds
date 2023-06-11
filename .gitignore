@@ -112,5 +112,6 @@ typings/
 /api/.env
 /api/.env.local
 /seeds.env
+/seeds.dev.env
 
 /api/config/credentials.yml.enc
