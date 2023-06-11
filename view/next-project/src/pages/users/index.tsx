@@ -94,6 +94,7 @@ export default function UserList(props: Props) {
     flex-wrap: wrap;
     justify-content: center;
     margin-bottom: 200px;
+    width: 100%;
   `;
   const UserMargin = styled.div`
     height: 150px;
@@ -170,7 +171,7 @@ export default function UserList(props: Props) {
     z-index: 2;
     display: flex;
   `;
-  
+
   const MemberPageTitle = styled.div`
     position: fixed;
     top: 11%;
@@ -184,7 +185,7 @@ export default function UserList(props: Props) {
     color: #ffffff;
     text-align: center;
   `;
-  
+
   const TopSearchButton = styled.div`
     position: fixed;
     top: 15%;
