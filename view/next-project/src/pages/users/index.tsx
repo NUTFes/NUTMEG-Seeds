@@ -13,30 +13,45 @@ interface Props {
 interface UserDetails {
   user: User;
   detail: UserDetail;
-  projects: Project[];
-  records: Record[];
-  skills: Skill[];
 }
 
 interface User {
   id: number;
+  provider: string;
+  uid: string;
+  allow_password_change: boolean;
   name: string;
   email: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Grade {
   id: string;
   name: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Department {
   id: string;
   name: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Bureau {
   id: string;
   name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Type {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface UserDetail {
@@ -52,32 +67,11 @@ interface UserDetail {
   pc_cpu: string;
   pc_ram: string;
   pc_storage: string;
-}
-
-interface Record {
-  id: string;
-  title: string;
-  teacher: Teacher;
-}
-
-interface Teacher {
-  name: string;
-}
-
-interface Skill {
-  id: number;
-  name: string;
-  category: string;
-}
-
-interface Project {
-  id: number;
-  project: string;
-  role: string;
+  type: Type;
 }
 
 export async function getServerSideProps() {
-  const getUrl = process.env.SSR_API_URI + '/api/v1/get_users_for_member_page';
+  const getUrl = process.env.SSR_API_URI + '/api/v1/get_users_for_user_page';
   const json = await get(getUrl);
   return {
     props: {
@@ -220,7 +214,7 @@ export default function UserList(props: Props) {
 
               <UserInfo>
                 <UserNameContainer>{userDetail.user.name ? userDetail.user.name : ''}</UserNameContainer>
-                <TypeNameContainer>{userDetail.type ? userDetail.type : ''}</TypeNameContainer>
+                <TypeNameContainer>{userDetail.detail.type.name ? userDetail.detail.type.name : ''}</TypeNameContainer>
               </UserInfo>
             </UserInfoContainer>
           </Card>
