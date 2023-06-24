@@ -20,11 +20,17 @@ interface Bureau {
   name: string;
 }
 
+interface Type {
+  id: number;
+  name: string;
+}
+
 export interface UserDetail {
   userId: number;
   gradeId: number;
   departmentId: number;
   bureauId: number;
+  typeId: number;
   iconName: string;
   github: string;
   slack: string;
@@ -40,6 +46,7 @@ interface Props {
   gradeList: Grade[];
   departmentList: Department[];
   bureauList: Bureau[];
+  typeList: Type[];
 }
 
 export const ProfileEditForm = (props: Props) => {
@@ -50,6 +57,7 @@ export const ProfileEditForm = (props: Props) => {
     gradeId: 0,
     departmentId: 0,
     bureauId: 0,
+    typeId: 0,
     iconName: '',
     github: '',
     slack: '',
@@ -78,6 +86,7 @@ export const ProfileEditForm = (props: Props) => {
       gradeId: userDetail.gradeId,
       departmentId: userDetail.departmentId,
       bureauId: userDetail.bureauId,
+      typeId: userDetail.typeId,
       iconName: userDetail.iconName,
       github: userDetail.github,
       slack: userDetail.slack,
@@ -114,7 +123,18 @@ export const ProfileEditForm = (props: Props) => {
   };
 
   const watchAll =
-    watch('gradeId') + watch('departmentId') + watch('bureauId') + watch('github') + watch('biography');
+    watch('gradeId') +
+    watch('departmentId') +
+    watch('bureauId') +
+    watch('typeId') +
+    watch('iconName') +
+    watch('github') +
+    watch('biography') +
+    watch('pcName') +
+    watch('pcOs') +
+    watch('pcCpu') +
+    watch('pcRam') +
+    watch('pcStorage');
 
   const messageResetHandler = () => {
     setSuccess(false);
@@ -158,12 +178,46 @@ export const ProfileEditForm = (props: Props) => {
         </select>
       </div>
       <div className={s.profile}>
+        <p>アイコン</p>
+        <input type='text' className={s.input} {...register('iconName')} placeholder='***.png / ***.jpg' />
+      </div>
+      <div className={s.profile}>
         <p>GitHub</p>
-        <input type='text' className={s.input} {...register('github')} />
+        <input type='text' className={s.input} {...register('github')} placeholder='https://github.com/***' />
       </div>
       <div className={s.profile}>
         <p>紹介文</p>
         <textarea className={s.textarea} {...register('biography')} />
+      </div>
+      <div className={s.profile}>
+        <p>PC名</p>
+        <input type='text' className={s.input} {...register('pcName')} />
+      </div>
+      <div className={s.profile}>
+        <p>PC OS</p>
+        <input type='text' className={s.input} {...register('pcOs')} />
+      </div>
+      <div className={s.profile}>
+        <p>PC CPU</p>
+        <input type='text' className={s.input} {...register('pcCpu')} />
+      </div>
+      <div className={s.profile}>
+        <p>PC RAM</p>
+        <input type='text' className={s.input} {...register('pcRam')} />
+      </div>
+      <div className={s.profile}>
+        <p>PC Strage</p>
+        <input type='text' className={s.input} {...register('pcStorage')} />
+      </div>
+      <div className={s.profile}>
+        <p>得意分野</p>
+        <select className={s.select} {...register('typeId')}>
+          {props.typeList?.map((type) => (
+            <option key={type.id} value={type.id}>
+              {type.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className={s.submit}>
         <button type='submit' className={s.button}>

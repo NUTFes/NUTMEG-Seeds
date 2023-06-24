@@ -21,6 +21,12 @@ interface Bureau {
   id: number;
   name: string;
 }
+
+interface Type {
+  id: number;
+  name: string;
+}
+
 interface User {
   id: number;
   provider: string;
@@ -36,6 +42,7 @@ interface Props {
   gradeList: Grade[];
   departmentList: Department[];
   bureauList: Bureau[];
+  typeList: Type[];
   users: User[];
 }
 
@@ -49,6 +56,9 @@ export const getServerSideProps = async () => {
   const bureauListUrl = process.env.SSR_API_URI + '/bureaus';
   const bureauList = await get(bureauListUrl);
 
+  const typeListUrl = process.env.SSR_API_URI + '/types';
+  const typeList = await get(typeListUrl);
+
   const usersUrl = process.env.SSR_API_URI + '/api/v1/users';
   const users = await get(usersUrl);
 
@@ -57,13 +67,14 @@ export const getServerSideProps = async () => {
       gradeList,
       departmentList,
       bureauList,
+      typeList,
       users,
     },
   };
 };
 
 export default function Profile(props: Props) {
-  const { users, gradeList, departmentList, bureauList } = props;
+  const { users, gradeList, departmentList, bureauList, typeList } = props;
 
   return (
     <>
@@ -78,7 +89,12 @@ export default function Profile(props: Props) {
           <PasswordResetForm />
           <h2 className={s.sub}>Edit Profile</h2>
           <hr />
-          <ProfileEditForm gradeList={gradeList} departmentList={departmentList} bureauList={bureauList} />
+          <ProfileEditForm
+            gradeList={gradeList}
+            departmentList={departmentList}
+            bureauList={bureauList}
+            typeList={typeList}
+          />
         </FlatCard>
       </MainLayout>
     </>
