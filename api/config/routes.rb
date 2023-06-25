@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     namespace 'v1' do
       # users
       get "/users" => "users_api#index"
+      get "/get_users_for_user_page" => "users_api#get_users_for_user_page"
       get "/get_users_for_member_page" => "users_api#get_users_for_member_page"
       get "/get_user_for_member_page/:id" => "users_api#get_user_for_member_page"
       get "user/:id" => "users#show"

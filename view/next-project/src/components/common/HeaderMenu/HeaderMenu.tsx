@@ -24,7 +24,7 @@ const HeaderMenu: FC = () => {
         className={s.menu}
         style={{
           transition: '0.1s',
-          opacity: isMenuOpen ? 1 : 0,
+          visibility: isMenuOpen ? 'visible' : 'hidden',
         }}
       >
         <button
