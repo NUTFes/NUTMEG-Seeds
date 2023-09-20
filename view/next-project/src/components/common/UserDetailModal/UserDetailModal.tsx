@@ -1,63 +1,62 @@
 import React from 'react';
 import s from './UserDetailModal.module.css';
-import styled from 'styled-components';
 
-type User = {
-    id: number;
-    provider: string;
-    uid: string;
-    allow_password_change: boolean;
-    name: string;
-    email: string;
-    created_at: string;
-    updated_at: string;
-}
+interface User {
+  id: number;
+  provider: string;
+  uid: string;
+  allow_password_change: boolean;
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+};
 
 interface Type {
-    id: string;
-    name: string;
-    created_at: string;
-    updated_at: string;
-  }
-
-type UserDetail = {
-    icon_name: string;
-    github: string;
-    slack: string;
-    biography: string;
-    pc_name: string;
-    pc_os: string;
-    pc_cpu: string;
-    pc_ram: string;
-    pc_storage: string;
-    type: Type;
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
 };
 
-type Project = {
-    id: number;
-    project: string;
-    role: string;
+interface UserDetail {
+  icon_name: string;
+  github: string;
+  slack: string;
+  biography: string;
+  pc_name: string;
+  pc_os: string;
+  pc_cpu: string;
+  pc_ram: string;
+  pc_storage: string;
+  type: Type;
 };
 
-type Record = {
-    id: number;
-    title: string;
-    teacher: User;
+interface Project {
+  id: number;
+  project: string;
+  role: string;
 };
 
-type Skill = {
-    id: number;
-    name: string;
-    category: string;
+interface Record {
+  id: number;
+  title: string;
+  teacher: User;
 };
 
-type UserDetailModalProps = {
-    onClose: () => void;
-    user: User;
-    userDetail: UserDetail;
-    userProject?: Project[] | null;
-    userSkill?: Skill[] | null;
-    userRecord?: Record[] | null;
+interface Skill {
+  id: number;
+  name: string;
+  category: string;
+};
+
+interface UserDetailModalProps {
+  onClose: () => void;
+  user: User;
+  userDetail: UserDetail;
+  userProject?: Project[] | null;
+  userSkill?: Skill[] | null;
+  userRecord?: Record[] | null;
 };
 
 const UserDetailModal: React.FC<UserDetailModalProps> = (props) => {
@@ -67,21 +66,7 @@ const UserDetailModal: React.FC<UserDetailModalProps> = (props) => {
         if (e.target === e.currentTarget) {
             props.onClose();
         }
-    }
-    const MemberHeaderContainer = styled.div`
-    z-index: 30;
-    position: absolute;
-    top: 0;
-    left: 0;
-    text-align:center;
-  `;
-  const MemberFooterContainer = styled.div`
-    z-index: 30;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    text-align:center;
-  `;
+    };
 
     return (
         <div className={s.modalContainer} onClick={handleOutsideClick}>
@@ -89,10 +74,8 @@ const UserDetailModal: React.FC<UserDetailModalProps> = (props) => {
             <div className={s.modalInnerContainer}>
 
                 <div className={s.modalTakumi}>
-
-                    <MemberHeaderContainer>
-                        <img className={s.imgg} src='MemberModalHeader.svg' />
-                    </MemberHeaderContainer>
+      
+                    <img className={s.img_header} src='MemberModalHeader.svg' />
 
                     <div className={s.modalContent}>
 
@@ -150,9 +133,7 @@ const UserDetailModal: React.FC<UserDetailModalProps> = (props) => {
                     
                     </div>
 
-                    <MemberFooterContainer>
-                        <img className={s.imgg} src='MemberModalFooter.svg' />
-                    </MemberFooterContainer>
+                    <img className={s.img_footer} src='MemberModalFooter.svg' />
 
                 </div>
                 
