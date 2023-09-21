@@ -249,17 +249,19 @@
   display: flex;
   width: 90%;
   margin: 0 auto;
+  flex-wrap: wrap;
 }
 
 .box4 {
   display: flex;
   width: 90%;
   margin: 0 auto;
+  flex-wrap: wrap;
 }
 
 .card {
   padding: 0.5em 1em;
-  margin: 2em 1rem;
+  margin: 0.75em 1rem;
   font-weight: bold;
   color: #505050;
   background: #FFF9F5;
