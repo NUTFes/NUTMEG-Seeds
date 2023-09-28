@@ -53,8 +53,7 @@ interface CurriculumChapters {
 }
 
 interface Teacher {
-  user_id: number | string;
-  record_id: string;
+  user_id:  string;
 }
 
 interface User {
@@ -72,7 +71,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const [curriculumChapter, setCurriculumChapter] = useState<CurriculumChapters>();
   const [records, setRecords] = useState<Record[]>([]);
   const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
-  const [teacherData, setTeacherData] = useState<Teacher>({ user_id: 1, record_id: '' });
+  const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '1' });
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [newRecordId, setNewRecordId] = useState('');
 
@@ -128,8 +127,8 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     ) => {
       setRecordData({ ...recordData, [input]: e.target.value });
     };
-
-  const handleTeacher = () => (e: React.ChangeEvent<HTMLSelectElement>) => {
+  
+  const handleTeacher = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTeacherData({ ...teacherData, user_id: e.target.value });
   };
 
