@@ -117,7 +117,7 @@ export default function UserList(props: Props) {
     display: flex;
     width: 100%;
     flex-wrap: wrap;
-    over-flow: normal;
+    overflow: normal;
   `;
   const Card = styled.div`
     position: relative;
@@ -133,7 +133,7 @@ export default function UserList(props: Props) {
     height: 68px;
   `;
   const UserInfo = styled.div`
-    display: column
+    display: column;
     width: 120px;
     height: 100px;
     padding: 10px;
@@ -268,7 +268,7 @@ export default function UserList(props: Props) {
             </div>
           ))}
         </UserListContainer>
-          {isOpenUserDetailModal && currentUser && currentDetail && 
+          {isOpenUserDetailModal && currentUser && currentDetail &&
           <OpenUserDetailModal onClose={onClose} user={currentUser} userDetail={currentDetail} userProject={currentProjects} userSkill={currentSkills} userRecord={currentRecords}/>}
       </UserCardListContainer>
       <BottomSearchButton>
