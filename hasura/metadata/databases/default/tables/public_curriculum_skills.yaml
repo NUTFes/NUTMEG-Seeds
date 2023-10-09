@@ -1,0 +1,10 @@
+table:
+  name: curriculum_skills
+  schema: public
+object_relationships:
+  - name: curriculum
+    using:
+      foreign_key_constraint_on: curriculum_id
+  - name: skill
+    using:
+      foreign_key_constraint_on: skill_id

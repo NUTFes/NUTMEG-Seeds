@@ -1,0 +1,18 @@
+table:
+  name: records
+  schema: public
+object_relationships:
+  - name: chapter
+    using:
+      foreign_key_constraint_on: chapter_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+array_relationships:
+  - name: teachers
+    using:
+      foreign_key_constraint_on:
+        column: record_id
+        table:
+          name: teachers
+          schema: public

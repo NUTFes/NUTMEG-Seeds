@@ -11,6 +11,21 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
 
+  seeds_hasura_db:
+    image: postgres:12
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: myapp_development
+      POSTGRES_USER: seeds
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   seeds_api:
     build: ./api
     container_name: "seeds_api"
@@ -23,6 +38,27 @@ services:
       - seeds_db
     stdin_open: true
     tty: true
+
+  hasura:
+    build:
+      context: .docker
+      dockerfile: hasura.Dockerfile
+    container_name: "seeds_hasura"
+    ports:
+      - "8082:8080"
+    # restart: always
+    volumes:
+      - ./hasura:/hasura
+    environment:
+      HASURA_GRAPHQL_MIGRATIONS_DIR: /hasura/migrations
+      HASURA_GRAPHQL_METADATA_DIR: /hasura/metadata
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DATABASE_URL: postgres://seeds:password@seeds_hasura_db:5432/myapp_development
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+    depends_on:
+      seeds_hasura_db:
+        condition: service_healthy
 
   seeds_view:
     build: ./view
@@ -52,3 +88,4 @@ services:
 volumes:
   mysql-data:
     driver: local
+  db-data:

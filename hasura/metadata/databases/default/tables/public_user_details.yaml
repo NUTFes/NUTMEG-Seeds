@@ -1,0 +1,19 @@
+table:
+  name: user_details
+  schema: public
+object_relationships:
+  - name: bureau
+    using:
+      foreign_key_constraint_on: bureau_id
+  - name: department
+    using:
+      foreign_key_constraint_on: department_id
+  - name: grade
+    using:
+      foreign_key_constraint_on: grade_id
+  - name: type
+    using:
+      foreign_key_constraint_on: type_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
