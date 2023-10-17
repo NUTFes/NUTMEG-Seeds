@@ -30,8 +30,14 @@ export default async function handler(
         throw new Error("Error parsing form: " + err);
       }
 
-      const bucketName = fields.bucketName;
-      const fileName = fields.fileName;
+      if (fields.bucketName === undefined) {
+        throw new Error("Bucket name is required");
+      } else if (fields.fileName === undefined) {
+        throw new Error("File name is required");
+      }
+
+      const bucketName = fields.bucketName[0];
+      const fileName = fields.fileName[0];
       const metaData = {
         "Content-Type": "image/png",
       };
@@ -40,7 +46,7 @@ export default async function handler(
         const response = await minioClient.putObject(
           bucketName,
           fileName,
-          fs.createReadStream(files.file.filepath),
+          fs.createReadStream(files.file[0].filepath),
           metaData
         );
 
