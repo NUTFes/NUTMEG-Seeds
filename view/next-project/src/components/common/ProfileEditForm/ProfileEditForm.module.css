@@ -84,3 +84,14 @@
   display: flex;
   justify-content: center;
 }
+
+.icon-container{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.icon{
+  width: 40%;
+}
