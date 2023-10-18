@@ -50,7 +50,7 @@ interface Props {
   typeList: Type[];
 }
 
-const ICON_BUCKET_NAME = 'image';
+const ICON_BUCKET_NAME = 'images';
 
 export const ProfileEditForm = (props: Props) => {
   const { currentUser } = useAuth();
@@ -88,7 +88,7 @@ export const ProfileEditForm = (props: Props) => {
   const [uploadImageURL, setUploadImageURL] = useState<string>('');
   useEffect(() => {
     if (userDetail.iconName === '' || userDetail.iconName.includes('/')) return;
-    const getIconUrl = '/api/images/' + ICON_BUCKET_NAME + '/' + userDetail.iconName;
+    const getIconUrl = '/api/images/' + ICON_BUCKET_NAME + '/' + `${userDetail.userId}_${userDetail.iconName}`;
     const getIcon = async () => {
       await get(getIconUrl).then((res) => {
         if (res.imageUrl) {
@@ -151,7 +151,7 @@ export const ProfileEditForm = (props: Props) => {
     const iconParams = new FormData();
     iconParams.append('file', uploadImage);
     iconParams.append('bucketName', ICON_BUCKET_NAME);
-    iconParams.append('fileName', uploadImage.name);
+    iconParams.append('fileName', `${userDetail.userId}_${uploadImage}`);
     await fetch('/api/images', {
       method: 'POST',
       body: iconParams,
