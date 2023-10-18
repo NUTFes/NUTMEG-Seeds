@@ -151,7 +151,7 @@ export const ProfileEditForm = (props: Props) => {
     const iconParams = new FormData();
     iconParams.append('file', uploadImage);
     iconParams.append('bucketName', ICON_BUCKET_NAME);
-    iconParams.append('fileName', `${userDetail.userId}_${uploadImage}`);
+    iconParams.append('fileName', `${userDetail.userId}_${uploadImage.name}`);
     await fetch('/api/images', {
       method: 'POST',
       body: iconParams,
