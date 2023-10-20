@@ -30,6 +30,7 @@ export default async function handler(
       );
       res.status(200).json({ imageUrl });
     } catch (err) {
+      res.status(500).json({ err });
       throw new Error("Error getting images (" + err + ")");
     }
   }

@@ -52,6 +52,7 @@ export default async function handler(
 
         res.status(200).json({ response });
       } catch (err) {
+        res.status(500).json({ err });
         throw new Error("Error uploading file (" + err + ")");
       }
     });
