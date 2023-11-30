@@ -1,9 +1,10 @@
-import { get, put } from '@utils/api_methods';
+import { get, put, post } from '@utils/api_methods';
 import { useForm } from 'react-hook-form';
 import { useState, useEffect, useMemo } from 'react';
 import s from './ProfileEditForm.module.css';
 import { useAuth } from 'src/context/AuthProvider';
 import { snakeToCamel, camelToSnake } from '@utils/namingConversion';
+import { AiOutlineArrowRight } from 'react-icons/ai';
 
 interface Grade {
   id: number;
@@ -49,6 +50,8 @@ interface Props {
   typeList: Type[];
 }
 
+const ICON_BUCKET_NAME = 'images';
+
 export const ProfileEditForm = (props: Props) => {
   const { currentUser } = useAuth();
 
@@ -80,6 +83,29 @@ export const ProfileEditForm = (props: Props) => {
     getUserDetail();
   }, [currentUser?.userId]);
 
+  const [iconUrl, setIconUrl] = useState<string>('');
+  const [uploadImage, setUploadImage] = useState<File>();
+  const [uploadImageURL, setUploadImageURL] = useState<string>('');
+  useEffect(() => {
+    if (userDetail.iconName === '' || userDetail.iconName.includes('/')) return;
+    const getIconUrl = '/api/images/' + ICON_BUCKET_NAME + '/' + `${userDetail.userId}_${userDetail.iconName}`;
+    const getIcon = async () => {
+      await get(getIconUrl).then((res) => {
+        if (res.imageUrl) {
+          setIconUrl(res.imageUrl);
+        }
+      });
+    };
+    getIcon();
+  }, [userDetail.iconName]);
+
+  const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]!;
+    setUploadImage(file);
+    setUploadImageURL(URL.createObjectURL(file));
+    setValue('iconName', file.name);
+  };
+
   const defaultValues = useMemo(() => {
     return {
       userId: userDetail.userId,
@@ -99,7 +125,7 @@ export const ProfileEditForm = (props: Props) => {
     };
   }, [userDetail]);
 
-  const { register, handleSubmit, reset, watch } = useForm<UserDetail>({
+  const { register, handleSubmit, reset, watch, setValue } = useForm<UserDetail>({
     mode: 'onChange',
     defaultValues,
   });
@@ -120,6 +146,16 @@ export const ProfileEditForm = (props: Props) => {
       setSuccess(false);
       setError(true);
     }
+
+    if (!uploadImage) return;
+    const iconParams = new FormData();
+    iconParams.append('file', uploadImage);
+    iconParams.append('bucketName', ICON_BUCKET_NAME);
+    iconParams.append('fileName', `${userDetail.userId}_${uploadImage.name}`);
+    await fetch('/api/images', {
+      method: 'POST',
+      body: iconParams,
+    });
   };
 
   const watchAll =
@@ -147,6 +183,21 @@ export const ProfileEditForm = (props: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <div className={s.profile}>
+        <p>アイコン設定</p>
+        <div>
+          <div className={s['icon-container']}>
+            <img src={iconUrl} alt='icon' className={s.icon} />
+            {uploadImage && (
+              <>
+                <AiOutlineArrowRight />
+                <img src={uploadImageURL} alt='upload' className={s.icon} />
+              </>
+            )}
+          </div>
+          <input type='file' onChange={(e) => handleChangeFile(e)} />
+        </div>
+      </div>
       <div className={s.profile}>
         <p>学年</p>
         <select className={s.select} {...register('gradeId')}>
@@ -176,10 +227,6 @@ export const ProfileEditForm = (props: Props) => {
             </option>
           ))}
         </select>
-      </div>
-      <div className={s.profile}>
-        <p>アイコン</p>
-        <input type='text' className={s.input} {...register('iconName')} placeholder='***.png / ***.jpg' />
       </div>
       <div className={s.profile}>
         <p>GitHub</p>

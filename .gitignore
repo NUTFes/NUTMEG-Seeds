@@ -114,3 +114,6 @@ typings/
 /seeds.env
 
 /api/config/credentials.yml.enc
+
+# minio files
+/minio/data

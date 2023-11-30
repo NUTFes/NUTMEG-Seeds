@@ -15,12 +15,13 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
+    "downlevelIteration": true,
     "paths": {
       "@assets/*": ["src/assets/*"],
       "@images/*": ["public/*"],
       "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"],
-      "@store/*": ["src/store/*"],
+      "@store/*": ["src/store/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
