@@ -56,7 +56,7 @@ services:
       MINIO_ROOT_USER: nutmeg
       MINIO_ROOT_PASSWORD: gidaifes
     entrypoint: sh
-    command: -c "/opt/bin/minio server /export --address :9000 --console-address :9001"
+    command: -c "/usr/bin/minio server /export --address :9000 --console-address :9001"
     volumes:
       - ./minio/data:/export
     ports:
