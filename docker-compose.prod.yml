@@ -1,5 +1,12 @@
 version: "3"
 services:
+  cloudflare:
+    image: cloudflare/cloudflared:latest
+    container_name: "seeds_cloudflare"
+    volumes:
+      - ./cloudflare/prod:/home/nonroot/.cloudflared
+    command: tunnel run
+
   seeds_api:
     build: ./api
     container_name: "seeds_api"
