@@ -114,3 +114,5 @@ typings/
 /seeds.env
 
 /api/config/credentials.yml.enc
+
+/cloudflare
