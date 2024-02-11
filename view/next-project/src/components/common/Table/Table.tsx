@@ -1,8 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, ReactNode, useEffect } from 'react';
 import s from './Table.module.css';
 import DataTable from 'react-data-table-component';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
 
 interface Column {
   name: ReactNode;
@@ -51,6 +50,11 @@ const Table: FC<TableContentProps> = (props) => {
   const router = useRouter();
   const [filterText, setFilterText] = useState('');
 
+  const [loader, setLoader] = useState(true);
+  useEffect(() => {
+    setLoader(false);
+  }, []);
+
   const filteredItems = props.data.filter(
     (item: any) => JSON.stringify(item).toLowerCase().indexOf(filterText.toLowerCase()) !== -1,
   );
@@ -68,18 +72,22 @@ const Table: FC<TableContentProps> = (props) => {
           ×
         </button>
       </div>
-      <DataTable
-        columns={props.columns}
-        data={filteredItems}
-        pagination
-        highlightOnHover
-        pointerOnHover
-        onRowClicked={(row) => {
-          if (row.curriculum) router.push(`/${props.route}/${row.curriculum.id}`);
-          else router.push(`/${props.route}/${row.id}`);
-        }}
-        customStyles={CUSTOM_STYLES}
-      />
+      {loader ? (
+        <div>Loading</div>
+      ) : (
+        <DataTable
+          columns={props.columns}
+          data={filteredItems}
+          pagination
+          highlightOnHover
+          pointerOnHover
+          onRowClicked={(row) => {
+            if (row.curriculum) router.push(`/${props.route}/${row.curriculum.id}`);
+            else router.push(`/${props.route}/${row.id}`);
+          }}
+          customStyles={CUSTOM_STYLES}
+        />
+      )}
     </>
   );
 };
