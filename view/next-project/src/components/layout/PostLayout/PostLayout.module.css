@@ -1,0 +1,21 @@
+.mainLayoutContainer {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 50px 100px;
+  margin-top: 60px;
+  gap: 50px 0px;
+  animation: fadeIn 0.5s ease 0s 1 alternate none running;
+  background-color: #f8f1e8;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

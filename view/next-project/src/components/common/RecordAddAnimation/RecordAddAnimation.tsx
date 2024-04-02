@@ -40,6 +40,16 @@ const RecordAddAnimation = (props: Props) => {
     }
   };
 
+  const navigateHandler = (path: string) => {
+    props.setIsOpen(false);
+    props.setAddModalOpen(false);
+    if (path === '/post') {
+      window.location.href = path;
+    } else {
+      router.push(path);
+    }
+  };
+
   return (
     <div className={s.container}>
       <Particles options={options} init={onInit} className={s.particles} />
@@ -47,6 +57,7 @@ const RecordAddAnimation = (props: Props) => {
       <div className={s.buttons}>
         <AnimationButton onClick={() => showRecordsHandler(true)}>追加したレコードを見る</AnimationButton>
         <AnimationButton onClick={() => showRecordsHandler(false)}>レコード一覧ページに戻る</AnimationButton>
+        <AnimationButton onClick={() => navigateHandler('/post')}>下書きページに戻る</AnimationButton>
       </div>
     </div>
   );

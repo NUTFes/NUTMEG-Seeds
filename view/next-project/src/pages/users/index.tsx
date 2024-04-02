@@ -4,7 +4,6 @@ import UsersLayout from '@components/layout/UsersLayout';
 import styled from 'styled-components';
 import AccountCircle from '@components/icons/AccountCircle';
 import UserBackgroundAnimation from '@components/common/UsersBackgroundAnimation/UsersBackgroundAnimation';
-import MemberSearchButton from '@components/common/MemberSearchButton';
 import React, { useState } from 'react';
 import OpenUserDetailModal from '@components/common/UserDetailModal/UserDetailModal';
 interface Props {
@@ -255,9 +254,6 @@ export default function UserList(props: Props) {
   return (
     <UsersLayout>
       <MemberPageTitle>Members</MemberPageTitle>
-      <TopSearchButton>
-        <MemberSearchButton title={'Search'} />
-      </TopSearchButton>
       <UserMargin />
       <UserBackgroundAnimation />
       <UserCardListContainer>
@@ -268,12 +264,17 @@ export default function UserList(props: Props) {
             </div>
           ))}
         </UserListContainer>
-          {isOpenUserDetailModal && currentUser && currentDetail && 
-          <OpenUserDetailModal onClose={onClose} user={currentUser} userDetail={currentDetail} userProject={currentProjects} userSkill={currentSkills} userRecord={currentRecords}/>}
+        {isOpenUserDetailModal && currentUser && currentDetail && (
+          <OpenUserDetailModal
+            onClose={onClose}
+            user={currentUser}
+            userDetail={currentDetail}
+            userProject={currentProjects}
+            userSkill={currentSkills}
+            userRecord={currentRecords}
+          />
+        )}
       </UserCardListContainer>
-      <BottomSearchButton>
-        <MemberSearchButton title={'Search'} />
-      </BottomSearchButton>
     </UsersLayout>
   );
 }

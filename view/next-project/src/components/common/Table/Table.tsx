@@ -15,7 +15,7 @@ interface Column {
 interface TableContentProps {
   columns: Column[];
   data: any;
-  route: 'records' | 'categories' | 'skills' | 'curriculums';
+  route: 'post' | 'records' | 'categories' | 'skills' | 'curriculums';
 }
 
 const CUSTOM_STYLES = {

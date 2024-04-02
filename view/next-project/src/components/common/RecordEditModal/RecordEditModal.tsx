@@ -6,6 +6,7 @@ import Close from '@components/icons/Close';
 import s from './RecordEditModal.module.css';
 import 'easymde/dist/easymde.min.css';
 import dynamic from 'next/dynamic';
+import Switch from '@mui/material/Switch';
 
 const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
@@ -59,6 +60,7 @@ interface Record {
   chapter_id: number;
   created_at?: string;
   updated_at?: string;
+  release?: boolean;
 }
 
 interface RecordCurriculumTeacher {
@@ -92,9 +94,11 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     homework: '',
     user_id: 0,
     chapter_id: 0,
+    release: false,
   });
   const [recordMarkdown, setRecordMarkdown] = useState<string>('');
   const [homeworkMarkdown, setHomeworkMarkdown] = useState<string>('');
+  const [release, setRelease] = useState(false);
 
   useEffect(() => {
     const getCurriculumChaptersUrl = process.env.CSR_API_URI + '/api/v1/get_curriculums_chapter_for_index';
@@ -118,6 +122,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
         setFormData(getRes);
         setRecordMarkdown(getRes.content);
         setHomeworkMarkdown(getRes.homework);
+        setRelease(getRes.release);
       };
       getFormData(getFormDataUrl);
 
@@ -166,14 +171,21 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     );
   };
 
+  const handleReleaseChange = (event: { target: { checked: any } }) => {
+    setRelease(event.target.checked);
+  };
+
   const submitRecord = async (data: Record, query: any) => {
     const submitRecordUrl = process.env.CSR_API_URI + '/records/' + query.id;
     const submitData = {
-      title: data.title,
-      content: recordMarkdown,
-      homework: homeworkMarkdown,
-      user_id: data.user_id,
-      chapter_id: data.chapter_id,
+      record: {
+        title: data.title,
+        content: recordMarkdown,
+        homework: homeworkMarkdown,
+        user_id: data.user_id,
+        chapter_id: data.chapter_id,
+        release: release,
+      },
     };
     console.log(submitData);
     await put(submitRecordUrl, submitData);
@@ -267,6 +279,14 @@ const RecordEditModal: FC<ModalProps> = (props) => {
                 }
               })}
             </select>
+          </div>
+          <div className={s.modalContentContents}>
+            <label htmlFor='release-switch'>公開する:</label>
+            <Switch
+              checked={release}
+              onChange={handleReleaseChange} // 適切なハンドラー関数を設定
+              color='primary'
+            />
           </div>
           <div className={s.modalSubmitButton}>
             <Button
