@@ -15,37 +15,32 @@ const Header: FC = () => {
           <nav>
             <ul>
               <li>
-                <Link href='/post'>
-                  <a>Post</a>
-                </Link>
-              </li>
-              <li>
-                <Link href='/records'>
+                <Link href='/records'legacyBehavior>
                   <a>Record</a>
                 </Link>
               </li>
               <li>
-                <Link href='/curriculums'>
+                <Link href='/curriculums' legacyBehavior>
                   <a>Curriculum</a>
                 </Link>
               </li>
               <li>
-                <Link href='/projects'>
+                <Link href='/projects' legacyBehavior>
                   <a>Project</a>
                 </Link>
               </li>
               <li>
-                <Link href='/users'>
+                <Link href='/users' legacyBehavior>
                   <a>Member</a>
                 </Link>
               </li>
               <li>
-                <Link href='/skills'>
+                <Link href='/skills' legacyBehavior>
                   <a>Skills</a>
                 </Link>
               </li>
               <li>
-                <Link href='/categories'>
+                <Link href='/categories' legacyBehavior>
                   <a>Categories</a>
                 </Link>
               </li>
