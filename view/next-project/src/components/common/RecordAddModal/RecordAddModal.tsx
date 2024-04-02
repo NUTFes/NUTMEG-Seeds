@@ -7,6 +7,8 @@ import Close from '@components/icons/Close';
 import 'easymde/dist/easymde.min.css';
 import dynamic from 'next/dynamic';
 import RecordAddAnimation from '@components/common/RecordAddAnimation';
+import Switch from '@mui/material/Switch';
+import { useAuth } from 'src/context/AuthProvider';
 
 const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
@@ -25,6 +27,7 @@ interface Record {
   chapter_id: number;
   created_at?: string;
   updated_at?: string;
+  release?: boolean; // 追加
 }
 
 interface Curriculum {
@@ -53,7 +56,7 @@ interface CurriculumChapters {
 }
 
 interface Teacher {
-  user_id:  string;
+  user_id: string;
 }
 
 interface User {
@@ -67,6 +70,7 @@ interface Skill {
 }
 
 const RecordAddModal: FC<ModalProps> = (props) => {
+  const { currentUser } = useAuth(); // ログインしているユーザーの情報を取得
   const [curriculumChapters, setCurriculumChapters] = useState<CurriculumChapters[]>([]);
   const [curriculumChapter, setCurriculumChapter] = useState<CurriculumChapters>();
   const [records, setRecords] = useState<Record[]>([]);
@@ -74,6 +78,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '1' });
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [newRecordId, setNewRecordId] = useState('');
+  const [release, setRelease] = useState<boolean>(false);
 
   const contentSentence =
     '# 内容・やったこと \n\n\n' +
@@ -127,7 +132,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     ) => {
       setRecordData({ ...recordData, [input]: e.target.value });
     };
-  
+
   const handleTeacher = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTeacherData({ ...teacherData, user_id: e.target.value });
   };
@@ -153,27 +158,36 @@ const RecordAddModal: FC<ModalProps> = (props) => {
 
   // フォームデータの送信とページの表を再レンダリング
   const submitRecord = async (recordData: Record, teacherData: Teacher) => {
-    const submitRecordUrl = process.env.CSR_API_URI + '/records';
+    const submitRecordUrl = `${process.env.CSR_API_URI}/records`;
     const submitData = {
       record: {
         title: recordData.title,
         content: recordMarkdown,
         homework: homeworkMarkdown,
-        user_id: recordData.user_id,
+        user_id: currentUser?.userId,
         chapter_id: recordData.chapter_id,
+        release: release,
       },
-      teacher: {
-        user_id: teacherData.user_id,
-        record_id: 1,
-      },
+      teacher: teacherData,
     };
-    const req = await post(submitRecordUrl, submitData);
-    const res = await req.json();
-    const getRecordUrl = process.env.CSR_API_URI + '/api/v1/get_record_for_index_reload/' + res.id;
-    setNewRecordId(res.id);
-    const getRes = await get(getRecordUrl);
-    const newRecord: Record = getRes[0];
-    props.setNewRecords([...records, newRecord]);
+
+    try {
+      const response = await post(submitRecordUrl, submitData);
+      if (response.ok) {
+        const newRecord = await response.json();
+        // props.setNewRecordsが関数であることを確認してから呼び出す
+        if (typeof props.setNewRecords === 'function') {
+          props.setNewRecords((prevRecords) => [...prevRecords, newRecord]);
+        }
+        setIsAnimationOpen(true); // アニメーションを表示
+        props.setIsOpen(false); // モーダルを閉じる
+      } else {
+        // エラーハンドリング
+        console.error('Failed to add record:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error adding record:', error);
+    }
   };
 
   return (
@@ -229,26 +243,6 @@ const RecordAddModal: FC<ModalProps> = (props) => {
               })}
             </select>
           </div>
-          <h3 className={s.contentsTitle}>Student</h3>
-          <div className={s.modalContentContents}>
-            <select defaultValue={recordData.user_id} onChange={handleRecord('user_id')}>
-              {users.map((data: User) => {
-                if (data.id == recordData.user_id) {
-                  return (
-                    <option key={data.id} value={data.id} selected>
-                      {data.name}
-                    </option>
-                  );
-                } else {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.name}
-                    </option>
-                  );
-                }
-              })}
-            </select>
-          </div>
           <h3 className={s.contentsTitle}>Curriculum</h3>
           <div className={s.modalContentContents}>
             <select onChange={handleCurriculum}>
@@ -278,6 +272,16 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                 );
               })}
             </select>
+          </div>
+          <div className={s.releaseToggle}>
+            <label>公開する:</label>
+            <Switch
+              checked={release}
+              onChange={(event: { target: { checked: boolean | ((prevState: boolean) => boolean) } }) =>
+                setRelease(event.target.checked)
+              }
+              color='primary'
+            />
           </div>
           <div className={s.modalSubmitButton}>
             <Button

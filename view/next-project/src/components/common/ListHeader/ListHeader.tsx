@@ -63,7 +63,7 @@ const ListHeader = (props: Props) => {
 
   const AddModalUI = (isOpenAddModal: boolean) => {
     switch (router.pathname) {
-      case '/records':
+      case '/post':
         return (
           <>
             <AddButton onClick={() => setIsOpenAddModal(!isOpenAddModal)} />
@@ -145,7 +145,7 @@ const ListHeader = (props: Props) => {
   return (
     <div className={s.HeaderContainer}>
       <div className={s.SplitLeftContainer}>
-        <h1>{props.title}</h1>
+        <h1 style={{ color: router.pathname === '/post' ? '#ffac5d' : '#FFFFFF' }}>{props.title}</h1>
       </div>
       <div className={s.SplitRightContainer}>{AddModalUI(isOpenAddModal)}</div>
     </div>

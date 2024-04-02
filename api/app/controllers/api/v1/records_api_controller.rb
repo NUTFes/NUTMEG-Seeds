@@ -1,7 +1,8 @@
 class Api::V1::RecordsApiController < ApplicationController
   def get_records_for_index
-    @record = Record.with_teacher_and_skills
-    render json: @record
+    # releaseカラムがtrueになっているレコードのみを取得
+    @records = Record.where(release: true).with_teacher_and_skills
+    render json: @records
   end
 
   def get_record_for_index_reload
@@ -14,10 +15,16 @@ class Api::V1::RecordsApiController < ApplicationController
     render json: @record
   end
 
-
   def get_teacher_by_record
     @record = Record.get_teacher(params[:id])
     render json: @record
+  end
+
+  # app/controllers/api/v1/records_api_controller.rb
+  def get_drafts_for_user
+    user_id = params[:user_id] # または、認証されたユーザーのIDを直接取得
+    @records = Record.where(user_id: user_id, release: false)
+    render json: @records
   end
 
   def get_record_from_user

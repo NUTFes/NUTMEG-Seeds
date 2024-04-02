@@ -1,0 +1,39 @@
+.recordContentsContainer {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.contentsTitle {
+  margin-top: 2rem;
+  font-size: 2.8rem;
+  margin-bottom: 2rem;
+  padding-left: 10px;
+  font-weight: bold;
+  font-size: 3.6rem;
+  border-left: 6px solid var(--primary);
+}
+.recordContents {
+  font-size: 1.6rem;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+  margin: 20px 0;
+}
+.homeworkContentsContainer {
+  width: 100%;
+  margin: 20px 0;
+}
+.recordContents {
+  font-size: 1.6rem;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+  margin: 20px 0;
+}
+
+.parentButton {
+  position: relative;
+  width: 100%;
+}
+.childButton {
+  position: absolute;
+  bottom: 50px;
+  left: -40px;
+}

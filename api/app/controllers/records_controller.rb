@@ -77,7 +77,7 @@ class RecordsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def record_params
-    params.require(:record).permit(:title, :content, :homework, :user_id, :chapter_id)
+    params.require(:record).permit(:title, :content, :homework, :user_id, :chapter_id, :release)
   end
   def teacher_params
     params.require(:teacher).permit(:user_id, :record_id)
