@@ -15,6 +15,11 @@ const Header: FC = () => {
           <nav>
             <ul>
               <li>
+                <Link href='/post'legacyBehavior>
+                  <a>Post</a>
+                </Link>
+              </li>
+              <li>
                 <Link href='/records'legacyBehavior>
                   <a>Record</a>
                 </Link>
