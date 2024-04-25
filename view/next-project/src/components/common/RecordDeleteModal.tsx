@@ -1,6 +1,6 @@
-import React, {FC, useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
-import {del, get} from '@utils/api_methods';
+import React, { FC, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { del, get } from '@utils/api_methods';
 import DeleteModal from '@components/common/DeleteModal';
 import Button from '@components/common/TestButton';
 
@@ -32,12 +32,14 @@ const RecordDeleteModal: FC<ModalProps> = (props) => {
 
   const handler =
     (input: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-      setFormData({...formData, [input]: e.target.value});
+      setFormData({ ...formData, [input]: e.target.value });
     };
 
   const DeleteRecord = async (query: any) => {
     const deleteRecordUrl = process.env.CSR_API_URI + '/records/' + query.id;
     await del(deleteRecordUrl);
+    props.setIsOpen(false); // モーダルを閉じる
+    window.location.reload(); // ページをリロード
   };
 
   return (

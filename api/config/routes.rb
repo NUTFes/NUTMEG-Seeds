@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       get "/get_record_for_index_reload/:id" => "records_api#get_record_for_index_reload"
       get "/get_record_for_view/:id" => "records_api#get_record_for_view"
       get "get_records_from_user/:id" => "records#get_record_from_user"
+      get 'get_drafts_for_user/:user_id' => 'records_api#get_drafts_for_user'
 
       # curriculum
       get "get_current_user" => "current_user#get_current_user"

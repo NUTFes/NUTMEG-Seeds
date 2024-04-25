@@ -15,7 +15,7 @@ type Record = {
   teacher_name: string;
   curriculum_id: number;
   curriculum_title: string;
-  skills: {name: string}[];
+  skills: { name: string }[];
   created_at: string;
   updated_at: string;
 };
@@ -32,15 +32,15 @@ export const getServerSideProps = async () => {
       records: json,
     },
   };
-}
+};
 
 export default function RecordList(props: Props) {
-  const [records, setRecords] = useState<Record[]>(props.records)
+  const [records, setRecords] = useState<Record[]>(props.records);
 
   return (
     <>
       <MainLayout>
-        <ListHeader title='Records' setRecords={setRecords}/>
+        <ListHeader title='Records' setRecords={setRecords} />
         <FlatCard>
           <Table columns={RECORD_COLUMNS} data={records} route='records' />
         </FlatCard>
