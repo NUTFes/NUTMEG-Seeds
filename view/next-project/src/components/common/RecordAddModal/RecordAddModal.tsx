@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import RecordAddAnimation from '@components/common/RecordAddAnimation';
 import Switch from '@mui/material/Switch';
 import { useAuth } from 'src/context/AuthProvider';
+import CloseModal from '@components/icons/CloseModal';
 
 const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
@@ -27,7 +28,7 @@ interface Record {
   chapter_id: number;
   created_at?: string;
   updated_at?: string;
-  release?: boolean; // 追加
+  release?: boolean;
 }
 
 interface Curriculum {
@@ -70,7 +71,7 @@ interface Skill {
 }
 
 const RecordAddModal: FC<ModalProps> = (props) => {
-  const { currentUser } = useAuth(); // ログインしているユーザーの情報を取得
+  const { currentUser } = useAuth();
   const [curriculumChapters, setCurriculumChapters] = useState<CurriculumChapters[]>([]);
   const [curriculumChapter, setCurriculumChapter] = useState<CurriculumChapters>();
   const [records, setRecords] = useState<Record[]>([]);
@@ -79,15 +80,33 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [newRecordId, setNewRecordId] = useState('');
   const [release, setRelease] = useState<boolean>(false);
+  const { isOpen, setIsOpen } = props;
+  const [isFocused, setIsFocused] = useState(false);
+  const [placeholder, setPlaceholder] = useState('Record Name');
+  const [isActive, setIsActive] = useState(false);
 
-  const contentSentence =
-    '# 内容・やったこと \n\n\n' +
-    '# 具体的な内容 \n\n\n' +
-    '# ポイント \n\n\n' +
-    '# 学習の際の工夫点 \n\n\n' +
-    '# 使用した記事 \n\n\n';
-  const homeworkSentence =
-    '# 次回までの課題 \n\n\n' + '# 参考資料 \n\n\n' + '# 次回までに勉強しておいた方がいいこと\n\n\n';
+  const toggleSwitch = () => {
+    setIsActive(!isActive);
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    setPlaceholder('');
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    if (!recordData.title) {
+      setPlaceholder('Record Name');
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
+
+  const contentSentence = '';
+  const homeworkSentence = '';
 
   const [recordData, setRecordData] = useState<Record>({
     title: '',
@@ -137,16 +156,13 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     setTeacherData({ ...teacherData, user_id: e.target.value });
   };
 
-  // レコード編集用ハンドラー
   const handleRecordMarkdown = useCallback((value: string) => {
     setRecordMarkdown(value);
   }, []);
-  // Homework編集用ハンドラー
   const handleHomeworkMarkdown = useCallback((value: string) => {
     setHomeworkMarkdown(value);
   }, []);
 
-  // カリキュラムのセレクトボックスの変更を検知
   const handleCurriculum = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setCurriculumChapter(
@@ -156,7 +172,6 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     [curriculumChapters, setCurriculumChapter],
   );
 
-  // フォームデータの送信とページの表を再レンダリング
   const submitRecord = async (recordData: Record, teacherData: Teacher) => {
     const submitRecordUrl = `${process.env.CSR_API_URI}/records`;
     const submitData = {
@@ -175,14 +190,12 @@ const RecordAddModal: FC<ModalProps> = (props) => {
       const response = await post(submitRecordUrl, submitData);
       if (response.ok) {
         const newRecord = await response.json();
-        // props.setNewRecordsが関数であることを確認してから呼び出す
         if (typeof props.setNewRecords === 'function') {
           props.setNewRecords((prevRecords) => [...prevRecords, newRecord]);
         }
-        setIsAnimationOpen(true); // アニメーションを表示
-        props.setIsOpen(false); // モーダルを閉じる
+        setIsAnimationOpen(true);
+        props.setIsOpen(false);
       } else {
-        // エラーハンドリング
         console.error('Failed to add record:', response.statusText);
       }
     } catch (error) {
@@ -202,96 +215,109 @@ const RecordAddModal: FC<ModalProps> = (props) => {
       )}
       <div className={s.modalInnerContainer}>
         <div className={s.modalContent}>
-          <div className={s.modalContentClose}>
-            <button
-              className={s.modalContentCloseIcon}
-              onClick={() => {
-                props.setIsOpen(false);
-              }}
-            >
-              <Close width={24} height={24} color={'var(--accent-4)'} />
-            </button>
+          <div className={s.modalHeader}>
+            <div className={s.closeButton}>
+              <CloseModal onClick={handleCloseModal} color='black' />
+            </div>
+
+            <div className={s.modalButtons}>
+              <div className={s.releaseToggle}>
+                <div className={`${s.toggle} ${isActive ? s.checked : ''}`} onClick={toggleSwitch}>
+                  <input type='checkbox' name='check' checked={isActive} onChange={() => {}} />
+                </div>
+              </div>
+              <div className={s.modalSubmitButton}>
+                <Button
+                  onClick={() => {
+                    submitRecord(recordData, teacherData);
+                    setIsAnimationOpen(true);
+                  }}
+                >
+                  Save Draft
+                </Button>
+              </div>
+            </div>
           </div>
-          <div className={s.modalName}>
-            <h2>New Record</h2>
-          </div>
-          <h3 className={s.contentsTitle}>Record Name</h3>
-          <div className={s.modalContentContents}>
-            <input type='text' placeholder='Input' value={recordData.title} onChange={handleRecord('title')} />
-          </div>
-          <h3 className={s.contentsTitle}>Contents</h3>
-          <SimpleMde value={recordMarkdown} onChange={handleRecordMarkdown} className={s.contentsMde} />
-          <h3 className={s.contentsTitle}>Homework</h3>
-          <SimpleMde value={homeworkMarkdown} onChange={handleHomeworkMarkdown} className={s.homeworkMde} />
-          <h3 className={s.contentsTitle}>Teacher</h3>
-          <div className={s.modalContentContents}>
-            <select defaultValue={teacherData.user_id} onChange={handleTeacher}>
-              {users.map((data: User) => {
-                if (data.id == teacherData.user_id) {
-                  return (
-                    <option key={data.id} value={data.id} selected>
-                      {data.name}
+
+          <div className={s.recordContent}>
+            <div className={s.editorSection}>
+              <div className={s.inputWrap}>
+                <input
+                  type='text'
+                  placeholder={placeholder}
+                  value={recordData.title}
+                  onChange={handleRecord('title')}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                  className={s.textBox}
+                />
+                <label className={isFocused ? `${s.label} ${s.focus}` : s.label}>Record Name</label>
+              </div>
+              <div className={s.mdeWrapper}>
+                <SimpleMde
+                  placeholder='Record Write with Markdown'
+                  value={recordMarkdown}
+                  onChange={handleRecordMarkdown}
+                  className={s.simpleMde}
+                />
+              </div>
+              <div className={s.mdeWrapper}>
+                <SimpleMde
+                  placeholder='Home Work Write with Markdown'
+                  value={homeworkMarkdown}
+                  onChange={handleHomeworkMarkdown}
+                  className={s.simpleMde}
+                />
+              </div>
+            </div>
+
+            <div className={s.selectSection}>
+              <div className={s.teacherSelect}>
+                <div className={s.selectWrapper}>
+                  <div className={s.selectLabel}>Teacher</div>
+                  <select defaultValue={teacherData.user_id} onChange={handleTeacher}>
+                    <option value='' hidden>
+                      Tap and Choose
                     </option>
-                  );
-                } else {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.name}
+                    {users.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className={s.curriculumSelect}>
+                <div className={s.selectWrapper}>
+                  <div className={s.selectLabel}>Curriculum</div>
+                  <select onChange={handleCurriculum}>
+                    <option value='' hidden>
+                      Tap and Choose
                     </option>
-                  );
-                }
-              })}
-            </select>
-          </div>
-          <h3 className={s.contentsTitle}>Curriculum</h3>
-          <div className={s.modalContentContents}>
-            <select onChange={handleCurriculum}>
-              <option value='' selected hidden>
-                選択してください
-              </option>
-              {curriculumChapters.map((data: CurriculumChapters) => {
-                return (
-                  <option key={data.curriculum.id} value={data.curriculum.id}>
-                    {data.curriculum.title}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <h3 className={s.contentsTitle}>Chapter</h3>
-          <div className={s.modalContentContents}>
-            <select onChange={handleRecord('chapter_id')}>
-              <option value='' selected hidden>
-                選択してください
-              </option>
-              {curriculumChapter?.chapters.map((chapter: Chapter) => {
-                return (
-                  <option key={chapter.id} value={chapter.id}>
-                    {chapter.title}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div className={s.releaseToggle}>
-            <label>公開する:</label>
-            <Switch
-              checked={release}
-              onChange={(event: { target: { checked: boolean | ((prevState: boolean) => boolean) } }) =>
-                setRelease(event.target.checked)
-              }
-              color='primary'
-            />
-          </div>
-          <div className={s.modalSubmitButton}>
-            <Button
-              onClick={() => {
-                submitRecord(recordData, teacherData);
-                setIsAnimationOpen(true);
-              }}
-            >
-              Submit
-            </Button>
+                    {curriculumChapters.map((curriculum) => (
+                      <option key={curriculum.curriculum.id} value={curriculum.curriculum.id}>
+                        {curriculum.curriculum.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className={s.chapterSelect}>
+                <div className={s.selectWrapper}>
+                  <div className={s.selectLabel}>Chapter</div>
+                  <select onChange={handleRecord('chapter_id')}>
+                    <option value='' hidden>
+                      Tap and Choose
+                    </option>
+                    {curriculumChapter?.chapters.map((chapter) => (
+                      <option key={chapter.id} value={chapter.id}>
+                        {chapter.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,4 +1,3 @@
-version: "3"
 services:
   seeds_db:
     image: mysql:8.0
@@ -23,6 +22,11 @@ services:
       - seeds_db
     stdin_open: true
     tty: true
+    environment:
+     DB_HOST: seeds_db
+     DB_USER: root
+     DB_PASSWORD: password
+     DB_NAME: myapp_development
 
   seeds_view:
     build: ./view
