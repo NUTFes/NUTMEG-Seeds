@@ -205,6 +205,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     <div className={s.modalContainer}>
       <div className={s.modalInnerContainer}>
         <div className={s.modalContent}>
+          
           <div className={s.modalContentClose}>
             <button
               className={s.modalContentCloseIcon}
