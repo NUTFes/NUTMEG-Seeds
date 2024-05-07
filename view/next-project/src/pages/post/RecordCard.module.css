@@ -1,11 +1,17 @@
+.cardWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
 .cardContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: calc(30% - 14px);
+  width: 350px;
   height: 250px;
-  margin-bottom: 20px;
-  margin-left: 20px;
+  margin: 20px;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
