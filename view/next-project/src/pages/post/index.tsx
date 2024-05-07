@@ -53,7 +53,7 @@ const PostPage: React.FC = () => {
     <PostLayout>
       <div className={styles.sample}></div>
       <ListHeader title='Drafts' />
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'flex-start' }}>
+      <div className={styles.cardWrapper}>
         {drafts.map((draft) => (
           <RecordCard key={draft.id} record={draft} />
         ))}
