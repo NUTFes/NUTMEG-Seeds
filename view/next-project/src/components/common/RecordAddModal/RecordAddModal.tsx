@@ -85,10 +85,6 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const [placeholder, setPlaceholder] = useState('Record Name');
   const [isActive, setIsActive] = useState(false);
 
-  const toggleSwitch = () => {
-    setIsActive(!isActive);
-  };
-
   const handleFocus = () => {
     setIsFocused(true);
     setPlaceholder('');
@@ -140,6 +136,11 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     };
     getUsers(getUsersUrl);
   }, []);
+
+  const toggleSwitch = () => {
+    setRelease(!release);
+    setIsActive(!isActive);
+  };
 
   const handleRecord =
     (input: string) =>
@@ -223,7 +224,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
             <div className={s.modalButtons}>
               <div className={s.releaseToggle}>
                 <div className={`${s.toggle} ${isActive ? s.checked : ''}`} onClick={toggleSwitch}>
-                  <input type='checkbox' name='check' checked={isActive} onChange={() => {}} />
+                  <input type='checkbox' name='check' checked={release} onChange={() => {}} />
                 </div>
               </div>
               <div className={s.modalSubmitButton}>
