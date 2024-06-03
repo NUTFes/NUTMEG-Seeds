@@ -39,11 +39,23 @@
   flex-flow: row;
   flex-wrap: nowrap;
 }
-.modalContentContents {
+
+.contentsTitleAccordion {
   width: 100%;
   display: flex;
   justify-content: start;
   align-items: start;
+  flex-flow: row;
+  flex-wrap: nowrap;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.modalContentContents {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
   flex-flow: row;
   flex-wrap: nowrap;
 }
@@ -137,6 +149,6 @@
 .textButton:active {
 }
 
-.modalContentContents{
+.modalContentContents {
   font-size: 1.6rem;
 }
