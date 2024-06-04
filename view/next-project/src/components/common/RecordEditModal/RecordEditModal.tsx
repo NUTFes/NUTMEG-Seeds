@@ -7,6 +7,9 @@ import s from './RecordEditModal.module.css';
 import 'easymde/dist/easymde.min.css';
 import dynamic from 'next/dynamic';
 import Switch from '@mui/material/Switch';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 
 const SimpleMde = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
@@ -99,6 +102,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
   const [recordMarkdown, setRecordMarkdown] = useState<string>('');
   const [homeworkMarkdown, setHomeworkMarkdown] = useState<string>('');
   const [release, setRelease] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState(false);
 
   useEffect(() => {
     const getCurriculumChaptersUrl = process.env.CSR_API_URI + '/api/v1/get_curriculums_chapter_for_index';
@@ -205,7 +209,6 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     <div className={s.modalContainer}>
       <div className={s.modalInnerContainer}>
         <div className={s.modalContent}>
-          
           <div className={s.modalContentClose}>
             <button
               className={s.modalContentCloseIcon}
@@ -227,62 +230,81 @@ const RecordEditModal: FC<ModalProps> = (props) => {
           <SimpleMde value={recordMarkdown} onChange={recordMarkdownHandler} className={s.contentsMde} />
           <h3 className={s.contentsTitle}>Homework</h3>
           <SimpleMde value={homeworkMarkdown} onChange={homeworkMarkdownHandler} className={s.homeworkMde} />
-          <h3 className={s.contentsTitle}>Teacher</h3>
+
+          <Accordion
+            expanded={accordionOpen}
+            onChange={() => setAccordionOpen(!accordionOpen)}
+            sx={{
+              backgroundColor: 'transparent',
+              boxShadow: 'none',
+              '&:before': { display: 'none' },
+            }}
+          >
+            <AccordionSummary sx={{ padding: 0 }}>
+              {accordionOpen ? 'ー' : '＋'} Teacher・Curriculum・Chapter（※変更する場合のみ）
+            </AccordionSummary>
+            <AccordionDetails>
+              <>
+                <h3 className={s.contentsTitleAccordion}>Teacher</h3>
+                <div className={s.modalContentContents}>
+                  <select defaultValue={teacherData.user_id} onChange={teacherHandler(query)}>
+                    {users.map((data: User) => {
+                      if (data.id == teacherData.user_id) {
+                        return (
+                          <option key={data.id} value={data.id} selected>
+                            {data.name}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={data.id} value={data.id}>
+                            {data.name}
+                          </option>
+                        );
+                      }
+                    })}
+                  </select>
+                </div>
+                <h3 className={s.contentsTitleAccordion}>Curriculum</h3>
+                <div className={s.modalContentContents}>
+                  <select onChange={handleCurriculum}>
+                    {formData.chapter_id === null && <option value={formData.chapter_id}>no curriculum</option>}
+                    {curriculumChapters.map((data: CurriculumChapters) => {
+                      return (
+                        <option key={data.curriculum.id} value={data.curriculum.id}>
+                          {data.curriculum.title}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <h3 className={s.contentsTitleAccordion}>Chapter</h3>
+                <div className={s.modalContentContents}>
+                  <select onChange={handler('chapter_id')}>
+                    {formData.chapter_id === null && <option value={formData.chapter_id}>no chapter</option>}
+                    {curriculumChapter?.chapters.map((chapter: Chapter) => {
+                      if (formData.chapter_id !== null && chapter.id === formData.chapter_id) {
+                        return (
+                          <option key={chapter.id} value={chapter.id} selected>
+                            {chapter.title}
+                          </option>
+                        );
+                      } else {
+                        return (
+                          <option key={chapter.id} value={chapter.id}>
+                            {chapter.title}
+                          </option>
+                        );
+                      }
+                    })}
+                  </select>
+                </div>
+              </>
+            </AccordionDetails>
+          </Accordion>
+
           <div className={s.modalContentContents}>
-            <select defaultValue={teacherData.user_id} onChange={teacherHandler(query)}>
-              {users.map((data: User) => {
-                if (data.id == teacherData.user_id) {
-                  return (
-                    <option key={data.id} value={data.id} selected>
-                      {data.name}
-                    </option>
-                  );
-                } else {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.name}
-                    </option>
-                  );
-                }
-              })}
-            </select>
-          </div>
-          <h3 className={s.contentsTitle}>Curriculum</h3>
-          <div className={s.modalContentContents}>
-            <select onChange={handleCurriculum}>
-              {formData.chapter_id === null && <option value={formData.chapter_id}>no curriculum</option>}
-              {curriculumChapters.map((data: CurriculumChapters) => {
-                return (
-                  <option key={data.curriculum.id} value={data.curriculum.id}>
-                    {data.curriculum.title}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <h3 className={s.contentsTitle}>Chapter</h3>
-          <div className={s.modalContentContents}>
-            <select onChange={handler('chapter_id')}>
-              {formData.chapter_id === null && <option value={formData.chapter_id}>no chapter</option>}
-              {curriculumChapter?.chapters.map((chapter: Chapter) => {
-                if (formData.chapter_id !== null && chapter.id === formData.chapter_id) {
-                  return (
-                    <option key={chapter.id} value={chapter.id} selected>
-                      {chapter.title}
-                    </option>
-                  );
-                } else {
-                  return (
-                    <option key={chapter.id} value={chapter.id}>
-                      {chapter.title}
-                    </option>
-                  );
-                }
-              })}
-            </select>
-          </div>
-          <div className={s.modalContentContents}>
-            <label htmlFor='release-switch'>公開する:</label>
+            <label htmlFor='release-switch'>公開する</label>
             <Switch
               checked={release}
               onChange={handleReleaseChange} // 適切なハンドラー関数を設定
