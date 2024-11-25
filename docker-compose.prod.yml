@@ -24,13 +24,14 @@ services:
       - seeds.env
 
   seeds_view:
-    build: ./view
+    image: node:20.11.0
+    working_dir: /app
     container_name: "seeds_view"
     ports:
       - 8080:8080
     command: bash -c "npm run start"
     volumes:
-      - ./view:/app
+      - ./view/next-project/:/app
       - ./view/next-project/node_modules:/app/node_modules
     stdin_open: true
     tty: true

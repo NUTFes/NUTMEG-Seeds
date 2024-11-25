@@ -29,13 +29,14 @@ services:
      DB_NAME: myapp_development
 
   seeds_view:
-    build: ./view
+    image: node:20.11.0
+    working_dir: /app
     container_name: "seeds_view"
     ports:
       - "8080:8080"
     command: sh -c "npm install && npm run dev"
     volumes:
-      - ./view:/app
+      - ./view/next-project/:/app
     stdin_open: true
     tty: true
     environment:
