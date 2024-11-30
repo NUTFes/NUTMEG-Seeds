@@ -142,6 +142,10 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     setIsActive(!isActive);
   };
 
+  const MAX_TITLE_LENGTH = 36;
+
+  const [titleLength, setTitleLength] = useState(0);
+
   const handleRecord =
     (input: string) =>
     (
@@ -150,7 +154,18 @@ const RecordAddModal: FC<ModalProps> = (props) => {
         | React.ChangeEvent<HTMLTextAreaElement>
         | React.ChangeEvent<HTMLSelectElement>,
     ) => {
-      setRecordData({ ...recordData, [input]: e.target.value });
+      const value = e.target.value;
+
+    if (input === 'title') {
+      if (value.length > MAX_TITLE_LENGTH) {
+      } else {
+        setRecordData({ ...recordData, [input]: e.target.value });
+
+        setTitleLength(value.length);
+      }
+    } else {
+      setRecordData({ ...recordData, [input]: value });
+    }
     };
 
   const handleTeacher = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -252,7 +267,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                   onBlur={handleBlur}
                   className={s.textBox}
                 />
-                <label className={isFocused ? `${s.label} ${s.focus}` : s.label}>Record Name</label>
+                <label className={isFocused ? `${s.label} ${s.focus}` : s.label}>Record Name ( 残りの文字数 : {MAX_TITLE_LENGTH - titleLength} )</label>
               </div>
               <div className={s.mdeWrapper}>
                 <SimpleMde
