@@ -147,6 +147,9 @@ const RecordEditModal: FC<ModalProps> = (props) => {
   const MAX_TITLE_LENGTH = 36;
 
   const [titleLength, setTitleLength] = useState(0);
+    useEffect(() => {
+      setTitleLength(formData.title.length); 
+    }, [formData.title]);
 
   const handler =
     (input: string) =>
