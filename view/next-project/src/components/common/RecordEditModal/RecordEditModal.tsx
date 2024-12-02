@@ -144,6 +144,13 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     }
   }, [query, router]);
 
+  const MAX_TITLE_LENGTH = 36;
+
+  const [titleLength, setTitleLength] = useState(0);
+    useEffect(() => {
+      setTitleLength(formData.title.length); 
+    }, [formData.title]);
+
   const handler =
     (input: string) =>
     (
@@ -152,7 +159,18 @@ const RecordEditModal: FC<ModalProps> = (props) => {
         | React.ChangeEvent<HTMLTextAreaElement>
         | React.ChangeEvent<HTMLSelectElement>,
     ) => {
-      setFormData({ ...formData, [input]: e.target.value });
+      const value = e.target.value;
+
+    if (input === 'title') {
+      if (value.length > MAX_TITLE_LENGTH) {
+      } else {
+        setFormData({ ...formData, [input]: e.target.value });
+
+        setTitleLength(value.length);
+      }
+    } else {
+      setFormData({ ...formData, [input]: value });
+    }
     };
 
   // レコード編集用ハンドラー
@@ -223,6 +241,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
             <h2>Edit Record</h2>
           </div>
           <h3 className={s.contentsTitle}>Record Name</h3>
+          <p>残りの文字数 : {MAX_TITLE_LENGTH - titleLength}</p>
           <div className={s.modalContentContents}>
             <input type='text' placeholder='Input' value={formData.title} onChange={handler('title')} />
           </div>
