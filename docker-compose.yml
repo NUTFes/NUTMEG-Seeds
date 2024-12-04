@@ -40,7 +40,6 @@ services:
     tty: true
     environment:
       - SEEDS_API_URI=http://localhost:3000
-      - WATCHPACK_POLLING=true
 
   # 定期実行用コンテナ
   cron:
