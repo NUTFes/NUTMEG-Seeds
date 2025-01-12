@@ -9,7 +9,7 @@ const Header: FC = () => {
     <section className={s.headerContainer}>
       <header>
         <div>
-          <HeaderLogo height={30} width={142} color={'var(--accent-0)'} />
+          <HeaderLogo height={50} width={220} color={'var(--accent-0)'} />
         </div>
         <div className={s.headerLinks}>
           <nav>
