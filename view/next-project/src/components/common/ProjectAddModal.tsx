@@ -53,8 +53,11 @@ const ProjectAddModal: FC<ModalProps> = (props) => {
         <input type='text' placeholder='Input' value={formData.name} onChange={handler('name')} />
       </div>
       <div>
-        <h3>Detail</h3>
-        <textarea placeholder='Input' value={formData.detail} onChange={handler('detail')} />
+        <div style={{ display: 'flex', alignItems: 'center', height: '3rem'}}>
+          <h3>Detail</h3>
+          <p>( 残りの文字数：{42 - formData.detail.length} )</p>
+        </div>
+        <textarea placeholder='Input' value={formData.detail} onChange={handler('detail')} maxLength={42}/>
       </div>
       <div>
         <h3>GitHub</h3>
