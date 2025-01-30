@@ -257,6 +257,9 @@ const RecordEditModal: FC<ModalProps> = (props) => {
         <div className={s.modalContainer}>
           <div className={s.modalInnerContainer}>
             <div className={s.modalContent}>
+            <div className={s.editrecordtitle}>
+              <h1>EditRecord</h1>
+              </div>
               {/* ヘッダー */}
               <div className={s.modalHeader}>
                 <div className={s.closeButton}>

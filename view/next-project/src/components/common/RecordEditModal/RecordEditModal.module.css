@@ -24,6 +24,12 @@
   background-color: #ffac5d; /* RecordAddModal と同じ背景色 */
 }
 
+.editrecordtitle{
+  padding-bottom: 3rem;
+  color: #FFF;
+  text-align:center;
+}
+
 /* ヘッダー */
 .modalHeader {
   display: flex;
