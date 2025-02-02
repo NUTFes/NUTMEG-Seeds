@@ -24,6 +24,12 @@
   background-color: #ffac5d;
 }
 
+.addrecordtitle{
+  padding-bottom: 3rem;
+  color: #FFF;
+  text-align:center;
+}
+
 .modalHeader {
   display: flex;
   justify-content: space-between;

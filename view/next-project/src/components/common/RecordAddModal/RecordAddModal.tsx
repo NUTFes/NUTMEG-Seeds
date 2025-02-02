@@ -231,6 +231,9 @@ const RecordAddModal: FC<ModalProps> = (props) => {
       )}
       <div className={s.modalInnerContainer}>
         <div className={s.modalContent}>
+        <div className={s.addrecordtitle}>
+        <h1>AddRecord</h1>
+      </div>
           <div className={s.modalHeader}>
             <div className={s.closeButton}>
               <CloseModal onClick={handleCloseModal} color='black' />
