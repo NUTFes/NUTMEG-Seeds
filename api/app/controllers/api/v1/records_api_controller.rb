@@ -1,7 +1,7 @@
 class Api::V1::RecordsApiController < ApplicationController
   def get_records_for_index
-    # releaseカラムがtrueになっているレコードのみを取得
-    @records = Record.where(release: true).with_teacher_and_skills
+    # releaseカラムがtrueになっているレコードのみを取得（新しい順に並び替え）
+    @records = Record.where(release: true).order(created_at: :desc).with_teacher_and_skills
     render json: @records
   end
 
@@ -23,7 +23,7 @@ class Api::V1::RecordsApiController < ApplicationController
   # app/controllers/api/v1/records_api_controller.rb
   def get_drafts_for_user
     user_id = params[:user_id] # または、認証されたユーザーのIDを直接取得
-    @records = Record.where(user_id: user_id, release: false)
+    @records = Record.where(user_id: user_id, release: false).order(created_at: :desc)
     render json: @records
   end
 
