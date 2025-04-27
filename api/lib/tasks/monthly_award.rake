@@ -1,12 +1,13 @@
 namespace :monthly_award do
-  desc "Monthly Award"
+  desc "Monthly Award - 毎月1日に前月のレコード数ランキングを発表"
   task monthly_award: :environment do
     
-    # 月末に実行される処理
+    # 毎月1日に実行される処理
     @today = Time.zone.today
-    # 取得した時刻が含まれる月の範囲のデータを取得
-    # 1ヶ月間のレコードを取得
-    @records = Record.where(created_at: @today.all_month)
+    # 前月の範囲を取得
+    @last_month = @today.prev_month
+    # 前月の1ヶ月間のレコードを取得
+    @records = Record.where(created_at: @last_month.all_month)
     # レコードのuser_idのみを取得
     @user_ids = @records.pluck(:user_id)
     # ユーザに紐づくレコード数をカウント
@@ -86,15 +87,15 @@ namespace :monthly_award do
     attachment = {
       color: "good",
       type: "mrkdwn",
-      title: ":nutmeg: 今月のRecord数ランキングを発表します :nutmeg:",
+      title: ":nutmeg: #{@last_month.strftime('%Y年%m月')}のRecord数ランキングを発表します :nutmeg:",
       text: "
 
 #{if(@first_data_array.empty?) then '' else "1位 #{@first_user_record_num}レコード \n #{@first_users_name}" end}
 #{if(@second_data_array.empty?) then '' else "2位 #{@second_user_record_num}レコード \n #{@second_users_name}" end}
 #{if(@third_data_array.empty?) then '' else "3位 #{@third_user_record_num}レコード \n #{@third_users_name}" end}
 
-みなさん多くの勉強記録を残していただきありがとうございます:clap:
-来月もみんなで頑張りましょう:muscle:
+みなさん#{@last_month.strftime('%m月')}は多くの勉強記録を残していただきありがとうございます:clap:
+#{@today.strftime('%m月')}もみんなで頑張りましょう:muscle:
       "
     }
 

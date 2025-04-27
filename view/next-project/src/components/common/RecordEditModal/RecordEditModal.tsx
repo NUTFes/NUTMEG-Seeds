@@ -164,8 +164,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
 
   // input系共通ハンドラ
   const handler =
-    (input: string) =>
-    (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    (input: string) => (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
       const value = e.target.value;
       // タイトルの文字数制御
       if (input === 'title') {
@@ -186,9 +185,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
 
   // Curriculum選択
   const handleCurriculum = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = curriculumChapters.find(
-      (c) => c.curriculum.id === Number(e.target.value),
-    );
+    const selected = curriculumChapters.find((c) => c.curriculum.id === Number(e.target.value));
     if (selected) {
       setCurriculumChapter(selected);
     }
@@ -257,8 +254,8 @@ const RecordEditModal: FC<ModalProps> = (props) => {
         <div className={s.modalContainer}>
           <div className={s.modalInnerContainer}>
             <div className={s.modalContent}>
-            <div className={s.editrecordtitle}>
-              <h1>EditRecord</h1>
+              <div className={s.editrecordtitle}>
+                <h1>EditRecord</h1>
               </div>
               {/* ヘッダー */}
               <div className={s.modalHeader}>
@@ -268,16 +265,8 @@ const RecordEditModal: FC<ModalProps> = (props) => {
 
                 <div className={s.modalButtons}>
                   <div className={s.releaseToggle}>
-                    <div
-                      className={`${s.toggle} ${isActive ? s.checked : ''}`}
-                      onClick={toggleSwitch}
-                    >
-                      <input
-                        type='checkbox'
-                        name='check'
-                        checked={release}
-                        onChange={() => {}}
-                      />
+                    <div className={`${s.toggle} ${isActive ? s.checked : ''}`} onClick={toggleSwitch}>
+                      <input type='checkbox' name='check' checked={release} onChange={() => {}} />
                     </div>
                   </div>
                   <div className={s.modalSubmitButton}>
@@ -335,27 +324,27 @@ const RecordEditModal: FC<ModalProps> = (props) => {
                 </div>
 
                 {/* 右側セレクトセクション */}
-<div className={s.selectSection}>
-  {/* Teacher */}
-  <div className={s.teacherSelect}>
-    <div className={s.selectWrapper}>
-      <div className={s.selectLabel}>Teacher</div>
-      <select
-        // teacherData.user_id を反映
-        value={teacherData.user_id || ''}
-        onChange={teacherHandler}
-      >
-        <option value='' hidden>
-          Tap and Choose
-        </option>
-        {users.map((user) => (
-          <option key={user.id} value={user.id}>
-            {user.name}
-          </option>
-        ))}
-      </select>
-    </div>
-  </div>
+                <div className={s.selectSection}>
+                  {/* Teacher */}
+                  <div className={s.teacherSelect}>
+                    <div className={s.selectWrapper}>
+                      <div className={s.selectLabel}>Teacher</div>
+                      <select
+                        // teacherData.user_id を反映
+                        value={teacherData.user_id || ''}
+                        onChange={teacherHandler}
+                      >
+                        <option value='' hidden>
+                          Tap and Choose
+                        </option>
+                        {users.map((user) => (
+                          <option key={user.id} value={user.id}>
+                            {user.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
 
                   {/* Curriculum */}
                   <div className={s.curriculumSelect}>

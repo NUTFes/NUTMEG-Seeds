@@ -23,16 +23,16 @@ services:
     stdin_open: true
     tty: true
     environment:
-     DB_HOST: seeds_db
-     DB_USER: root
-     DB_PASSWORD: password
-     DB_NAME: myapp_development
+      DB_HOST: seeds_db
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: myapp_development
 
   seeds_view:
     build: ./view
     container_name: "seeds_view"
     ports:
-      - "8080:8080"
+      - "8081:8080"
     command: sh -c "npm install && npm run dev"
     volumes:
       - ./view:/app
