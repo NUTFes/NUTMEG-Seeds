@@ -304,6 +304,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
 
                   {/* Record内容(Markdown) */}
                   <div className={s.mdeWrapper}>
+                    <div className={s.selectLabel}>Content</div>
                     <SimpleMde
                       placeholder='Record Write with Markdown'
                       value={recordMarkdown}
@@ -314,6 +315,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
 
                   {/* Homework(Markdown) */}
                   <div className={s.mdeWrapper}>
+                    <div className={s.selectLabel}>Homework</div>
                     <SimpleMde
                       placeholder='Home Work Write with Markdown'
                       value={homeworkMarkdown}

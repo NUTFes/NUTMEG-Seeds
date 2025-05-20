@@ -273,6 +273,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                 <label className={isFocused ? `${s.label} ${s.focus}` : s.label}>Record Name ( 残りの文字数 : {MAX_TITLE_LENGTH - titleLength} )</label>
               </div>
               <div className={s.mdeWrapper}>
+                <div className={s.selectLabel}>Content</div>
                 <SimpleMde
                   placeholder='Record Write with Markdown'
                   value={recordMarkdown}
@@ -281,6 +282,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                 />
               </div>
               <div className={s.mdeWrapper}>
+                <div className={s.selectLabel}>Homework</div>
                 <SimpleMde
                   placeholder='Home Work Write with Markdown'
                   value={homeworkMarkdown}
