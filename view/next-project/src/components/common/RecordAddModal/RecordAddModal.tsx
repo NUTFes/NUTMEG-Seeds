@@ -79,11 +79,13 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '1' });
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [newRecordId, setNewRecordId] = useState('');
-  const [release, setRelease] = useState<boolean>(false);
+  // デフォルトで公開状態に変更（true）
+  const [release, setRelease] = useState<boolean>(true);
   const { isOpen, setIsOpen } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [placeholder, setPlaceholder] = useState('Record Name');
-  const [isActive, setIsActive] = useState(false);
+  // デフォルトで公開状態に変更（true）
+  const [isActive, setIsActive] = useState(true);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -110,7 +112,8 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     homework: homeworkSentence,
     user_id: Number(localStorage.getItem('user_id')),
     chapter_id: 1,
-  });
+    release: true,
+      });
 
   const [recordMarkdown, setRecordMarkdown] = useState<string>(contentSentence);
   const [homeworkMarkdown, setHomeworkMarkdown] = useState<string>(homeworkSentence);
