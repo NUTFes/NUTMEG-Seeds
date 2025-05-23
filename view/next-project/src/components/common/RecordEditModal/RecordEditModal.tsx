@@ -374,6 +374,11 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     }
   };
 
+  // ボタンの有効/無効を判定する関数
+  const isSubmitDisabled = () => {
+    return !displayCurriculumId || !formData.chapter_id || !displayTeacherId || displayTeacherId === '';
+  };
+
   // -------------- Submit --------------
   const submitRecord = async () => {
     // 送信データの準備
@@ -528,6 +533,7 @@ const RecordEditModal: FC<ModalProps> = (props) => {
                   <div className={s.modalSubmitButton}>
                     <Button
                       onClick={handleSubmit}
+                      disabled={isSubmitDisabled()}
                     >
                       Save Draft
                     </Button>

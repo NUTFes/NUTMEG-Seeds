@@ -76,7 +76,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const [curriculumChapter, setCurriculumChapter] = useState<CurriculumChapters>();
   const [records, setRecords] = useState<Record[]>([]);
   const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
-  const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '1' });
+  const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '' });
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [newRecordId, setNewRecordId] = useState('');
   // デフォルトで公開状態に変更（true）
@@ -86,6 +86,10 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const [placeholder, setPlaceholder] = useState('Record Name');
   // デフォルトで公開状態に変更（true）
   const [isActive, setIsActive] = useState(true);
+  
+  // 選択状態を管理する新しいstate
+  const [selectedCurriculumId, setSelectedCurriculumId] = useState<number | null>(null);
+  const [selectedChapterId, setSelectedChapterId] = useState<number | null>(null);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -111,7 +115,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     content: contentSentence,
     homework: homeworkSentence,
     user_id: Number(localStorage.getItem('user_id')),
-    chapter_id: 1,
+    chapter_id: 0,
     release: true,
       });
 
@@ -123,7 +127,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     const getCurriculumChapters = async (url: string) => {
       const data = await get(url);
       setCurriculumChapters(data);
-      setCurriculumChapter(data[0]);
+      // 初期選択を削除
     };
     getCurriculumChapters(getCurriculumChaptersUrl);
 
@@ -166,6 +170,10 @@ const RecordAddModal: FC<ModalProps> = (props) => {
 
         setTitleLength(value.length);
       }
+    } else if (input === 'chapter_id') {
+      const chapterId = Number(value);
+      setSelectedChapterId(chapterId);
+      setRecordData({ ...recordData, [input]: chapterId });
     } else {
       setRecordData({ ...recordData, [input]: value });
     }
@@ -184,12 +192,21 @@ const RecordAddModal: FC<ModalProps> = (props) => {
 
   const handleCurriculum = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setCurriculumChapter(
-        curriculumChapters.find((curriculumChapter) => curriculumChapter.curriculum.id === Number(e.target.value)),
-      );
+      const curriculumId = Number(e.target.value);
+      setSelectedCurriculumId(curriculumId);
+      const selectedCurriculum = curriculumChapters.find((curriculumChapter) => curriculumChapter.curriculum.id === curriculumId);
+      setCurriculumChapter(selectedCurriculum);
+      // Curriculumが変更されたらChapterの選択をリセット
+      setSelectedChapterId(null);
+      setRecordData({ ...recordData, chapter_id: 0 });
     },
-    [curriculumChapters, setCurriculumChapter],
+    [curriculumChapters, setCurriculumChapter, recordData],
   );
+
+  // ボタンの有効/無効を判定する関数
+  const isSubmitDisabled = () => {
+    return !selectedCurriculumId || !selectedChapterId || !teacherData.user_id || teacherData.user_id === '';
+  };
 
   const submitRecord = async (recordData: Record, teacherData: Teacher) => {
     const submitRecordUrl = `${process.env.CSR_API_URI}/records`;
@@ -254,6 +271,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                     submitRecord(recordData, teacherData);
                     setIsAnimationOpen(true);
                   }}
+                  disabled={isSubmitDisabled()}
                 >
                   Save Draft
                 </Button>
@@ -299,7 +317,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
               <div className={s.teacherSelect}>
                 <div className={s.selectWrapper}>
                   <div className={s.selectLabel}>Teacher</div>
-                  <select defaultValue={teacherData.user_id} onChange={handleTeacher}>
+                  <select value={teacherData.user_id} onChange={handleTeacher}>
                     <option value='' hidden>
                       Tap and Choose
                     </option>
@@ -314,7 +332,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
               <div className={s.curriculumSelect}>
                 <div className={s.selectWrapper}>
                   <div className={s.selectLabel}>Curriculum</div>
-                  <select onChange={handleCurriculum}>
+                  <select value={selectedCurriculumId || ''} onChange={handleCurriculum}>
                     <option value='' hidden>
                       Tap and Choose
                     </option>
@@ -329,7 +347,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
               <div className={s.chapterSelect}>
                 <div className={s.selectWrapper}>
                   <div className={s.selectLabel}>Chapter</div>
-                  <select onChange={handleRecord('chapter_id')}>
+                  <select value={selectedChapterId || ''} onChange={handleRecord('chapter_id')}>
                     <option value='' hidden>
                       Tap and Choose
                     </option>
