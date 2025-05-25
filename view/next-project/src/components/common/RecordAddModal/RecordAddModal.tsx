@@ -76,14 +76,23 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   const [curriculumChapter, setCurriculumChapter] = useState<CurriculumChapters>();
   const [records, setRecords] = useState<Record[]>([]);
   const [users, setUsers] = useState<User[]>([{ id: '', name: '' }]);
-  const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '1' });
+  const [teacherData, setTeacherData] = useState<Teacher>({ user_id: '' });
   const [isAnimationOpen, setIsAnimationOpen] = useState(false);
   const [newRecordId, setNewRecordId] = useState('');
-  const [release, setRelease] = useState<boolean>(false);
+  // デフォルトで公開状態に変更（true）
+  const [release, setRelease] = useState<boolean>(true);
   const { isOpen, setIsOpen } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [placeholder, setPlaceholder] = useState('Record Name');
-  const [isActive, setIsActive] = useState(false);
+  // デフォルトで公開状態に変更（true）
+  const [isActive, setIsActive] = useState(true);
+  
+  // 選択状態を管理する新しいstate
+  const [selectedCurriculumId, setSelectedCurriculumId] = useState<number | null>(null);
+  const [selectedChapterId, setSelectedChapterId] = useState<number | null>(null);
+  
+  // ボタンホバー状態を管理するstate
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -109,8 +118,9 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     content: contentSentence,
     homework: homeworkSentence,
     user_id: Number(localStorage.getItem('user_id')),
-    chapter_id: 1,
-  });
+    chapter_id: 0,
+    release: true,
+      });
 
   const [recordMarkdown, setRecordMarkdown] = useState<string>(contentSentence);
   const [homeworkMarkdown, setHomeworkMarkdown] = useState<string>(homeworkSentence);
@@ -120,7 +130,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     const getCurriculumChapters = async (url: string) => {
       const data = await get(url);
       setCurriculumChapters(data);
-      setCurriculumChapter(data[0]);
+      // 初期選択を削除
     };
     getCurriculumChapters(getCurriculumChaptersUrl);
 
@@ -163,6 +173,10 @@ const RecordAddModal: FC<ModalProps> = (props) => {
 
         setTitleLength(value.length);
       }
+    } else if (input === 'chapter_id') {
+      const chapterId = Number(value);
+      setSelectedChapterId(chapterId);
+      setRecordData({ ...recordData, [input]: chapterId });
     } else {
       setRecordData({ ...recordData, [input]: value });
     }
@@ -181,12 +195,38 @@ const RecordAddModal: FC<ModalProps> = (props) => {
 
   const handleCurriculum = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setCurriculumChapter(
-        curriculumChapters.find((curriculumChapter) => curriculumChapter.curriculum.id === Number(e.target.value)),
-      );
+      const curriculumId = Number(e.target.value);
+      setSelectedCurriculumId(curriculumId);
+      const selectedCurriculum = curriculumChapters.find((curriculumChapter) => curriculumChapter.curriculum.id === curriculumId);
+      setCurriculumChapter(selectedCurriculum);
+      // Curriculumが変更されたらChapterの選択をリセット
+      setSelectedChapterId(null);
+      setRecordData({ ...recordData, chapter_id: 0 });
     },
-    [curriculumChapters, setCurriculumChapter],
+    [curriculumChapters, setCurriculumChapter, recordData],
   );
+
+  // ボタンの有効/無効を判定する関数
+  const isSubmitDisabled = () => {
+    return !selectedCurriculumId || !selectedChapterId || !teacherData.user_id || teacherData.user_id === '';
+  };
+
+  // Save Draftボタンが無効な理由を取得する関数
+  const getDisableReason = () => {
+    const missingItems = [];
+    
+    if (!teacherData.user_id || teacherData.user_id === '') {
+      missingItems.push('Teacherを選択してください');
+    }
+    if (!selectedCurriculumId) {
+      missingItems.push('Curriculumを選択してください');
+    }
+    if (!selectedChapterId) {
+      missingItems.push('Chapterを選択してください');
+    }
+
+    return missingItems.join('、');
+  };
 
   const submitRecord = async (recordData: Record, teacherData: Teacher) => {
     const submitRecordUrl = `${process.env.CSR_API_URI}/records`;
@@ -245,15 +285,51 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                   <input type='checkbox' name='check' checked={release} onChange={() => {}} />
                 </div>
               </div>
-              <div className={s.modalSubmitButton}>
-                <Button
-                  onClick={() => {
-                    submitRecord(recordData, teacherData);
-                    setIsAnimationOpen(true);
-                  }}
+              <div className={s.modalSubmitButton} style={{ position: 'relative' }}>
+                <div
+                  onMouseEnter={() => setIsButtonHovered(true)}
+                  onMouseLeave={() => setIsButtonHovered(false)}
                 >
-                  Save Draft
-                </Button>
+                  <Button
+                    onClick={() => {
+                      submitRecord(recordData, teacherData);
+                      setIsAnimationOpen(true);
+                    }}
+                    disabled={isSubmitDisabled()}
+                  >
+                    Save Draft
+                  </Button>
+                </div>
+                {isSubmitDisabled() && isButtonHovered && (
+                  <div style={{ 
+                    position: 'absolute',
+                    top: '100%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    backgroundColor: '#333',
+                    color: '#fff',
+                    padding: '6px 8px',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    whiteSpace: 'nowrap',
+                    zIndex: 1000,
+                    marginTop: '4px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                  }}>
+                    {getDisableReason()}
+                    <div style={{
+                      position: 'absolute',
+                      top: '-5px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: 0,
+                      height: 0,
+                      borderLeft: '5px solid transparent',
+                      borderRight: '5px solid transparent',
+                      borderBottom: '5px solid #333'
+                    }} />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -273,6 +349,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                 <label className={isFocused ? `${s.label} ${s.focus}` : s.label}>Record Name ( 残りの文字数 : {MAX_TITLE_LENGTH - titleLength} )</label>
               </div>
               <div className={s.mdeWrapper}>
+                <div className={s.selectLabel}>Content</div>
                 <SimpleMde
                   placeholder='Record Write with Markdown'
                   value={recordMarkdown}
@@ -281,6 +358,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                 />
               </div>
               <div className={s.mdeWrapper}>
+                <div className={s.selectLabel}>Homework</div>
                 <SimpleMde
                   placeholder='Home Work Write with Markdown'
                   value={homeworkMarkdown}
@@ -294,7 +372,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
               <div className={s.teacherSelect}>
                 <div className={s.selectWrapper}>
                   <div className={s.selectLabel}>Teacher</div>
-                  <select defaultValue={teacherData.user_id} onChange={handleTeacher}>
+                  <select value={teacherData.user_id} onChange={handleTeacher}>
                     <option value='' hidden>
                       Tap and Choose
                     </option>
@@ -309,7 +387,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
               <div className={s.curriculumSelect}>
                 <div className={s.selectWrapper}>
                   <div className={s.selectLabel}>Curriculum</div>
-                  <select onChange={handleCurriculum}>
+                  <select value={selectedCurriculumId || ''} onChange={handleCurriculum}>
                     <option value='' hidden>
                       Tap and Choose
                     </option>
@@ -324,7 +402,7 @@ const RecordAddModal: FC<ModalProps> = (props) => {
               <div className={s.chapterSelect}>
                 <div className={s.selectWrapper}>
                   <div className={s.selectLabel}>Chapter</div>
-                  <select onChange={handleRecord('chapter_id')}>
+                  <select value={selectedChapterId || ''} onChange={handleRecord('chapter_id')}>
                     <option value='' hidden>
                       Tap and Choose
                     </option>
