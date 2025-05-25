@@ -90,6 +90,9 @@ const RecordAddModal: FC<ModalProps> = (props) => {
   // 選択状態を管理する新しいstate
   const [selectedCurriculumId, setSelectedCurriculumId] = useState<number | null>(null);
   const [selectedChapterId, setSelectedChapterId] = useState<number | null>(null);
+  
+  // ボタンホバー状態を管理するstate
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -208,6 +211,23 @@ const RecordAddModal: FC<ModalProps> = (props) => {
     return !selectedCurriculumId || !selectedChapterId || !teacherData.user_id || teacherData.user_id === '';
   };
 
+  // Save Draftボタンが無効な理由を取得する関数
+  const getDisableReason = () => {
+    const missingItems = [];
+    
+    if (!teacherData.user_id || teacherData.user_id === '') {
+      missingItems.push('Teacherを選択してください');
+    }
+    if (!selectedCurriculumId) {
+      missingItems.push('Curriculumを選択してください');
+    }
+    if (!selectedChapterId) {
+      missingItems.push('Chapterを選択してください');
+    }
+
+    return missingItems.join('、');
+  };
+
   const submitRecord = async (recordData: Record, teacherData: Teacher) => {
     const submitRecordUrl = `${process.env.CSR_API_URI}/records`;
     const submitData = {
@@ -265,16 +285,51 @@ const RecordAddModal: FC<ModalProps> = (props) => {
                   <input type='checkbox' name='check' checked={release} onChange={() => {}} />
                 </div>
               </div>
-              <div className={s.modalSubmitButton}>
-                <Button
-                  onClick={() => {
-                    submitRecord(recordData, teacherData);
-                    setIsAnimationOpen(true);
-                  }}
-                  disabled={isSubmitDisabled()}
+              <div className={s.modalSubmitButton} style={{ position: 'relative' }}>
+                <div
+                  onMouseEnter={() => setIsButtonHovered(true)}
+                  onMouseLeave={() => setIsButtonHovered(false)}
                 >
-                  Save Draft
-                </Button>
+                  <Button
+                    onClick={() => {
+                      submitRecord(recordData, teacherData);
+                      setIsAnimationOpen(true);
+                    }}
+                    disabled={isSubmitDisabled()}
+                  >
+                    Save Draft
+                  </Button>
+                </div>
+                {isSubmitDisabled() && isButtonHovered && (
+                  <div style={{ 
+                    position: 'absolute',
+                    top: '100%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    backgroundColor: '#333',
+                    color: '#fff',
+                    padding: '6px 8px',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    whiteSpace: 'nowrap',
+                    zIndex: 1000,
+                    marginTop: '4px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                  }}>
+                    {getDisableReason()}
+                    <div style={{
+                      position: 'absolute',
+                      top: '-5px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: 0,
+                      height: 0,
+                      borderLeft: '5px solid transparent',
+                      borderRight: '5px solid transparent',
+                      borderBottom: '5px solid #333'
+                    }} />
+                  </div>
+                )}
               </div>
             </div>
           </div>

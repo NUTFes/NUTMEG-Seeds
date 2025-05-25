@@ -129,6 +129,9 @@ const RecordEditModal: FC<ModalProps> = (props) => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // ボタンホバー状態を管理するstate
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
+
   // デバッグ用に状態を出力
   useEffect(() => {
     if (isInitialized) {
@@ -379,6 +382,23 @@ const RecordEditModal: FC<ModalProps> = (props) => {
     return !displayCurriculumId || !formData.chapter_id || !displayTeacherId || displayTeacherId === '';
   };
 
+  // Save Draftボタンが無効な理由を取得する関数
+  const getDisableReason = () => {
+    const missingItems = [];
+    
+    if (!displayTeacherId || displayTeacherId === '') {
+      missingItems.push('Teacherを選択してください');
+    }
+    if (!displayCurriculumId) {
+      missingItems.push('Curriculumを選択してください');
+    }
+    if (!formData.chapter_id) {
+      missingItems.push('Chapterを選択してください');
+    }
+
+    return missingItems.join('、');
+  };
+
   // -------------- Submit --------------
   const submitRecord = async () => {
     // 送信データの準備
@@ -530,13 +550,48 @@ const RecordEditModal: FC<ModalProps> = (props) => {
                       <input type='checkbox' name='check' checked={release} onChange={() => {}} />
                     </div>
                   </div>
-                  <div className={s.modalSubmitButton}>
-                    <Button
-                      onClick={handleSubmit}
-                      disabled={isSubmitDisabled()}
+                  <div className={s.modalSubmitButton} style={{ position: 'relative' }}>
+                    <div
+                      onMouseEnter={() => setIsButtonHovered(true)}
+                      onMouseLeave={() => setIsButtonHovered(false)}
                     >
-                      Save Draft
-                    </Button>
+                      <Button
+                        onClick={handleSubmit}
+                        disabled={isSubmitDisabled()}
+                      >
+                        Save Draft
+                      </Button>
+                    </div>
+                    {isSubmitDisabled() && isButtonHovered && (
+                      <div style={{ 
+                        position: 'absolute',
+                        top: '100%',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        backgroundColor: '#333',
+                        color: '#fff',
+                        padding: '6px 8px',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        whiteSpace: 'nowrap',
+                        zIndex: 1000,
+                        marginTop: '4px',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                      }}>
+                        {getDisableReason()}
+                        <div style={{
+                          position: 'absolute',
+                          top: '-5px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: 0,
+                          height: 0,
+                          borderLeft: '5px solid transparent',
+                          borderRight: '5px solid transparent',
+                          borderBottom: '5px solid #333'
+                        }} />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
