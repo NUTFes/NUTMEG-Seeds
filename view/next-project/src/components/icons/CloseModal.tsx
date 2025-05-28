@@ -37,7 +37,7 @@ const CloseModal = (props: Props) => {
         fill="none"
       >
         <path d='M0 0h24v24H0V0z' fill='none' />
-        <path d='M6 6L18 18M18 6L6 18' stroke="white" stroke-width='2' /> // Changed stroke color to white
+        <path d='M6 6L18 18M18 6L6 18' stroke="white" stroke-width='2' /> {/* Changed stroke color to white */}
       </svg>
     </CloseButton>
   );
