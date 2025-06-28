@@ -1,0 +1,40 @@
+name: Release action
+run-name: Release action
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump-level:
+        type: choice
+        options: [patch, minor, major]
+        required: true
+        description: Bump to patch or minor or major version
+
+jobs:
+  # 新しいタグをリリース
+  release:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.bump.outputs.new_version }}
+    # GITHUB＿TOKENに付与される権限を設定
+    permissions:
+      ## readだとエラーが出るっぽい
+      contents: write
+    # 実行するステップを定義
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: bump
+        name: Bump version and tag repository
+        env:
+          USERNAME: github-actions[bot]
+          EMAIL: github-actions[bot]@users.noreply.github.com
+          BUMP_LEVEL: ${{ inputs.bump-level }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "${USERNAME}"
+          git config --global user.email "${EMAIL}"
+          version="$(.github/scripts/bump.sh "${BUMP_LEVEL}")"
+          echo "New version: ${version}"
+          echo "new_version=${version}" >> $GITHUB_OUTPUT
