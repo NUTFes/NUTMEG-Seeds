@@ -28,7 +28,7 @@
   text-align: start;
   vertical-align: middle;
   padding: 0.5rem 2rem;
-  overflow: scroll;
+  overflow: auto;
   white-space: nowrap;
 }
 
@@ -38,7 +38,7 @@
   text-align: end;
   vertical-align: middle;
   padding: 0.8rem 2rem;
-  overflow: scroll;
+  overflow: auto;
   white-space: nowrap;
 }
 
