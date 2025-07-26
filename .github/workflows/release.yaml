@@ -101,15 +101,15 @@ jobs:
           pull: true
           push: true
           tags: |
-            ${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:${{ needs.release.outputs.tag }}
-            ${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:latest
+            ${{ secrets.HARBOR_REG }}/${{ matrix.image }}:${{ needs.release.outputs.tag }}
+            ${{ secrets.HARBOR_REG }}/${{ matrix.image }}:latest
           build-args: ${{ steps.build_args.outputs.ARGS }}
           cache-from: |
-            type=gha,scope=${{ matrix.image_name }}-cache
-            type=registry,ref=${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:cache
+            type=gha,scope=${{ matrix.image }}-cache
+            type=registry,ref=${{ secrets.HARBOR_REG }}/${{ matrix.image }}:cache
           cache-to: |
-            type=gha,mode=max,scope=${{ matrix.image_name }}-cache
-            type=registry,ref=${{ secrets.HARBOR_REG }}/${{ matrix.image_name }}:cache,mode=max,image-manifest=true
+            type=gha,mode=max,scope=${{ matrix.image }}-cache
+            type=registry,ref=${{ secrets.HARBOR_REG }}/${{ matrix.image }}:cache,mode=max,image-manifest=true
 
       # Docker Buildxのキャッシュをプルーニング
       - name: Prune Buildx builder and caches
